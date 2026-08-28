@@ -1,0 +1,24 @@
+---
+layout: default
+---
+{% assign path_parts = page.path | split: "/" %}
+{% assign app_slug = path_parts[1] %}
+{% assign app_url = "/apps/" | append: app_slug | append: "/" | relative_url %}
+{% assign app = site.docs | where_exp: "d", "d.url == app_url" | first %}
+
+<article>
+  <h1>{{ page.title }}</h1>
+  <p class="doc-meta">
+    {% if page.effective_date %}Effective date: {{ page.effective_date }}{% endif %}
+    {% if page.last_updated %} &middot; Last updated: {{ page.last_updated }}{% endif %}
+  </p>
+
+  {{ content }}
+
+  {% if app %}
+  <footer class="doc-footer">
+    <p>{{ app.app_name }} &mdash; Contact: <a href="mailto:{{ app.contact_email }}">{{ app.contact_email }}</a></p>
+    <p><a href="{{ app.url | relative_url }}">&larr; Back to {{ app.app_name }} documents</a></p>
+  </footer>
+  {% endif %}
+</article>
