@@ -1,0 +1,13 @@
+---
+layout: default
+---
+<h1>{{ page.title }}</h1>
+
+{{ content }}
+
+{% assign apps = site.docs | where: "is_app_index", true | sort: "app_name" %}
+<ul class="app-list">
+  {% for app in apps %}
+  <li><a href="{{ app.url | relative_url }}">{{ app.app_name }}</a></li>
+  {% endfor %}
+</ul>

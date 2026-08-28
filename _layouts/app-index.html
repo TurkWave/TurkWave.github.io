@@ -1,0 +1,19 @@
+---
+layout: default
+---
+<h1>{{ page.app_name }}</h1>
+
+{{ content }}
+
+{% assign path_parts = page.path | split: "/" %}
+{% assign app_dir_prefix = "_docs/" | append: path_parts[1] | append: "/" %}
+{% assign app_docs = site.docs | where_exp: "d", "d.path contains app_dir_prefix" | where_exp: "d", "d.url != page.url" | sort: "title" %}
+<ul class="doc-list">
+  {% for doc in app_docs %}
+  <li><a href="{{ doc.url | relative_url }}">{{ doc.title }}</a></li>
+  {% endfor %}
+</ul>
+
+{% if page.contact_email %}
+<p class="app-contact">Contact: <a href="mailto:{{ page.contact_email }}">{{ page.contact_email }}</a></p>
+{% endif %}
