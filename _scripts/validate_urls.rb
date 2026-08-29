@@ -60,6 +60,11 @@ Dir.glob(File.join(DOCS_DIR, "**", "*.{md,markdown}")).sort.each do |path|
     if fm["layout"] != "app-index"
       errors << "#{rel}\n  index.md must set  layout: app-index\n  actual: #{fm["layout"].inspect}"
     end
+
+    # home-apps.html lists an app only if its index.md carries this flag.
+    if fm["is_app_index"] != true
+      errors << "#{rel}\n  index.md must set  is_app_index: true\n  actual: #{fm["is_app_index"].inspect}"
+    end
   else
     errors << "#{rel}\n  doc slug #{doc_slug.inspect} is not lowercase kebab-case" unless doc_slug =~ SLUG_RE
 
