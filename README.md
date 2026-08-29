@@ -1,9 +1,9 @@
 # TurkWave App Legal & Support Documents
 
 Source for [turkwave.github.io](https://turkwave.github.io/) — privacy policies, terms of
-use, and other legal/support documents for TurkWave's apps. Built with Jekyll
-([just-the-docs](https://github.com/just-the-docs/just-the-docs) theme) and deployed
-automatically by GitHub Actions on every push to `main`.
+use, and other legal/support documents for TurkWave's apps. Built with Jekyll (no theme
+gem — the layouts and styling live in this repo) and deployed automatically by GitHub
+Actions on every push to `main`.
 
 ## What's where
 
