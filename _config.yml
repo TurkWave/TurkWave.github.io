@@ -5,15 +5,12 @@ baseurl: ""
 
 # Single source of truth for the support address shown on every app and
 # document page. Change it here and it updates site-wide.
-contact_email: "support@turkwave.example"
+contact_email: "Turk191906@outlook.com"
 
-theme: just-the-docs
-nav_enabled: false
-search_enabled: true
-
+# assets/site.scss is compiled to a single minified _site/assets/site.css.
 sass:
-  quiet_deps: true
-  silence_deprecations: [import, global-builtin, color-functions]
+  style: compressed
+  sourcemap: never
 
 plugins:
   - jekyll-seo-tag

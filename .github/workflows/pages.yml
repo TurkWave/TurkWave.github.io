@@ -33,6 +33,13 @@ jobs:
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
+      - name: Run test suites
+        run: |
+          ruby _scripts/lib/front_matter_test.rb
+          ruby _scripts/validate_config_test.rb
+          ruby bin/new-app_test.rb
+      - name: Validate config
+        run: ruby _scripts/validate_config.rb
       - name: Validate URL scheme
         run: ruby _scripts/validate_urls.rb
       - name: Lint legal-doc content

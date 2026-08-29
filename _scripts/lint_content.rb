@@ -13,32 +13,30 @@
 
 require "date"
 require "yaml"
+require_relative "lib/front_matter"
 
 REPO_ROOT = File.expand_path("..", __dir__)
 DOCS_DIR  = File.join(REPO_ROOT, "_docs")
 TODAY     = Date.today
 
-# Case-insensitive substrings that must never appear in a published doc.
-# Extend this list as new placeholder phrasings turn up.
+# Case-insensitive substrings that mean a template was published unedited.
+# Anchor each to a literal string from _templates/ so real legal prose is not
+# caught - e.g. "we may replace with a successor service" is legitimate, so the
+# bare phrase "replace with" cannot be on this list; the template's actual
+# title "Replace With Document Title" can. "YYYY-MM-DD" is likewise omitted: an
+# unfilled template date is already rejected by the strict date-format check,
+# and a doc may legitimately mention the date format.
+# Extend this list with the exact wording of any new template placeholder.
 PLACEHOLDERS = [
   "sample content",
   "demonstration only",
-  "replace with",
-  "content goes here",
+  "replace with document title",  # _templates/new-doc.md title
+  "replace with app name",        # _templates/new-app/index.md title
+  "content goes here",            # "<X> content goes here." in every doc template body
   "lorem ipsum",
-  "yyyy-mm-dd",
 ].freeze
 
 DATE_RE = /\A\d{4}-\d{2}-\d{2}\z/
-
-def split_front_matter(text)
-  return [nil, text] unless text.start_with?("---")
-
-  parts = text.split(/^---\s*$/, 3)
-  return [nil, text] if parts.length < 3
-
-  [parts[1], parts[2]]
-end
 
 errors = Hash.new { |h, k| h[k] = [] }
 
@@ -48,7 +46,7 @@ docs = Dir.glob(File.join(DOCS_DIR, "**", "*.{md,markdown}")).sort
 docs.each do |path|
   rel  = path.sub("#{REPO_ROOT}/", "")
   text = File.read(path)
-  fm_text, = split_front_matter(text)
+  fm_text, = FrontMatter.split(text)
 
   if fm_text.nil?
     errors[rel] << "missing YAML front matter"
