@@ -182,6 +182,79 @@
       font-size: .95rem;
     }
 
+    /* ---- Legal document pages: framed body + auto table of contents ---- */
+    .layout-legal-doc .site-header__inner,
+    .layout-legal-doc .site-footer,
+    .layout-legal-doc main { max-width: 74rem; }
+
+    .doc-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+    @media (min-width: 60rem) {
+      .doc-layout { grid-template-columns: minmax(0, 1fr) 13.5rem; }
+    }
+
+    .doc-frame {
+      min-width: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.75rem;
+    }
+    @media (max-width: 40rem) { .doc-frame { padding: 1.5rem; } }
+    .doc-frame > h1 { margin-top: 0; }
+    .doc-frame h2, .doc-frame h3 { scroll-margin-top: 5rem; }
+
+    .doc-toc { font-size: .9rem; }
+    .doc-toc:not(.is-ready) { display: none; }
+    .doc-toc__title {
+      margin: 0 0 .6rem;
+      font-size: .7rem;
+      font-weight: 650;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      color: var(--text-muted);
+    }
+    .doc-toc nav ul { list-style: none; margin: 0; padding: 0; }
+    .doc-toc nav li { margin: 0; }
+    .doc-toc nav a {
+      display: block;
+      padding: .3rem 0 .3rem .8rem;
+      border: 0;
+      border-left: 2px solid var(--border);
+      color: var(--text-muted);
+      line-height: 1.35;
+      transition: color .15s ease, border-color .15s ease;
+    }
+    .doc-toc nav a:hover { color: var(--text); border-left-color: var(--border-strong); }
+    .doc-toc nav a.is-active {
+      color: var(--text);
+      border-left-color: var(--text);
+      font-weight: 550;
+    }
+    .doc-toc nav .toc-sub a { padding-left: 1.7rem; font-size: .85rem; }
+
+    @media (min-width: 60rem) {
+      .doc-toc {
+        position: sticky;
+        top: 5.5rem;
+        max-height: calc(100vh - 8rem);
+        overflow-y: auto;
+      }
+    }
+    @media (max-width: 60rem) {
+      .doc-toc {
+        order: -1;
+        background: var(--bg-subtle);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1rem 1.15rem;
+      }
+    }
+
     /* App list (home) + doc list (app index) */
     .app-list, .doc-list {
       list-style: none;
@@ -230,7 +303,7 @@
     ::selection { background: var(--text); color: var(--bg); }
   </style>
 </head>
-<body>
+<body class="layout-{{ page.layout | default: 'default' }}">
   <header class="site-header">
     <div class="site-header__inner">
       <a class="site-title" href="{{ '/' | relative_url }}">{{ site.title }}</a>
@@ -245,5 +318,49 @@
   <footer class="site-footer">
     &copy; {{ 'now' | date: "%Y" }} TurkWave. All rights reserved.
   </footer>
+
+  <script>
+    (function () {
+      var toc = document.getElementById('doc-toc');
+      var content = document.getElementById('doc-content');
+      if (!toc || !content) return;
+      var list = toc.querySelector('ul');
+      var headings = [].slice.call(content.querySelectorAll('h2, h3'));
+      if (!headings.length) { toc.parentNode.removeChild(toc); return; }
+
+      var links = headings.map(function (h, i) {
+        if (!h.id) {
+          h.id = (h.textContent || '').toLowerCase().replace(/[^\w\s-]/g, '')
+            .trim().replace(/\s+/g, '-') || 'section-' + i;
+        }
+        var li = document.createElement('li');
+        if (h.tagName === 'H3') li.className = 'toc-sub';
+        var a = document.createElement('a');
+        a.href = '#' + h.id;
+        a.textContent = h.textContent;
+        li.appendChild(a);
+        list.appendChild(li);
+        return a;
+      });
+      toc.classList.add('is-ready');
+
+      function spy() {
+        var mark = window.scrollY + 130;
+        var id = headings[0].id;
+        for (var i = 0; i < headings.length; i++) {
+          if (headings[i].getBoundingClientRect().top + window.scrollY - mark <= 0) id = headings[i].id;
+          else break;
+        }
+        links.forEach(function (a) { a.classList.toggle('is-active', a.hash === '#' + id); });
+      }
+      spy();
+      var ticking = false;
+      window.addEventListener('scroll', function () {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () { spy(); ticking = false; });
+      }, { passive: true });
+    })();
+  </script>
 </body>
 </html>
