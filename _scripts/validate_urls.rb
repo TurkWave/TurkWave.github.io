@@ -54,6 +54,12 @@ Dir.glob(File.join(DOCS_DIR, "**", "*.{md,markdown}")).sort.each do |path|
     if actual != expected
       errors << "#{rel}\n  index.md must set  permalink: #{expected}\n  actual: #{actual.inspect}"
     end
+
+    # index.md must render as the app index. With any other layout, default.html
+    # builds the header back-link from the URL depth and lands on a dead /apps/.
+    if fm["layout"] != "app-index"
+      errors << "#{rel}\n  index.md must set  layout: app-index\n  actual: #{fm["layout"].inspect}"
+    end
   else
     errors << "#{rel}\n  doc slug #{doc_slug.inspect} is not lowercase kebab-case" unless doc_slug =~ SLUG_RE
 
@@ -61,6 +67,13 @@ Dir.glob(File.join(DOCS_DIR, "**", "*.{md,markdown}")).sort.each do |path|
       expected = "/apps/#{app_slug}/#{doc_slug}/"
       errors << "#{rel}\n  custom 'permalink' is not allowed on collection docs\n" \
                 "  expected (from path): #{expected}\n  actual (front matter): #{fm["permalink"].inspect}"
+    end
+
+    # A content doc must use the collection default (legal-doc). The app-index /
+    # home-apps layouts build a wrong back-link for a /apps/<app>/<doc>/ URL.
+    if fm.key?("layout") && fm["layout"] != "legal-doc"
+      errors << "#{rel}\n  collection docs must use  layout: legal-doc  (the default)\n" \
+                "  actual: #{fm["layout"].inspect}"
     end
   end
 end
