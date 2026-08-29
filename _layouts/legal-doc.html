@@ -6,19 +6,26 @@ layout: default
 {% assign app_url = "/apps/" | append: app_slug | append: "/" | relative_url %}
 {% assign app = site.docs | where_exp: "d", "d.url == app_url" | first %}
 
-<article>
-  <h1>{{ page.title }}</h1>
-  <p class="doc-meta">
-    {% if page.effective_date %}Effective date: {{ page.effective_date }}{% endif %}
-    {% if page.last_updated %} &middot; Last updated: {{ page.last_updated }}{% endif %}
-  </p>
+<div class="doc-layout">
+  <article class="doc-frame" id="doc-content">
+    <h1>{{ page.title }}</h1>
+    <p class="doc-meta">
+      {% if page.effective_date %}Effective date: {{ page.effective_date }}{% endif %}
+      {% if page.last_updated %} &middot; Last updated: {{ page.last_updated }}{% endif %}
+    </p>
 
-  {{ content }}
+    {{ content }}
 
-  {% if app %}
-  <footer class="doc-footer">
-    <p>{{ app.app_name }} &mdash; Contact: <a href="mailto:{{ app.contact_email }}">{{ app.contact_email }}</a></p>
-    <p><a href="{{ app.url | relative_url }}">&larr; Back to {{ app.app_name }} documents</a></p>
-  </footer>
-  {% endif %}
-</article>
+    {% if app %}
+    <footer class="doc-footer">
+      <p>{{ app.app_name }} &mdash; Contact: <a href="mailto:{{ app.contact_email }}">{{ app.contact_email }}</a></p>
+      <p><a href="{{ app.url | relative_url }}">&larr; Back to {{ app.app_name }} documents</a></p>
+    </footer>
+    {% endif %}
+  </article>
+
+  <aside class="doc-toc" id="doc-toc" aria-label="On this page">
+    <p class="doc-toc__title">On this page</p>
+    <nav><ul></ul></nav>
+  </aside>
+</div>
