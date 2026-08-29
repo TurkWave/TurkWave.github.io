@@ -11,8 +11,7 @@
 # Exit 0 when every entry has its page (or there are none), 1 otherwise,
 # 2 when _site/ is missing.
 
-require "date"
-require "yaml"
+require_relative "lib/front_matter"
 
 REPO_ROOT = File.expand_path("..", __dir__)
 DOCS_DIR  = File.join(REPO_ROOT, "_docs")
@@ -23,16 +22,6 @@ unless Dir.exist?(SITE_DIR)
   exit 2
 end
 
-def front_matter(path)
-  text = File.read(path)
-  return {} unless text.start_with?("---")
-
-  parts = text.split(/^---\s*$/, 3)
-  return {} if parts.length < 3
-
-  YAML.safe_load(parts[1], permitted_classes: [Date, Time], aliases: true) || {}
-end
-
 def redirect_page?(html)
   html.match?(/http-equiv\s*=\s*["']?\s*refresh/i)
 end
@@ -41,12 +30,25 @@ def rel(path)
   path.sub("#{REPO_ROOT}/", "")
 end
 
-entries = [] # [doc_rel, from]
+entries      = [] # [doc_rel, from]
+parse_errors = []
 Dir.glob(File.join(DOCS_DIR, "**", "*.{md,markdown}")).sort.each do |path|
-  raw = front_matter(path)["redirect_from"]
+  begin
+    fm = FrontMatter.parse_file(path) || {}
+  rescue FrontMatter::Error => e
+    parse_errors << "#{rel(path)}\n  front matter is not valid YAML (#{e.message})"
+    next
+  end
+
+  raw = fm["redirect_from"]
   next if raw.nil?
 
   Array(raw).each { |from| entries << [rel(path), from.to_s] }
+end
+
+unless parse_errors.empty?
+  warn "Redirect validation failures (#{parse_errors.length}):\n\n#{parse_errors.join("\n\n")}"
+  exit 1
 end
 
 if entries.empty?
@@ -57,7 +59,20 @@ end
 errors = []
 entries.each do |doc_rel, from|
   slug = from.strip.sub(%r{\A/}, "").sub(%r{/\z}, "")
-  candidates = [File.join(SITE_DIR, slug, "index.html"), File.join(SITE_DIR, "#{slug}.html")]
+
+  if slug.empty?
+    errors << "#{doc_rel}\n  redirect_from: #{from.inspect}\n  is empty"
+    next
+  end
+
+  # jekyll-redirect-from emits  <slug>/index.html  for a directory-style value,
+  # <slug>  when the value already ends in a filename (e.g. /old.html), and we
+  # also accept <slug>.html.
+  candidates = [
+    File.join(SITE_DIR, slug, "index.html"),
+    File.join(SITE_DIR, slug),
+    File.join(SITE_DIR, "#{slug}.html"),
+  ]
   hit = candidates.find { |c| File.file?(c) && redirect_page?(File.read(c)) }
 
   if hit
