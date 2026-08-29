@@ -7,6 +7,10 @@ baseurl: ""
 # document page. Change it here and it updates site-wide.
 contact_email: "support@turkwave.example"
 
+# assets/site.scss is compiled to a single minified _site/assets/site.css.
+sass:
+  style: compressed
+
 plugins:
   - jekyll-seo-tag
   - jekyll-include-cache
