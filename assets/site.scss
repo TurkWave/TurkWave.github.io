@@ -229,7 +229,29 @@ th { font-weight: 600; }
   overflow-wrap: anywhere;
 }
 
-/* ---- Legal document pages: framed body + fixed table of contents ---- */
+/* Stacked variant (legal-doc.html sidebar): label/value rows, no hover lift */
+.contact-card--stack {
+  flex-direction: column;
+  align-items: stretch;
+  gap: .15rem;
+}
+.contact-card--stack:hover {
+  border-color: var(--border);
+  background: var(--surface);
+  transform: none;
+}
+.contact-card--stack .contact-card__value {
+  font-size: .9rem;
+  font-weight: 400;
+}
+.contact-card--stack a.contact-card__value {
+  border: 0;
+  color: var(--text-muted);
+}
+.contact-card--stack a.contact-card__value:hover { color: var(--text); }
+.contact-card--stack .contact-card__value + .contact-card__label { margin-top: .6rem; }
+
+/* ---- Legal document pages: framed body + a contact/link card ---- */
 .doc-layout { display: flex; flex-direction: column; }
 
 .doc-frame {
@@ -243,60 +265,20 @@ th { font-weight: 600; }
 .doc-frame > h1 { margin-top: 0; }
 .doc-frame h2, .doc-frame h3 { scroll-margin-top: 5.5rem; }
 
-.doc-toc {
-  font-size: .8rem;
-  line-height: 1.3;
-}
-.doc-toc:not(.is-ready) { display: none; }
-.doc-toc__title {
-  margin: 0 0 .5rem;
-  font-size: .66rem;
-  font-weight: 650;
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  color: var(--text-muted);
-}
-.doc-toc nav ul { list-style: none; margin: 0; padding: 0; }
-.doc-toc nav li { margin: 0; }
-.doc-toc nav a {
-  display: block;
-  padding: .25rem 0 .25rem .7rem;
-  border: 0;
-  border-left: 2px solid var(--border);
-  color: var(--text-muted);
-  transition: color .15s ease, border-color .15s ease;
-}
-.doc-toc nav a:hover { color: var(--text); border-left-color: var(--border-strong); }
-.doc-toc nav a.is-active {
-  color: var(--text);
-  border-left-color: var(--text);
-  font-weight: 550;
-}
-.doc-toc nav .toc-sub a { padding-left: 1.5rem; font-size: .95em; }
-
-/* Narrow screens: compact panel stacked above the document */
+/* Narrow screens: the card sits stacked above the document */
 @media (max-width: 75.99rem) {
-  .doc-toc {
-    order: -1;
-    margin-bottom: 1.75rem;
-    padding: .9rem 1.15rem;
-    background: var(--bg-subtle);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-  }
+  .doc-aside { order: -1; margin-bottom: 1.75rem; }
 }
 
-/* Wide screens: small panel pinned beside the document, fixed while scrolling */
+/* Wide screens: the card is pinned beside the document, fixed while scrolling */
 @media (min-width: 76rem) {
-  .doc-toc {
+  .doc-aside {
     position: fixed;
     top: 6rem;
     left: calc(50% + 24rem);
     width: 13rem;
-    max-height: calc(100vh - 9rem);
-    overflow-y: auto;
-    padding-right: .25rem;
   }
+  .doc-aside .contact-card { margin-top: 0; }
 }
 
 /* App list (home) + doc list (app index) */
