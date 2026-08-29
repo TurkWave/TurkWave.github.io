@@ -27,7 +27,7 @@ jobs:
           cache-version: 0
       - name: Run test suites
         run: make test
-      - name: Lint (URL + content)
+      - name: Lint (config + URL + content)
         run: make lint
       - name: Build with Jekyll
         run: bundle exec jekyll build
