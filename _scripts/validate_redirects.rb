@@ -59,7 +59,20 @@ end
 errors = []
 entries.each do |doc_rel, from|
   slug = from.strip.sub(%r{\A/}, "").sub(%r{/\z}, "")
-  candidates = [File.join(SITE_DIR, slug, "index.html"), File.join(SITE_DIR, "#{slug}.html")]
+
+  if slug.empty?
+    errors << "#{doc_rel}\n  redirect_from: #{from.inspect}\n  is empty"
+    next
+  end
+
+  # jekyll-redirect-from emits  <slug>/index.html  for a directory-style value,
+  # <slug>  when the value already ends in a filename (e.g. /old.html), and we
+  # also accept <slug>.html.
+  candidates = [
+    File.join(SITE_DIR, slug, "index.html"),
+    File.join(SITE_DIR, slug),
+    File.join(SITE_DIR, "#{slug}.html"),
+  ]
   hit = candidates.find { |c| File.file?(c) && redirect_page?(File.read(c)) }
 
   if hit
