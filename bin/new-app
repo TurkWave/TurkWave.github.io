@@ -18,6 +18,7 @@
 require "date"
 require "fileutils"
 require "yaml"
+require_relative "../_scripts/lib/front_matter"
 
 REPO_ROOT    = File.expand_path("..", __dir__)
 TEMPLATE_DIR = File.join(REPO_ROOT, "_templates", "new-app")
@@ -107,18 +108,10 @@ def yq(str)
 end
 
 # Replace `key: <value>` lines, but only inside the leading front-matter block.
+# FrontMatter.fill leaves body lines - including a `---` horizontal rule and any
+# `key: value` beneath it - untouched.
 def fill_front_matter(path, replacements)
-  fence = 0
-  out = File.readlines(path).map do |line|
-    fence += 1 if line.strip == "---"
-    m = line.match(/\A(\s*)([A-Za-z0-9_-]+):\s.*\n?\z/)
-    if fence == 1 && m && replacements.key?(m[2])
-      "#{m[1]}#{m[2]}: #{replacements[m[2]]}\n"
-    else
-      line
-    end
-  end
-  File.write(path, out.join)
+  File.write(path, FrontMatter.fill(File.read(path), replacements))
 end
 
 # --- scaffold ---------------------------------------------------------------
@@ -138,7 +131,7 @@ Dir.glob(File.join(target, "*.md")).sort.each do |f|
 end
 
 # --- self-check: permalink must match the folder ----------------------------
-idx_fm = YAML.safe_load(File.read(File.join(target, "index.md")).split(/^---\s*$/)[1].to_s) || {}
+idx_fm = FrontMatter.parse_file(File.join(target, "index.md")) || {}
 unless idx_fm["permalink"] == "/apps/#{slug}/"
   die("internal: generated permalink #{idx_fm["permalink"].inspect} != /apps/#{slug}/")
 end

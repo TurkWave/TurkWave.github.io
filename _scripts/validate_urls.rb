@@ -12,22 +12,11 @@
 #
 # Exit 0 when clean, 1 with a report listing file + expected vs actual URL.
 
-require "date"
-require "yaml"
+require_relative "lib/front_matter"
 
 REPO_ROOT = File.expand_path("..", __dir__)
 DOCS_DIR  = File.join(REPO_ROOT, "_docs")
 SLUG_RE   = /\A[a-z0-9]+(?:-[a-z0-9]+)*\z/
-
-def front_matter(path)
-  text = File.read(path)
-  return nil unless text.start_with?("---")
-
-  parts = text.split(/^---\s*$/, 3)
-  return nil if parts.length < 3
-
-  YAML.safe_load(parts[1], permitted_classes: [Date, Time], aliases: true) || {}
-end
 
 errors = []
 count  = 0
@@ -46,7 +35,12 @@ Dir.glob(File.join(DOCS_DIR, "**", "*.{md,markdown}")).sort.each do |path|
   doc_slug = File.basename(file, ".*")
   count   += 1
 
-  fm = front_matter(path)
+  begin
+    fm = FrontMatter.parse_file(path)
+  rescue FrontMatter::Error => e
+    errors << "#{rel}\n  front matter is not valid YAML (#{e.message})"
+    next
+  end
   if fm.nil?
     errors << "#{rel}\n  missing YAML front matter"
     next
