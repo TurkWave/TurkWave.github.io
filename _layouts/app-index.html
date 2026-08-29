@@ -16,4 +16,7 @@ layout: default
   {% endfor %}
 </ul>
 
-<p class="app-contact">Contact: <a href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a></p>
+<a class="contact-card" href="mailto:{{ site.contact_email }}">
+  <span class="contact-card__label">Contact</span>
+  <span class="contact-card__value">{{ site.contact_email }}</span>
+</a>
