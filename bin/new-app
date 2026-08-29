@@ -154,7 +154,8 @@ Dir.glob(File.join(target, "*.md")).sort.each do |f|
 end
 puts "Dates:  effective_date = last_updated = #{doc_date}"
 puts
-puts "Next: write the real legal text in privacy.md and terms.md, then commit & push."
+puts "Next: replace the placeholder body text in privacy.md and terms.md with the"
+puts "real legal text, then commit & push. CI (content lint) fails until you do."
 
 # --- optional editor -----------------------------------------------------------
 editor = ENV["EDITOR"] || ENV["VISUAL"]
