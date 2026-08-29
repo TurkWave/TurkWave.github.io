@@ -25,7 +25,7 @@ bin/new-app <app-slug> "App Name" support@example.com   # Windows: prefix with `
 Creates `_docs/<app-slug>/` from the template with `permalink`, `app_name`, `contact_email`
 and today's `effective_date` / `last_updated` filled in (override with `--date YYYY-MM-DD`).
 Validates the slug and email, refuses an existing folder. Then write the real text into
-`privacy.md` / `terms.md` and commit.
+`privacy.md`, `terms.md` and `license.md`, and commit.
 
 ## Local development
 
