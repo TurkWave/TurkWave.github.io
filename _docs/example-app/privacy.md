@@ -3,6 +3,7 @@ title: Privacy Policy
 effective_date: 2026-08-29
 last_updated: 2026-08-29
 redirect_from:
+  - /apps/example-app/privacy/
   - /apps/example-app/privacy-policy/
 ---
 

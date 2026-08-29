@@ -50,7 +50,7 @@ class NewAppTest < Minitest::Test
                  docs("widget-viewer").map { |f| File.basename(f) }
 
     index = File.read(File.join(@root, "_docs", "widget-viewer", "index.md"))
-    assert_includes index, "permalink: /apps/widget-viewer/\n"
+    assert_includes index, "permalink: /widget-viewer/\n"
     assert_includes index, %(title: "Widget Viewer"\n)
 
     %w[privacy terms license].each do |name|
@@ -81,6 +81,15 @@ class NewAppTest < Minitest::Test
     ["Upper", "-lead", "trail-", "dou--ble", "sp ace", "under_score"].each do |slug|
       out, status = run_new_app(slug, "--no-edit")
       refute status.success?, "expected failure for #{slug.inspect}: #{out}"
+      refute File.exist?(File.join(@root, "_docs", slug)), "#{slug.inspect} left a folder"
+    end
+  end
+
+  def test_reserved_slugs_are_refused_and_write_nothing
+    %w[apps assets sitemap robots 404 index].each do |slug|
+      out, status = run_new_app(slug, "--no-edit")
+      refute status.success?, "expected failure for reserved #{slug.inspect}: #{out}"
+      assert_includes out, "reserved"
       refute File.exist?(File.join(@root, "_docs", slug)), "#{slug.inspect} left a folder"
     end
   end

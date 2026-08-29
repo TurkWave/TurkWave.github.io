@@ -11,7 +11,7 @@ Actions on every push to `main`.
   where the actual content (privacy policy, terms, etc.) lives.
 - `_layouts/` — Jekyll page templates that turn the documents in `_docs/` into site pages.
 - `_templates/` — copy-paste starting points for adding a new app or a new document.
-- `_config.yml` — site-wide configuration (theme, plugins, URL structure).
+- `_config.yml` — site-wide configuration (plugins, the `docs` collection, URL scheme).
 - `.github/workflows/` — GitHub Actions workflow that builds and deploys the site.
 - `bin/new-app` — scaffolds a new app's folder from `_templates/new-app/`.
 - `index.md` — the site's home page.
@@ -29,6 +29,16 @@ this script, so it lives in exactly one place — the folder name. The support a
 comes from `contact_email` in `_config.yml`, shared by every page. Validates the slug,
 refuses an existing folder. Then write the real text into `privacy.md`, `terms.md` and
 `license.md`, and commit.
+
+## URLs & redirects
+
+Documents publish at `/<app-slug>/<doc-slug>/` and each app index at `/<app-slug>/`,
+derived mechanically from the file path — no link list is kept by hand. `<app-slug>`
+may not be one of the reserved top-level names (`apps`, `assets`, `sitemap`, `robots`,
+`404`, `index`); `_scripts/validate_urls.rb` enforces that. The previous
+`/apps/<app-slug>/…` scheme still works: every old URL redirects to its new location
+via `jekyll-redirect-from` (`redirect_from:` entries in `_docs/*/*.md`), and
+`_scripts/validate_redirects.rb` verifies each one after the build.
 
 ## Local development
 
