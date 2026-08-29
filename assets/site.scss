@@ -66,7 +66,8 @@ a:hover { border-bottom-color: var(--text); }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: .35rem 1rem;
 }
 .site-header__left {
   display: flex;
@@ -86,6 +87,7 @@ a:hover { border-bottom-color: var(--text); }
 .crumbs a {
   color: var(--text-muted);
   border: 0;
+  overflow-wrap: anywhere;
 }
 .crumbs a:hover { color: var(--text); }
 .crumbs__sep {
@@ -110,6 +112,7 @@ main {
   padding: 3.5rem 1.5rem 4rem;
 }
 
+h1, h2, h3 { overflow-wrap: break-word; }
 h1 {
   font-size: clamp(1.9rem, 1.4rem + 2vw, 2.6rem);
   line-height: 1.15;
@@ -131,10 +134,10 @@ h3 {
   margin: 2rem 0 .5rem;
 }
 
-p { margin: 0 0 1.1rem; }
+p { margin: 0 0 1.1rem; overflow-wrap: break-word; }
 
 ul, ol { padding-left: 1.3rem; }
-li { margin: .35rem 0; }
+li { margin: .35rem 0; overflow-wrap: break-word; }
 
 hr {
   border: 0;
@@ -149,6 +152,7 @@ code {
   border: 1px solid var(--border);
   border-radius: 5px;
   padding: .1em .4em;
+  overflow-wrap: anywhere;
 }
 pre {
   background: var(--bg-subtle);
@@ -178,6 +182,8 @@ th, td {
   border-bottom: 1px solid var(--border);
 }
 th { font-weight: 600; }
+/* Wide tables scroll inside the framed body instead of stretching the page. */
+.doc-frame table { display: block; overflow-x: auto; }
 
 /* Document identity + meta (legal-doc.html) */
 .doc-appline {
@@ -185,6 +191,7 @@ th { font-weight: 600; }
   font-size: .9rem;
   font-weight: 550;
   color: var(--text);
+  overflow-wrap: anywhere;
 }
 .doc-appline a {
   border: 0;
@@ -327,6 +334,7 @@ th { font-weight: 600; }
   display: block;
   border: 0;
   font-weight: 550;
+  overflow-wrap: anywhere;
 }
 .app-list__sub {
   display: flex;
@@ -338,6 +346,7 @@ th { font-weight: 600; }
   font-size: .82rem;
   color: var(--text-muted);
 }
+.app-list__platform { overflow-wrap: anywhere; }
 .app-list__link {
   border: 0;
   color: var(--text-muted);
