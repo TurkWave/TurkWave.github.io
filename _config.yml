@@ -30,8 +30,11 @@ defaults:
 
 exclude:
   - _templates
+  - _scripts
+  - bin
   - Gemfile
   - Gemfile.lock
+  - Makefile
   - README.md
   - vendor
   - node_modules
