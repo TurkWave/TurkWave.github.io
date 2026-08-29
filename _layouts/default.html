@@ -3,10 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
   {% seo %}
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <style>
     :root {
+      color-scheme: light dark;
       --bg: #ffffff;
       --bg-subtle: #f4f4f5;
       --surface: #ffffff;
@@ -69,9 +71,32 @@
       margin: 0 auto;
       padding: 1rem 1.5rem;
       display: flex;
-      align-items: baseline;
+      align-items: center;
       justify-content: space-between;
       gap: 1rem;
+    }
+    .site-header__left {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .site-back {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.9rem;
+      height: 1.9rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1;
+      transition: color .15s ease, border-color .15s ease, background .15s ease;
+    }
+    .site-back:hover {
+      color: var(--text);
+      border-color: var(--border-strong);
+      background: var(--bg-subtle);
     }
     .site-title {
       font-size: .95rem;
@@ -301,9 +326,22 @@
   </style>
 </head>
 <body class="layout-{{ page.layout | default: 'default' }}">
+  {%- assign back_url = "" -%}
+  {%- if page.layout == "legal-doc" -%}
+    {%- assign segs = page.url | split: "/" -%}
+    {%- assign lim = segs | size | minus: 2 -%}
+    {%- capture back_url -%}/{% for s in segs offset:1 limit:lim %}{{ s }}/{% endfor %}{%- endcapture -%}
+  {%- elsif page.layout == "app-index" -%}
+    {%- assign back_url = "/" -%}
+  {%- endif -%}
   <header class="site-header">
     <div class="site-header__inner">
-      <a class="site-title" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+      <div class="site-header__left">
+        {%- if back_url != "" %}
+        <a class="site-back" href="{{ back_url | relative_url }}" aria-label="Go back" title="Back">&larr;</a>
+        {%- endif %}
+        <a class="site-title" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+      </div>
       <span class="site-header__tag">Legal &amp; Support</span>
     </div>
   </header>
