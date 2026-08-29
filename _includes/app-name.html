@@ -3,4 +3,13 @@ Human-readable app name derived from its folder slug.
 Usage: {% include app-name.html slug=some_slug %}  ->  "example-app" becomes "Example App"
 {%- endcomment -%}
 {%- assign _words = include.slug | split: "-" -%}
-{%- for _word in _words -%}{{ _word | capitalize }}{%- unless forloop.last %} {% endunless -%}{%- endfor -%}
+{%- assign _name = "" -%}
+{%- for _word in _words -%}
+  {%- capture _cap -%}{{ _word | capitalize }}{%- endcapture -%}
+  {%- if forloop.first -%}
+    {%- assign _name = _cap -%}
+  {%- else -%}
+    {%- assign _name = _name | append: " " | append: _cap -%}
+  {%- endif -%}
+{%- endfor -%}
+{{- _name -}}
