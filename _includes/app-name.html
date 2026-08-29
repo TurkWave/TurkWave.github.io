@@ -1,0 +1,6 @@
+{%- comment -%}
+Human-readable app name derived from its folder slug.
+Usage: {% include app-name.html slug=some_slug %}  ->  "example-app" becomes "Example App"
+{%- endcomment -%}
+{%- assign _words = include.slug | split: "-" -%}
+{%- for _word in _words -%}{{ _word | capitalize }}{%- unless forloop.last %} {% endunless -%}{%- endfor -%}

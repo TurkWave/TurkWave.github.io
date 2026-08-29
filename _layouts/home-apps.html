@@ -5,9 +5,11 @@ layout: default
 
 {{ content }}
 
-{% assign apps = site.docs | where: "is_app_index", true | sort: "app_name" %}
+{% assign apps = site.docs | where: "is_app_index", true | sort: "path" %}
 <ul class="app-list">
   {% for app in apps %}
-  <li><a href="{{ app.url | relative_url }}">{{ app.app_name }}</a></li>
+  {% assign app_path_parts = app.path | split: "/" %}
+  {% assign app_slug = app_path_parts[1] %}
+  <li><a href="{{ app.url | relative_url }}">{% include app-name.html slug=app_slug %}</a></li>
   {% endfor %}
 </ul>

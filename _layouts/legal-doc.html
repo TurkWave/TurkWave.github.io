@@ -4,24 +4,21 @@ layout: default
 {% assign path_parts = page.path | split: "/" %}
 {% assign app_slug = path_parts[1] %}
 {% assign app_url = "/apps/" | append: app_slug | append: "/" | relative_url %}
-{% assign app = site.docs | where_exp: "d", "d.url == app_url" | first %}
+{% capture app_name %}{% include app-name.html slug=app_slug %}{% endcapture %}
 
 <div class="doc-layout">
   <article class="doc-frame" id="doc-content">
     <h1>{{ page.title }}</h1>
+    <p class="doc-appline">
+      <a href="{{ app_url }}">{{ app_name }}</a>
+      &middot; Contact: <a href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a>
+    </p>
     <p class="doc-meta">
       {% if page.effective_date %}Effective date: {{ page.effective_date }}{% endif %}
       {% if page.last_updated %} &middot; Last updated: {{ page.last_updated }}{% endif %}
     </p>
 
     {{ content }}
-
-    {% if app %}
-    <footer class="doc-footer">
-      <p>{{ app.app_name }} &mdash; Contact: <a href="mailto:{{ app.contact_email }}">{{ app.contact_email }}</a></p>
-      <p><a href="{{ app.url | relative_url }}">&larr; Back to {{ app.app_name }} documents</a></p>
-    </footer>
-    {% endif %}
   </article>
 
   <aside class="doc-toc" id="doc-toc" aria-label="On this page">
