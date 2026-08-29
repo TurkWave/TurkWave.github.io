@@ -1,4 +1,6 @@
-# Sample workflow for building and deploying a Jekyll site to GitHub Pages
+# Build the Jekyll site with `bundle exec jekyll build` (full Gemfile, not the
+# classic GitHub Pages gem whitelist) and deploy it to GitHub Pages on every
+# push to `main`. GitHub Pages "Build and deployment" source must be "GitHub Actions".
 name: Deploy Jekyll site to Pages
 
 on:
