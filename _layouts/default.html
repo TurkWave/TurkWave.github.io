@@ -8,23 +8,27 @@
   <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}">
 </head>
 <body class="layout-{{ page.layout | default: 'default' }}">
-  {%- assign back_url = "" -%}
-  {%- if page.layout == "legal-doc" -%}
-    {%- assign segs = page.url | split: "/" -%}
-    {%- assign lim = segs | size | minus: 2 -%}
-    {%- capture back_url -%}/{% for s in segs offset:1 limit:lim %}{{ s }}/{% endfor %}{%- endcapture -%}
-  {%- elsif page.layout == "app-index" -%}
-    {%- assign back_url = "/" -%}
-  {%- endif -%}
   <header class="site-header">
     <div class="site-header__inner">
       <div class="site-header__left">
-        {%- if back_url != "" %}
-        <a class="site-back" href="{{ back_url | relative_url }}" aria-label="Go back" title="Back">&larr;</a>
-        {%- endif %}
-        <a class="site-title" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+        {%- if page.layout == "app-index" or page.layout == "legal-doc" -%}
+        {%- assign crumb_parts = page.path | split: "/" -%}
+        {%- assign crumb_slug = crumb_parts[1] -%}
+        {%- assign crumb_app_url = "/" | append: crumb_slug | append: "/" | relative_url -%}
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <a href="{{ '/' | relative_url }}">Home</a>
+          <span class="crumbs__sep" aria-hidden="true">&gt;</span>
+          {%- if page.layout == "app-index" -%}
+          <span class="crumbs__current">{% include app-name.html slug=crumb_slug %}</span>
+          {%- else -%}
+          <a href="{{ crumb_app_url }}">{% include app-name.html slug=crumb_slug %}</a>
+          <span class="crumbs__sep" aria-hidden="true">&gt;</span>
+          <span class="crumbs__current">{{ page.title }}</span>
+          {%- endif -%}
+        </nav>
+        {%- endif -%}
       </div>
-      <span class="site-header__tag">Legal &amp; Support</span>
+      <span class="site-header__tag">App Legal &amp; Support Documents</span>
     </div>
   </header>
 
