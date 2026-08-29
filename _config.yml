@@ -10,6 +10,7 @@ contact_email: "support@turkwave.example"
 # assets/site.scss is compiled to a single minified _site/assets/site.css.
 sass:
   style: compressed
+  sourcemap: never
 
 plugins:
   - jekyll-seo-tag
