@@ -2,6 +2,8 @@
 title: Terms of Use
 effective_date: 2026-08-29
 last_updated: 2026-08-29
+redirect_from:
+  - /apps/example-app/terms/
 ---
 
 These terms apply to Example App, a demo entry shown on this site.

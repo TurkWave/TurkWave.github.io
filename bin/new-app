@@ -24,6 +24,10 @@ REPO_ROOT    = File.expand_path("..", __dir__)
 TEMPLATE_DIR = File.join(REPO_ROOT, "_templates", "new-app")
 DOCS_DIR     = File.join(REPO_ROOT, "_docs")
 
+# Slugs that would publish to a URL clashing with a real top-level path.
+# Keep in sync with RESERVED_SLUGS in _scripts/validate_urls.rb.
+RESERVED_SLUGS = %w[apps assets sitemap robots 404 index].freeze
+
 def die(msg)
   warn "error: #{msg}"
   exit 1
@@ -63,6 +67,10 @@ slug = positional.first
 unless slug =~ /\A[a-z0-9]+(?:-[a-z0-9]+)*\z/
   die("invalid slug #{slug.inspect}: must be lowercase kebab-case " \
       "(a-z, 0-9, single hyphens, no leading/trailing/double hyphens)")
+end
+if RESERVED_SLUGS.include?(slug)
+  die("slug #{slug.inspect} is reserved: it would collide with a top-level site " \
+      "path (#{RESERVED_SLUGS.join(", ")})")
 end
 die("template dir not found: #{TEMPLATE_DIR}") unless Dir.exist?(TEMPLATE_DIR)
 
@@ -121,7 +129,7 @@ FileUtils.cp_r(TEMPLATE_DIR, target)
 Dir.glob(File.join(target, "*.md")).sort.each do |f|
   if File.basename(f) == "index.md"
     fill_front_matter(f,
-      "permalink" => "/apps/#{slug}/",
+      "permalink" => "/#{slug}/",
       "title"     => yq(app_name))
   else
     fill_front_matter(f,
@@ -132,8 +140,8 @@ end
 
 # --- self-check: permalink must match the folder ----------------------------
 idx_fm = FrontMatter.parse_file(File.join(target, "index.md")) || {}
-unless idx_fm["permalink"] == "/apps/#{slug}/"
-  die("internal: generated permalink #{idx_fm["permalink"].inspect} != /apps/#{slug}/")
+unless idx_fm["permalink"] == "/#{slug}/"
+  die("internal: generated permalink #{idx_fm["permalink"].inspect} != /#{slug}/")
 end
 
 # --- summary ---------------------------------------------------------------
@@ -142,7 +150,7 @@ base = "#{cfg["url"]}#{cfg["baseurl"]}"
 puts "Created #{File.join("_docs", slug)}/"
 Dir.glob(File.join(target, "*.md")).sort.each do |f|
   name = File.basename(f, ".md")
-  url  = name == "index" ? "#{base}/apps/#{slug}/" : "#{base}/apps/#{slug}/#{name}/"
+  url  = name == "index" ? "#{base}/#{slug}/" : "#{base}/#{slug}/#{name}/"
   puts format("  %-11s -> %s", File.basename(f), url)
 end
 puts "Name:   #{app_name} (derived from slug)"
