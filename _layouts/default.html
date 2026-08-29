@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: 'en' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% seo %}
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg-subtle: #f4f4f5;
+      --surface: #ffffff;
+      --text: #18181b;
+      --text-muted: #71717a;
+      --border: #e4e4e7;
+      --border-strong: #d4d4d8;
+      --accent: #18181b;
+      --radius: 10px;
+      --content-width: 46rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b0b0c;
+        --bg-subtle: #161618;
+        --surface: #121214;
+        --text: #f4f4f5;
+        --text-muted: #a1a1aa;
+        --border: #27272a;
+        --border-strong: #3f3f46;
+        --accent: #fafafa;
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    a {
+      color: var(--text);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border-strong);
+      transition: border-color .15s ease, color .15s ease;
+    }
+    a:hover { border-bottom-color: var(--text); }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--bg);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: saturate(180%) blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .site-header__inner {
+      max-width: var(--content-width);
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .site-title {
+      font-size: .95rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      border: 0;
+    }
+    .site-title:hover { color: var(--text-muted); }
+    .site-header__tag {
+      font-size: .8rem;
+      color: var(--text-muted);
+      display: none;
+    }
+    @media (min-width: 640px) { .site-header__tag { display: block; } }
+
+    main {
+      max-width: var(--content-width);
+      margin: 0 auto;
+      padding: 3.5rem 1.5rem 4rem;
+    }
+
+    h1 {
+      font-size: clamp(1.9rem, 1.4rem + 2vw, 2.6rem);
+      line-height: 1.15;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin: 0 0 1.25rem;
+    }
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 650;
+      letter-spacing: -0.015em;
+      margin: 2.75rem 0 .75rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 650;
+      margin: 2rem 0 .5rem;
+    }
+
+    p { margin: 0 0 1.1rem; }
+
+    ul, ol { padding-left: 1.3rem; }
+    li { margin: .35rem 0; }
+
+    hr {
+      border: 0;
+      border-top: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      font-size: .88em;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: .1em .4em;
+    }
+    pre {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem;
+      overflow-x: auto;
+    }
+    pre code { background: none; border: 0; padding: 0; }
+
+    blockquote {
+      margin: 1.5rem 0;
+      padding: .25rem 0 .25rem 1.15rem;
+      border-left: 3px solid var(--border-strong);
+      color: var(--text-muted);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: .95rem;
+    }
+    th, td {
+      text-align: left;
+      padding: .6rem .75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    th { font-weight: 600; }
+
+    /* Document meta + footer (legal-doc.html) */
+    .doc-meta {
+      color: var(--text-muted);
+      font-size: .9rem;
+      margin: -0.5rem 0 2.5rem;
+    }
+    .doc-footer {
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: .92rem;
+    }
+    .doc-footer p { margin: .35rem 0; }
+    .app-contact {
+      color: var(--text-muted);
+      font-size: .95rem;
+    }
+
+    /* App list (home) + doc list (app index) */
+    .app-list, .doc-list {
+      list-style: none;
+      padding: 0;
+      margin: 2rem 0 0;
+      display: grid;
+      gap: .75rem;
+    }
+    .app-list li, .doc-list li { margin: 0; }
+    .app-list a, .doc-list a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.15rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-weight: 550;
+      transition: border-color .15s ease, background .15s ease, transform .15s ease;
+    }
+    .app-list a:hover, .doc-list a:hover {
+      border-color: var(--border-strong);
+      background: var(--bg-subtle);
+      transform: translateY(-1px);
+    }
+    .app-list a::after, .doc-list a::after {
+      content: "\2192";
+      color: var(--text-muted);
+      transition: transform .15s ease;
+    }
+    .app-list a:hover::after, .doc-list a:hover::after {
+      transform: translateX(3px);
+      color: var(--text);
+    }
+
+    .site-footer {
+      max-width: var(--content-width);
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: .85rem;
+    }
+
+    ::selection { background: var(--text); color: var(--bg); }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-title" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+      <span class="site-header__tag">Legal &amp; Support</span>
+    </div>
+  </header>
+
+  <main>
+    {{ content }}
+  </main>
+
+  <footer class="site-footer">
+    &copy; {{ 'now' | date: "%Y" }} TurkWave. All rights reserved.
+  </footer>
+</body>
+</html>
