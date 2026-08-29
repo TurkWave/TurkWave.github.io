@@ -3,6 +3,8 @@ layout: app-index
 permalink: /example-app/
 is_app_index: true
 title: "Example App"
+platform: ""
+app_url: ""
 redirect_from:
   - /apps/example-app/
 ---

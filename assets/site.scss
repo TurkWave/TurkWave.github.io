@@ -281,7 +281,9 @@ th { font-weight: 600; }
   gap: .75rem;
 }
 .app-list li, .doc-list li { margin: 0; }
-.app-list a, .doc-list a {
+
+/* doc list (app index): the whole row is one link-card */
+.doc-list a {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -293,11 +295,46 @@ th { font-weight: 600; }
   font-weight: 550;
   transition: border-color .15s ease, background .15s ease, transform .15s ease;
 }
-.app-list a:hover, .doc-list a:hover {
+.doc-list a:hover {
   border-color: var(--border-strong);
   background: var(--bg-subtle);
   transform: translateY(-1px);
 }
+
+/* app list (home): a card holding the app name + an optional muted sub-line */
+.app-list__item {
+  padding: 1rem 1.15rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color .15s ease, background .15s ease, transform .15s ease;
+}
+.app-list__item:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-subtle);
+  transform: translateY(-1px);
+}
+.app-list__name {
+  display: block;
+  border: 0;
+  font-weight: 550;
+}
+.app-list__sub {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .1rem .9rem;
+  margin: .3rem 0 0;
+  font-size: .82rem;
+  color: var(--text-muted);
+}
+.app-list__link {
+  border: 0;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.app-list__link:hover { color: var(--text); }
 
 .site-footer {
   max-width: var(--content-width);
