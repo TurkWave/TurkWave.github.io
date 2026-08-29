@@ -86,4 +86,12 @@ class FrontMatterTest < Minitest::Test
   def test_fill_terminates_replaced_last_line
     assert_equal "---\ntitle: y\n---", FrontMatter.fill("---\ntitle: x\n---", "title" => "y")
   end
+
+  def test_fill_handles_crlf_and_a_body_dash_rule
+    src = "---\r\ntitle: X\r\neffective_date: OLD\r\n---\r\n\r\nBody.\r\n\r\n---\r\n\r\neffective_date: body sentinel\r\n"
+    out = FrontMatter.fill(src, "effective_date" => "2026-01-02")
+    assert_includes out, "effective_date: 2026-01-02"
+    assert_includes out, "effective_date: body sentinel\r\n"
+    assert_equal 1, out.scan(/effective_date: body sentinel/).length
+  end
 end
