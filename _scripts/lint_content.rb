@@ -13,6 +13,7 @@
 
 require "date"
 require "yaml"
+require_relative "lib/front_matter"
 
 REPO_ROOT = File.expand_path("..", __dir__)
 DOCS_DIR  = File.join(REPO_ROOT, "_docs")
@@ -31,15 +32,6 @@ PLACEHOLDERS = [
 
 DATE_RE = /\A\d{4}-\d{2}-\d{2}\z/
 
-def split_front_matter(text)
-  return [nil, text] unless text.start_with?("---")
-
-  parts = text.split(/^---\s*$/, 3)
-  return [nil, text] if parts.length < 3
-
-  [parts[1], parts[2]]
-end
-
 errors = Hash.new { |h, k| h[k] = [] }
 
 docs = Dir.glob(File.join(DOCS_DIR, "**", "*.{md,markdown}")).sort
@@ -48,7 +40,7 @@ docs = Dir.glob(File.join(DOCS_DIR, "**", "*.{md,markdown}")).sort
 docs.each do |path|
   rel  = path.sub("#{REPO_ROOT}/", "")
   text = File.read(path)
-  fm_text, = split_front_matter(text)
+  fm_text, = FrontMatter.split(text)
 
   if fm_text.nil?
     errors[rel] << "missing YAML front matter"

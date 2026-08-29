@@ -1,6 +1,6 @@
 # Build and check the site on every branch and pull request, WITHOUT deploying.
 # The deploy workflow (pages.yml) runs only on push to `main`; this one gives the
-# same validate -> build -> validate chain plus the test suite on feature work,
+# same validate -> build -> validate chain plus the test suites on feature work,
 # and uploads _site/ so a build can be inspected without a local Ruby toolchain.
 name: CI
 
@@ -25,25 +25,28 @@ jobs:
           ruby-version: '3.3'
           bundler-cache: true
           cache-version: 0
-      - name: Validate URL scheme
-        run: ruby _scripts/validate_urls.rb
-      - name: Lint legal-doc content
-        run: ruby _scripts/lint_content.rb
+      - name: Run test suites
+        run: make test
+      - name: Lint (URL + content)
+        run: make lint
       - name: Build with Jekyll
         run: bundle exec jekyll build
         env:
           JEKYLL_ENV: production
       - name: Validate redirects
-        run: ruby _scripts/validate_redirects.rb
+        run: make validate
       - name: Report _site sizes
         run: |
-          echo "## _site byte sizes" >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
-          find _site -type f \( -name '*.html' -o -name '*.css' -o -name '*.js' -o -name '*.xml' \) \
-            -printf '%s\t%p\n' | sort -k2 >> "$GITHUB_STEP_SUMMARY"
-          echo "---" >> "$GITHUB_STEP_SUMMARY"
-          echo "total bytes: $(find _site -type f -printf '%s\n' | paste -sd+ | bc)" >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "## _site byte sizes"
+            echo '```'
+            find _site -type f \( -name '*.html' -o -name '*.css' -o -name '*.js' -o -name '*.xml' -o -name '*.txt' -o -name '*.json' \) \
+              -printf '%s\t%p\n' | sort -k2
+            echo "---"
+            echo "total bytes: $(find _site -type f -printf '%s\n' | paste -sd+ | bc)"
+            echo "file count:  $(find _site -type f | wc -l)"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
       - name: Upload _site
         uses: actions/upload-artifact@v4
         with:
