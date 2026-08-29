@@ -6,17 +6,33 @@ redirect_from:
   - /apps/example-app/privacy-policy/
 ---
 
-This is sample content for demonstration only and is not a real privacy policy.
+Example App is a demo entry on this site. This policy describes how a small,
+offline TurkWave app of this kind handles your data.
 
 ## Information we collect
 
-Example App does not collect, store, or share any personal information. The app runs
-entirely on your device.
+Example App does not collect, store, or transmit personal information. It runs
+entirely on your device and has no user accounts or sign-in.
 
-## Analytics
+## Analytics and tracking
 
-No analytics or tracking SDKs are bundled with the app.
+The app bundles no analytics, advertising, or tracking SDKs, and makes no
+network requests of its own.
+
+## Third parties
+
+Because no data is collected, none is shared with third parties.
+
+## Children
+
+The app is suitable for all ages and collects nothing from anyone, including
+children.
 
 ## Contact
 
-Questions about this policy can be sent to the contact address listed on the app page.
+Questions about this policy can be sent to the contact address shown on the
+Example App page.
+
+## Changes
+
+If this policy changes, the "Last updated" date above will change with it.
