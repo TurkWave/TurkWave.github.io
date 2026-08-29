@@ -7,14 +7,6 @@ baseurl: ""
 # document page. Change it here and it updates site-wide.
 contact_email: "support@turkwave.example"
 
-theme: just-the-docs
-nav_enabled: false
-search_enabled: true
-
-sass:
-  quiet_deps: true
-  silence_deprecations: [import, global-builtin, color-functions]
-
 plugins:
   - jekyll-seo-tag
   - jekyll-include-cache
