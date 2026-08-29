@@ -19,13 +19,16 @@ automatically by GitHub Actions on every push to `main`.
 ## Adding an app
 
 ```sh
-bin/new-app <app-slug> "App Name" support@example.com   # Windows: prefix with `ruby `
+bin/new-app <app-slug>   # Windows: prefix with `ruby `
 ```
 
-Creates `_docs/<app-slug>/` from the template with `permalink`, `app_name`, `contact_email`
-and today's `effective_date` / `last_updated` filled in (override with `--date YYYY-MM-DD`).
-Validates the slug and email, refuses an existing folder. Then write the real text into
-`privacy.md`, `terms.md` and `license.md`, and commit.
+Creates `_docs/<app-slug>/` from the template with `permalink`, `title` and today's
+`effective_date` / `last_updated` filled in (override with `--date YYYY-MM-DD`). The
+display name is derived from the slug (`my-app` → "My App") by both the layouts and
+this script, so it lives in exactly one place — the folder name. The support address
+comes from `contact_email` in `_config.yml`, shared by every page. Validates the slug,
+refuses an existing folder. Then write the real text into `privacy.md`, `terms.md` and
+`license.md`, and commit.
 
 ## Local development
 

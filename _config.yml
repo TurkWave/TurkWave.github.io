@@ -3,6 +3,10 @@ description: "Privacy policies, terms of use, and support documents for TurkWave
 url: "https://turkwave.github.io"
 baseurl: ""
 
+# Single source of truth for the support address shown on every app and
+# document page. Change it here and it updates site-wide.
+contact_email: "support@turkwave.example"
+
 theme: just-the-docs
 nav_enabled: false
 search_enabled: true

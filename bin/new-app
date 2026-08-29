@@ -4,14 +4,16 @@
 # bin/new-app - scaffold a new app's legal/support docs from _templates/new-app/.
 #
 # Usage:
-#   bin/new-app <app-slug> <app-name> <contact-email> [--date YYYY-MM-DD] [--no-edit]
+#   bin/new-app <app-slug> [--date YYYY-MM-DD] [--no-edit]
 #
 # Example:
-#   bin/new-app my-app "My App" support@myapp.com
+#   bin/new-app my-app
 #
-# Creates _docs/<app-slug>/{index.md,privacy.md,terms.md} with permalink, app
-# name, contact email and dates filled in. The only thing left to do afterwards
-# is write the real legal text in privacy.md / terms.md.
+# Creates _docs/<app-slug>/{index.md,privacy.md,terms.md,license.md} with the
+# permalink, title and dates filled in. The display name is derived from the
+# slug ("my-app" -> "My App"); the support address comes from `contact_email`
+# in _config.yml. The only thing left to do afterwards is write the real legal
+# text in privacy.md / terms.md / license.md.
 
 require "date"
 require "fileutils"
@@ -28,10 +30,10 @@ end
 
 def usage
   warn <<~USAGE
-    Usage: bin/new-app <app-slug> <app-name> <contact-email> [--date YYYY-MM-DD] [--no-edit]
+    Usage: bin/new-app <app-slug> [--date YYYY-MM-DD] [--no-edit]
 
     Example:
-      bin/new-app my-app "My App" support@myapp.com
+      bin/new-app my-app
   USAGE
   exit 2
 end
@@ -53,19 +55,19 @@ until args.empty?
   else positional << a
   end
 end
-die("expected 3 arguments: <app-slug> <app-name> <contact-email>") unless positional.size == 3
-slug, app_name, contact_email = positional
+die("expected 1 argument: <app-slug>") unless positional.size == 1
+slug = positional.first
 
 # --- validate ----------------------------------------------------------------
 unless slug =~ /\A[a-z0-9]+(?:-[a-z0-9]+)*\z/
   die("invalid slug #{slug.inspect}: must be lowercase kebab-case " \
       "(a-z, 0-9, single hyphens, no leading/trailing/double hyphens)")
 end
-unless contact_email =~ /\A[^@\s]+@[^@\s]+\.[^@\s]+\z/
-  die("invalid email #{contact_email.inspect}")
-end
-die("app name must not contain control characters or newlines") if app_name =~ /[[:cntrl:]]/
 die("template dir not found: #{TEMPLATE_DIR}") unless Dir.exist?(TEMPLATE_DIR)
+
+# Display name is derived from the slug, matching the site's Liquid helper
+# (_includes/app-name.html): "my-app" -> "My App".
+app_name = slug.split("-").map(&:capitalize).join(" ")
 
 target = File.join(DOCS_DIR, slug)
 die("#{File.join("_docs", slug)} already exists") if File.exist?(target)
@@ -126,10 +128,8 @@ FileUtils.cp_r(TEMPLATE_DIR, target)
 Dir.glob(File.join(target, "*.md")).sort.each do |f|
   if File.basename(f) == "index.md"
     fill_front_matter(f,
-      "permalink"     => "/apps/#{slug}/",
-      "app_name"      => yq(app_name),
-      "title"         => yq(app_name),
-      "contact_email" => yq(contact_email))
+      "permalink" => "/apps/#{slug}/",
+      "title"     => yq(app_name))
   else
     fill_front_matter(f,
       "effective_date" => doc_date,
@@ -152,6 +152,7 @@ Dir.glob(File.join(target, "*.md")).sort.each do |f|
   url  = name == "index" ? "#{base}/apps/#{slug}/" : "#{base}/apps/#{slug}/#{name}/"
   puts format("  %-11s -> %s", File.basename(f), url)
 end
+puts "Name:   #{app_name} (derived from slug)"
 puts "Dates:  effective_date = last_updated = #{doc_date}"
 puts
 puts "Next: replace the placeholder body text in the generated docs (privacy.md,"

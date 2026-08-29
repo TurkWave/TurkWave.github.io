@@ -2,8 +2,6 @@
 layout: app-index
 permalink: /apps/example-app/
 is_app_index: true
-app_name: "Example App"
-contact_email: "support@turkwave.example"
 title: "Example App"
 ---
 
