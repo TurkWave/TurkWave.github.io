@@ -1,0 +1,164 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+#
+# bin/new-app - scaffold a new app's legal/support docs from _templates/new-app/.
+#
+# Usage:
+#   bin/new-app <app-slug> <app-name> <contact-email> [--date YYYY-MM-DD] [--no-edit]
+#
+# Example:
+#   bin/new-app my-app "My App" support@myapp.com
+#
+# Creates _docs/<app-slug>/{index.md,privacy.md,terms.md} with permalink, app
+# name, contact email and dates filled in. The only thing left to do afterwards
+# is write the real legal text in privacy.md / terms.md.
+
+require "date"
+require "fileutils"
+require "yaml"
+
+REPO_ROOT    = File.expand_path("..", __dir__)
+TEMPLATE_DIR = File.join(REPO_ROOT, "_templates", "new-app")
+DOCS_DIR     = File.join(REPO_ROOT, "_docs")
+
+def die(msg)
+  warn "error: #{msg}"
+  exit 1
+end
+
+def usage
+  warn <<~USAGE
+    Usage: bin/new-app <app-slug> <app-name> <contact-email> [--date YYYY-MM-DD] [--no-edit]
+
+    Example:
+      bin/new-app my-app "My App" support@myapp.com
+  USAGE
+  exit 2
+end
+
+# --- parse args ----------------------------------------------------------------
+args = ARGV.dup
+usage if args.empty? || args.include?("-h") || args.include?("--help")
+
+date_opt   = nil
+no_edit    = false
+positional = []
+until args.empty?
+  a = args.shift
+  case a
+  when "--date"          then date_opt = args.shift || die("--date needs a value")
+  when /\A--date=(.+)\z/ then date_opt = Regexp.last_match(1)
+  when "--no-edit"       then no_edit = true
+  when /\A-/             then die("unknown option: #{a}")
+  else positional << a
+  end
+end
+die("expected 3 arguments: <app-slug> <app-name> <contact-email>") unless positional.size == 3
+slug, app_name, contact_email = positional
+
+# --- validate ----------------------------------------------------------------
+unless slug =~ /\A[a-z0-9]+(?:-[a-z0-9]+)*\z/
+  die("invalid slug #{slug.inspect}: must be lowercase kebab-case " \
+      "(a-z, 0-9, single hyphens, no leading/trailing/double hyphens)")
+end
+unless contact_email =~ /\A[^@\s]+@[^@\s]+\.[^@\s]+\z/
+  die("invalid email #{contact_email.inspect}")
+end
+die("app name must not contain control characters or newlines") if app_name =~ /[[:cntrl:]]/
+die("template dir not found: #{TEMPLATE_DIR}") unless Dir.exist?(TEMPLATE_DIR)
+
+target = File.join(DOCS_DIR, slug)
+die("#{File.join("_docs", slug)} already exists") if File.exist?(target)
+
+# --- resolve date ------------------------------------------------------------
+today = Date.today
+
+def parse_iso(str)
+  Date.iso8601(str)
+rescue ArgumentError
+  nil
+end
+
+doc_date =
+  if date_opt
+    d = parse_iso(date_opt) || die("--date must be a real YYYY-MM-DD date")
+    die("--date #{date_opt} is in the future") if d > today
+    d.iso8601
+  elsif $stdin.tty?
+    print "Effective date / last updated [YYYY-MM-DD] (default #{today}): "
+    input = $stdin.gets.to_s.strip
+    if input.empty?
+      today.iso8601
+    else
+      d = parse_iso(input) || die("date must be a real YYYY-MM-DD date")
+      die("date #{input} is in the future") if d > today
+      d.iso8601
+    end
+  else
+    today.iso8601
+  end
+
+# --- helpers ---------------------------------------------------------------
+# YAML double-quoted scalar with backslash and quote escaped.
+def yq(str)
+  %("#{str.gsub(/[\\"]/) { |c| "\\#{c}" }}")
+end
+
+# Replace `key: <value>` lines, but only inside the leading front-matter block.
+def fill_front_matter(path, replacements)
+  fence = 0
+  out = File.readlines(path).map do |line|
+    fence += 1 if line.strip == "---"
+    m = line.match(/\A(\s*)([A-Za-z0-9_-]+):\s.*\n?\z/)
+    if fence == 1 && m && replacements.key?(m[2])
+      "#{m[1]}#{m[2]}: #{replacements[m[2]]}\n"
+    else
+      line
+    end
+  end
+  File.write(path, out.join)
+end
+
+# --- scaffold ---------------------------------------------------------------
+FileUtils.mkdir_p(DOCS_DIR)
+FileUtils.cp_r(TEMPLATE_DIR, target)
+
+Dir.glob(File.join(target, "*.md")).sort.each do |f|
+  if File.basename(f) == "index.md"
+    fill_front_matter(f,
+      "permalink"     => "/apps/#{slug}/",
+      "app_name"      => yq(app_name),
+      "title"         => yq(app_name),
+      "contact_email" => yq(contact_email))
+  else
+    fill_front_matter(f,
+      "effective_date" => doc_date,
+      "last_updated"   => doc_date)
+  end
+end
+
+# --- self-check: permalink must match the folder ----------------------------
+idx_fm = YAML.safe_load(File.read(File.join(target, "index.md")).split(/^---\s*$/)[1].to_s) || {}
+unless idx_fm["permalink"] == "/apps/#{slug}/"
+  die("internal: generated permalink #{idx_fm["permalink"].inspect} != /apps/#{slug}/")
+end
+
+# --- summary ---------------------------------------------------------------
+cfg  = (YAML.safe_load(File.read(File.join(REPO_ROOT, "_config.yml"))) rescue {}) || {}
+base = "#{cfg["url"]}#{cfg["baseurl"]}"
+puts "Created #{File.join("_docs", slug)}/"
+Dir.glob(File.join(target, "*.md")).sort.each do |f|
+  name = File.basename(f, ".md")
+  url  = name == "index" ? "#{base}/apps/#{slug}/" : "#{base}/apps/#{slug}/#{name}/"
+  puts format("  %-11s -> %s", File.basename(f), url)
+end
+puts "Dates:  effective_date = last_updated = #{doc_date}"
+puts
+puts "Next: write the real legal text in privacy.md and terms.md, then commit & push."
+
+# --- optional editor -----------------------------------------------------------
+editor = ENV["EDITOR"] || ENV["VISUAL"]
+if !no_edit && editor && $stdin.tty?
+  docs = Dir.glob(File.join(target, "*.md")).reject { |f| File.basename(f) == "index.md" }.sort
+  system(editor, *docs)
+end
