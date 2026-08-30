@@ -4,19 +4,21 @@ layout: default
 {% assign path_parts = page.path | split: "/" %}
 {% assign app_slug = path_parts[1] %}
 {% capture app_name %}{% include app-name.html slug=app_slug %}{% endcapture %}
-<h1>{{ app_name }}</h1>
-
-{{ content }}
-
 {% assign app_dir_prefix = "_docs/" | append: app_slug | append: "/" %}
 {% assign app_docs = site.docs | where_exp: "d", "d.path contains app_dir_prefix" | where_exp: "d", "d.url != page.url" | sort: "title" %}
-<ul class="doc-list">
-  {% for doc in app_docs %}
-  <li><a href="{{ doc.url | relative_url }}">{{ doc.title }}</a></li>
-  {% endfor %}
-</ul>
+<h1>{{ app_name }}</h1>
 
-<a class="contact-card" href="mailto:{{ site.contact_email }}">
-  <span class="contact-card__label">Contact</span>
-  <span class="contact-card__value">{{ site.contact_email }}</span>
-</a>
+<article class="app-frame">
+  <div class="app-frame__about">
+    {{ content }}
+  </div>
+
+  <hr>
+
+  <ul class="app-frame__links">
+    {% for doc in app_docs %}
+    <li><a href="{{ doc.url | relative_url }}">{{ doc.title }}</a></li>
+    {% endfor %}
+    <li><a href="mailto:{{ site.contact_email }}">Contact &middot; {{ site.contact_email }}</a></li>
+  </ul>
+</article>
