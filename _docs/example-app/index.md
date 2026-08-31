@@ -3,10 +3,76 @@ layout: app-index
 permalink: /example-app/
 is_app_index: true
 title: "Example App"
+
+# --- App-index page content -------------------------------------------------
+# Every block below is OPTIONAL. A section renders only when its key is set;
+# an empty value hides that section and its divider (same rule as the existing
+# "platform" / "app_url" conditionals). All values here are DEMO DATA for the
+# sample entry and use example.com (IANA's reserved example domain) on purpose.
+
+# Logo shown at the top-left of the frame, with the app name to its right.
+logo: "/assets/img/example-app/logo.svg"
+logo_alt: "Example App logo (placeholder)"
+
+# One-line taglines. "slogan" sits just under the header; "sub_slogan" sits
+# just above the Reviews section.
+slogan: "A demo entry that shows how the app-index layout renders."
+sub_slogan: "The rating, download count and reviews below are sample data."
+
+# Horizontal screenshot strip (swipe / wheel / arrow keys).
+screenshots:
+  - { src: "/assets/img/example-app/screenshot-1.svg", alt: "Home screen (placeholder)" }
+  - { src: "/assets/img/example-app/screenshot-2.svg", alt: "Detail screen (placeholder)" }
+  - { src: "/assets/img/example-app/screenshot-3.svg", alt: "Settings screen (placeholder)" }
+
+# "Get the app" buttons. Known stores (canonical label applied): google-play,
+# app-store, microsoft-store. Anything else: { label: "...", url: "..." }.
+# The generic "app_url" below also renders as a "Website" button in this row.
+store_links:
+  - { store: "google-play", url: "https://play.google.com/store/apps/details?id=com.example.demo" }
+  - { store: "app-store", url: "https://apps.apple.com/app/id000000000" }
+  - { store: "microsoft-store", url: "https://apps.microsoft.com/detail/0000000000000" }
+  - { label: "Source on GitHub", url: "https://github.com/TurkWave" }
+
+# The app's own website / generic link. Also used by the home page listing and
+# by the document pages' "Open app" link.
+app_url: "https://example.com/example-app"
+
+# Social proof. Omit any piece to hide it; omit all three to hide the section.
+rating: { value: 4.5, max: 5, count: 42 }
+downloads: "1,000+ (sample)"
+reviews:
+  - author: "Demo reviewer"
+    rating: 5
+    date: "2026-08-01"
+    text: "Sample review text for the layout. Not a real review."
+  - author: "Another demo user"
+    rating: 4
+    date: "2026-08-10"
+    text: "A second placeholder review so the fade-out and the read-more link are visible on the page."
+reviews_url: "https://example.com/example-app/reviews"
+
+# Pricing: a Markdown block.
+pricing: |
+  Free to download. This is sample pricing copy — an optional one-time
+  "Pro" unlock is shown here only as an example.
+
+# FAQ: static question / answer pairs (answers are Markdown).
+faq:
+  - q: "Is this a real app?"
+    a: "No. Example App is a demo entry that shows how the app-index layout renders."
+  - q: "Where does this content come from?"
+    a: "Each app's `index.md` front matter. An empty key hides its section."
+
+# Copyright line at the foot of the frame. Empty -> "(c) <year> TurkWave.
+# All rights reserved." Set it to name a different rights holder for an app.
+copyright: ""
+
+# Left empty on purpose so the home page listing is unchanged for the demo.
 platform: ""
-app_url: ""
+
 redirect_from:
   - /apps/example-app/
 ---
 
-Example App is a sample entry that shows how an app's legal and support documents are laid out on this site. Its documents below are generated automatically from the files in `_docs/example-app/`.
+Example App is a demo entry on this site; the sections above are all sample content.

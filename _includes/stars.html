@@ -1,0 +1,9 @@
+{%- comment -%}
+Monochrome star rating with a pure-CSS partial fill (no JS).
+Usage: {% include stars.html value=4.5 max=5 %}
+Renders five stars with the leading value/max fraction filled. Decorative
+only (aria-hidden) - the caller supplies the text alternative.
+{%- endcomment -%}
+{%- assign _max = include.max | default: 5 -%}
+{%- assign _pct = include.value | times: 1.0 | divided_by: _max | times: 100 | round: 2 -%}
+<span class="stars" aria-hidden="true"><span class="stars__on" style="width: {{ _pct }}%">&#9733;&#9733;&#9733;&#9733;&#9733;</span>&#9733;&#9733;&#9733;&#9733;&#9733;</span>
