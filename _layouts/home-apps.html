@@ -8,8 +8,7 @@ layout: default
 {% assign apps = site.docs | where: "is_app_index", true | sort: "path" %}
 <ul class="app-list">
   {% for app in apps %}
-  {% assign app_path_parts = app.path | split: "/" %}
-  {% assign app_slug = app_path_parts[1] %}
+  {% capture app_slug %}{% include app-slug.html path=app.path %}{% endcapture %}
   <li class="app-list__item">
     <a class="app-list__name" href="{{ app.url | relative_url }}">{% include app-name.html slug=app_slug %}</a>
     {%- if app.platform and app.platform != "" %}

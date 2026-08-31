@@ -49,6 +49,7 @@ test:
 	ruby _scripts/lib/front_matter_test.rb
 	ruby _scripts/validate_config_test.rb
 	ruby _scripts/validate_urls_test.rb
+	ruby _scripts/lint_content_test.rb
 	ruby bin/new-app_test.rb
 
 clean:

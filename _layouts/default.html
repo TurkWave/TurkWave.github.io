@@ -12,8 +12,7 @@
     <div class="site-header__inner">
       <div class="site-header__left">
         {%- if page.layout == "app-index" or page.layout == "legal-doc" -%}
-        {%- assign crumb_parts = page.path | split: "/" -%}
-        {%- assign crumb_slug = crumb_parts[1] -%}
+        {%- capture crumb_slug %}{% include app-slug.html path=page.path %}{% endcapture -%}
         {%- assign crumb_app_url = "/" | append: crumb_slug | append: "/" | relative_url -%}
         <nav class="crumbs" aria-label="Breadcrumb">
           <a href="{{ '/' | relative_url }}">Home</a>

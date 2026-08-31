@@ -6,8 +6,7 @@ The app-index page is built entirely from index.md front matter (see the
 keys in _templates/new-app/index.md). The Markdown body is NOT rendered
 here - it only feeds the SEO meta description via jekyll-seo-tag.
 {%- endcomment -%}
-{% assign path_parts = page.path | split: "/" %}
-{% assign app_slug = path_parts[1] %}
+{% capture app_slug %}{% include app-slug.html path=page.path %}{% endcapture %}
 {% capture app_name %}{% include app-name.html slug=app_slug %}{% endcapture %}
 {% assign app_dir_prefix = "_docs/" | append: app_slug | append: "/" %}
 {% assign app_docs = site.docs | where_exp: "d", "d.path contains app_dir_prefix" | where_exp: "d", "d.url != page.url" | sort: "title" %}
@@ -81,7 +80,7 @@ here - it only feeds the SEO meta description via jekyll-seo-tag.
     {%- if page.rating or (page.downloads and page.downloads != "") %}
     <p class="app-social__stats">
       {%- if page.rating %}
-      <span class="app-rating" role="img" aria-label="{{ page.rating.value }} out of {{ rating_max }}{% if page.rating.count %}, {{ page.rating.count }} ratings{% endif %}">
+      <span class="app-rating" role="img" aria-label="{{ page.rating.value }} out of {{ rating_max }}{% if page.rating.count %}{% if page.rating.count > 0 %}, {{ page.rating.count }} ratings{% endif %}{% endif %}">
         {%- include stars.html value=page.rating.value max=rating_max -%}
         <span class="app-rating__num">{{ page.rating.value }}</span>
       </span>
@@ -97,11 +96,11 @@ here - it only feeds the SEO meta description via jekyll-seo-tag.
       {%- for review in page.reviews %}
       <figure class="app-review">
         <div class="app-review__head">
-          {%- if review.rating %}
+          {%- if review.rating %}{%- if review.rating > 0 %}
           <span class="app-rating app-rating--sm" role="img" aria-label="{{ review.rating }} out of 5">
             {%- include stars.html value=review.rating max=5 -%}
           </span>
-          {%- endif %}
+          {%- endif %}{%- endif %}
           <figcaption>{{ review.author }}{% if review.date %} &middot; {{ review.date }}{% endif %}</figcaption>
         </div>
         <blockquote>{{ review.text }}</blockquote>

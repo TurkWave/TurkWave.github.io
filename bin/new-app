@@ -19,14 +19,15 @@ require "date"
 require "fileutils"
 require "yaml"
 require_relative "../_scripts/lib/front_matter"
+require_relative "../_scripts/lib/reserved_slugs"
 
 REPO_ROOT    = File.expand_path("..", __dir__)
 TEMPLATE_DIR = File.join(REPO_ROOT, "_templates", "new-app")
 DOCS_DIR     = File.join(REPO_ROOT, "_docs")
 
-# Slugs that would publish to a URL clashing with a real top-level path.
-# Keep in sync with RESERVED_SLUGS in _scripts/validate_urls.rb.
-RESERVED_SLUGS = %w[apps assets sitemap robots 404 index].freeze
+# Slugs that would publish to a URL clashing with a real top-level path -
+# one list, shared with _scripts/validate_urls.rb.
+RESERVED_SLUGS = ReservedSlugs::LIST
 
 def die(msg)
   warn "error: #{msg}"

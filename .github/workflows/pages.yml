@@ -34,23 +34,17 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
       - name: Run test suites
-        run: |
-          ruby _scripts/lib/front_matter_test.rb
-          ruby _scripts/validate_config_test.rb
-          ruby _scripts/validate_urls_test.rb
-          ruby bin/new-app_test.rb
-      - name: Validate config
-        run: ruby _scripts/validate_config.rb
-      - name: Validate URL scheme
-        run: ruby _scripts/validate_urls.rb
-      - name: Lint legal-doc content
-        run: ruby _scripts/lint_content.rb
+        run: make test
+      - name: Lint (config + URL + content)
+        run: make lint
+      # Not `make build`: Pages needs --baseurl from the configure-pages step,
+      # which the Makefile target (shared with local dev) does not pass.
       - name: Build with Jekyll
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
       - name: Validate redirects
-        run: ruby _scripts/validate_redirects.rb
+        run: make validate
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 

@@ -1,8 +1,7 @@
 ---
 layout: default
 ---
-{% assign path_parts = page.path | split: "/" %}
-{% assign app_slug = path_parts[1] %}
+{% capture app_slug %}{% include app-slug.html path=page.path %}{% endcapture %}
 {% assign app_home_url = "/" | append: app_slug | append: "/" | relative_url %}
 {% capture app_name %}{% include app-name.html slug=app_slug %}{% endcapture %}
 {% assign app_dir_prefix = "_docs/" | append: app_slug | append: "/" %}

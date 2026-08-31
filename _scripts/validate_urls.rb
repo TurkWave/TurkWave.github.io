@@ -19,19 +19,20 @@
 # Exit 0 when clean, 1 with a report listing file + expected vs actual URL.
 
 require_relative "lib/front_matter"
+require_relative "lib/reserved_slugs"
 
 REPO_ROOT = File.expand_path("..", __dir__)
 DOCS_DIR  = File.join(REPO_ROOT, "_docs")
 SLUG_RE   = /\A[a-z0-9]+(?:-[a-z0-9]+)*\z/
 
-# Top-level names already taken by the built site. An app folder with one of
-# these slugs would publish to a URL that shadows (or is shadowed by) a real
-# path: /assets/*, jekyll-sitemap's /sitemap.xml + /robots.txt, /404.html, the
-# site root, and the /apps/... redirect stubs kept for the old URL scheme.
-RESERVED_SLUGS = %w[apps assets sitemap robots 404 index].freeze
+# Top-level names already taken by the built site - one list, shared with
+# bin/new-app (see _scripts/lib/reserved_slugs.rb for the rationale).
+RESERVED_SLUGS = ReservedSlugs::LIST
 
 errors = []
 count  = 0
+app_dirs       = {} # app-slug => true: every folder that holds at least one doc
+app_index_seen = {} # app-slug => true: folders whose index.md was found
 
 Dir.glob(File.join(DOCS_DIR, "**", "*.{md,markdown}")).sort.each do |path|
   rel  = path.sub("#{REPO_ROOT}/", "")
@@ -46,6 +47,7 @@ Dir.glob(File.join(DOCS_DIR, "**", "*.{md,markdown}")).sort.each do |path|
   file     = segs[1]
   doc_slug = File.basename(file, ".*")
   count   += 1
+  app_dirs[app_slug] = true
 
   begin
     fm = FrontMatter.parse_file(path)
@@ -65,6 +67,7 @@ Dir.glob(File.join(DOCS_DIR, "**", "*.{md,markdown}")).sort.each do |path|
   end
 
   if file == "index.md"
+    app_index_seen[app_slug] = true
     expected = "/#{app_slug}/"
     actual   = fm["permalink"]
     if actual != expected
@@ -97,6 +100,17 @@ Dir.glob(File.join(DOCS_DIR, "**", "*.{md,markdown}")).sort.each do |path|
                 "  actual: #{fm["layout"].inspect}"
     end
   end
+end
+
+# Every app folder that ships a doc must also ship an index.md. home-apps.html
+# lists an app only through its index.md (is_app_index: true), and
+# legal-doc.html resolves `app_index` from it. A folder with docs but no
+# index.md passes every per-file check above yet is invisible on the home page,
+# and its doc pages link to a /<app-slug>/ page that is never generated.
+(app_dirs.keys - app_index_seen.keys).sort.each do |slug|
+  errors << "_docs/#{slug}/\n  no index.md: the folder has document(s) but no app index\n" \
+            "  - it would be absent from the home list (home-apps.html filters on is_app_index)\n" \
+            "  - its doc pages resolve app_index to nil and link to a missing /#{slug}/ page"
 end
 
 if errors.empty?
