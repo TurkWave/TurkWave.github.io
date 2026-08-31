@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270 480" role="img" aria-label="Example App screenshot 1 placeholder">
+  <rect width="270" height="480" rx="18" fill="#e4e4e7"/>
+  <rect x="1" y="1" width="268" height="478" rx="17" fill="none" stroke="#a1a1aa" stroke-width="1.5"/>
+  <rect x="24" y="40" width="222" height="120" rx="10" fill="#bcc0e0"/>
+  <rect x="24" y="184" width="150" height="16" rx="8" fill="#b0b0b8"/>
+  <rect x="24" y="212" width="222" height="12" rx="6" fill="#c8c8cf"/>
+  <rect x="24" y="232" width="196" height="12" rx="6" fill="#c8c8cf"/>
+  <text x="135" y="332" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="21" font-weight="700" fill="#52525b" text-anchor="middle">Screenshot 1</text>
+  <text x="135" y="358" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#71717a" text-anchor="middle">placeholder</text>
+</svg>

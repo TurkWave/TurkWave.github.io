@@ -217,7 +217,7 @@ th { font-weight: 600; }
 .doc-frame > h1 { margin-top: 0; }
 .doc-frame h2, .doc-frame h3 { scroll-margin-top: 5.5rem; }
 
-/* ---- App index: one frame — about text, a divider, then plain doc links ---- */
+/* ---- App index: one frame, a stack of divider-separated sections ---- */
 .app-frame {
   min-width: 0;
   background: var(--surface);
@@ -226,18 +226,182 @@ th { font-weight: 600; }
   padding: 2.75rem;
 }
 @media (max-width: 40rem) { .app-frame { padding: 1.5rem; } }
-.app-frame__about > :first-child { margin-top: 0; }
-.app-frame__about > :last-child { margin-bottom: 0; }
-.app-frame hr { margin: 2rem 0; }
-.app-frame__links {
+.app-frame > :first-child { margin-top: 0; }
+
+/* Header: logo left, app name right (side by side at every width) */
+.app-hero {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.app-hero__logo {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+.app-hero__name {
+  margin: 0;
+  min-width: 0;
+  font-size: clamp(1.7rem, 1.4rem + 1.6vw, 2.4rem);
+  overflow-wrap: anywhere;
+}
+
+/* Every block below the header: a hairline divider + breathing room */
+.app-section {
+  margin-top: 2.25rem;
+  padding-top: 2.25rem;
+  border-top: 1px solid var(--border);
+}
+.app-section > :first-child { margin-top: 0; }
+.app-section > :last-child { margin-bottom: 0; }
+.app-section h2 {
+  margin: 0 0 1rem;
+  padding-top: 0;
+  border-top: 0;
+  scroll-margin-top: 5.5rem;
+}
+
+/* Unlabelled lead lines */
+.app-slogan p {
+  margin: 0;
+  font-size: clamp(1.1rem, 1rem + .8vw, 1.35rem);
+  font-weight: 550;
+}
+.app-subslogan p { margin: 0; color: var(--text-muted); }
+.app-intro { color: var(--text-muted); }
+
+/* Screenshots: horizontal scroll-snap strip, scrollbar hidden */
+.app-shots__strip {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: .75rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
+  mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
+}
+.app-shots__strip::-webkit-scrollbar { display: none; }
+.app-shots__strip:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+.app-shots__item {
+  flex: 0 0 auto;
+  margin: 0;
+  width: clamp(9rem, 40vw, 12rem);
+  scroll-snap-align: start;
+}
+.app-shots__item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-subtle);
+}
+
+/* Get the app: outlined pill links */
+.app-stores__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+}
+.app-stores__list li { margin: 0; }
+.app-store-btn {
+  display: inline-block;
+  padding: .5rem .9rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  font-size: .92rem;
+  font-weight: 550;
+  color: var(--text);
+  transition: border-color .15s ease, background .15s ease;
+}
+.app-store-btn:hover { border-color: var(--text); background: var(--bg-subtle); }
+
+/* Reviews / social proof */
+.app-social__stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem 1.25rem;
+  margin: 0 0 1.25rem;
+}
+.app-rating { display: inline-flex; align-items: center; gap: .4rem; }
+.app-rating__num { font-weight: 650; }
+.app-social__downloads { color: var(--text-muted); }
+.stars {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  line-height: 1;
+  letter-spacing: .08em;
+  color: var(--border-strong);
+}
+.stars__on {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  letter-spacing: .08em;
+  color: var(--text);
+}
+.app-rating--sm .stars { font-size: .85rem; }
+.app-social__reviews { display: grid; gap: 1.5rem; }
+.app-social__reviews--faded {
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent);
+}
+.app-review { margin: 0; }
+.app-review__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .3rem .6rem;
+  margin-bottom: .35rem;
+  font-size: .9rem;
+  color: var(--text-muted);
+}
+.app-review__head figcaption { font-weight: 550; color: var(--text); }
+.app-review blockquote {
+  margin: 0;
+  padding: 0 0 0 1rem;
+  border-left: 3px solid var(--border-strong);
+  color: var(--text);
+}
+.app-social__more { margin: 1.25rem 0 0; text-align: center; }
+
+/* FAQ: static question / answer pairs */
+.app-faq__q {
+  margin: 1.5rem 0 .4rem;
+  font-size: 1rem;
+  font-weight: 650;
+}
+.app-faq__q:first-of-type { margin-top: 0; }
+.app-faq__a > :last-child { margin-bottom: 0; }
+
+/* Legal + Contact: plain link lists */
+.app-linklist {
   list-style: none;
   padding: 0;
   margin: 0;
   display: grid;
-  gap: .7rem;
+  gap: .6rem;
 }
-.app-frame__links li { margin: 0; }
-.app-frame__links a { font-weight: 550; overflow-wrap: anywhere; }
+.app-linklist li { margin: 0; }
+.app-linklist a { font-weight: 550; overflow-wrap: anywhere; }
+
+/* Copyright line at the foot of the frame */
+.app-copyright p { margin: 0; font-size: .9rem; color: var(--text-muted); }
 
 /* App list (home) */
 .app-list {

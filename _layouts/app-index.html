@@ -6,19 +6,164 @@ layout: default
 {% capture app_name %}{% include app-name.html slug=app_slug %}{% endcapture %}
 {% assign app_dir_prefix = "_docs/" | append: app_slug | append: "/" %}
 {% assign app_docs = site.docs | where_exp: "d", "d.path contains app_dir_prefix" | where_exp: "d", "d.url != page.url" | sort: "title" %}
-<h1>{{ app_name }}</h1>
+{% assign rating_max = page.rating.max | default: 5 %}
 
 <article class="app-frame">
-  <div class="app-frame__about">
+  <header class="app-hero">
+    {%- if page.logo and page.logo != "" %}
+    <img class="app-hero__logo" src="{{ page.logo | relative_url }}" alt="{{ page.logo_alt | default: app_name }}" width="56" height="56">
+    {%- endif %}
+    <h1 class="app-hero__name">{{ app_name }}</h1>
+  </header>
+
+  {%- assign intro = content | strip %}
+  {%- if intro != "" %}
+  <div class="app-section app-intro">
     {{ content }}
   </div>
+  {%- endif %}
 
-  <hr>
+  {%- if page.slogan and page.slogan != "" %}
+  <div class="app-section app-slogan">
+    <p>{{ page.slogan }}</p>
+  </div>
+  {%- endif %}
 
-  <ul class="app-frame__links">
-    {% for doc in app_docs %}
-    <li><a href="{{ doc.url | relative_url }}">{{ doc.title }}</a></li>
-    {% endfor %}
-    <li><a href="mailto:{{ site.contact_email }}">Contact &middot; {{ site.contact_email }}</a></li>
-  </ul>
+  {%- if page.screenshots and page.screenshots.size > 0 %}
+  <section class="app-section app-shots" aria-labelledby="screenshots">
+    <h2 id="screenshots">Screenshots</h2>
+    <ul class="app-shots__strip" tabindex="0" role="group" aria-label="Screenshots, scroll horizontally">
+      {%- for shot in page.screenshots %}
+      <li class="app-shots__item">
+        <img src="{{ shot.src | relative_url }}" alt="{{ shot.alt }}" loading="lazy">
+      </li>
+      {%- endfor %}
+    </ul>
+  </section>
+  {%- endif %}
+
+  {%- assign has_stores = false %}
+  {%- if page.store_links and page.store_links.size > 0 %}{% assign has_stores = true %}{% endif %}
+  {%- if page.app_url and page.app_url != "" %}{% assign has_stores = true %}{% endif %}
+  {%- if has_stores %}
+  <section class="app-section app-stores" aria-labelledby="get-the-app">
+    <h2 id="get-the-app">Get the app</h2>
+    <ul class="app-stores__list">
+      {%- for link in page.store_links %}
+      {%- assign label = link.label %}
+      {%- if link.store == "google-play" %}{% assign label = "Google Play" %}{% endif %}
+      {%- if link.store == "app-store" %}{% assign label = "App Store" %}{% endif %}
+      {%- if link.store == "microsoft-store" %}{% assign label = "Microsoft Store" %}{% endif %}
+      {%- if label and label != "" and link.url and link.url != "" %}
+      <li><a class="app-store-btn" href="{{ link.url }}">{{ label }}</a></li>
+      {%- endif %}
+      {%- endfor %}
+      {%- if page.app_url and page.app_url != "" %}
+      <li><a class="app-store-btn" href="{{ page.app_url }}">Website</a></li>
+      {%- endif %}
+    </ul>
+  </section>
+  {%- endif %}
+
+  {%- if page.sub_slogan and page.sub_slogan != "" %}
+  <div class="app-section app-subslogan">
+    <p>{{ page.sub_slogan }}</p>
+  </div>
+  {%- endif %}
+
+  {%- assign has_social = false %}
+  {%- if page.rating %}{% assign has_social = true %}{% endif %}
+  {%- if page.downloads and page.downloads != "" %}{% assign has_social = true %}{% endif %}
+  {%- if page.reviews and page.reviews.size > 0 %}{% assign has_social = true %}{% endif %}
+  {%- if has_social %}
+  <section class="app-section app-social" aria-labelledby="reviews">
+    <h2 id="reviews">Reviews</h2>
+
+    {%- if page.rating or (page.downloads and page.downloads != "") %}
+    <p class="app-social__stats">
+      {%- if page.rating %}
+      <span class="app-rating" role="img" aria-label="{{ page.rating.value }} out of {{ rating_max }}{% if page.rating.count %}, {{ page.rating.count }} ratings{% endif %}">
+        {%- include stars.html value=page.rating.value max=rating_max -%}
+        <span class="app-rating__num">{{ page.rating.value }}</span>
+      </span>
+      {%- endif %}
+      {%- if page.downloads and page.downloads != "" %}
+      <span class="app-social__downloads">{{ page.downloads }} downloads</span>
+      {%- endif %}
+    </p>
+    {%- endif %}
+
+    {%- if page.reviews and page.reviews.size > 0 %}
+    <div class="app-social__reviews{% if page.reviews_url and page.reviews_url != '' %} app-social__reviews--faded{% endif %}">
+      {%- for review in page.reviews %}
+      <figure class="app-review">
+        <div class="app-review__head">
+          {%- if review.rating %}
+          <span class="app-rating app-rating--sm" role="img" aria-label="{{ review.rating }} out of 5">
+            {%- include stars.html value=review.rating max=5 -%}
+          </span>
+          {%- endif %}
+          <figcaption>{{ review.author }}{% if review.date %} &middot; {{ review.date }}{% endif %}</figcaption>
+        </div>
+        <blockquote>{{ review.text }}</blockquote>
+      </figure>
+      {%- endfor %}
+    </div>
+    {%- endif %}
+
+    {%- if page.reviews_url and page.reviews_url != "" %}
+    <p class="app-social__more"><a href="{{ page.reviews_url }}">Read more reviews</a></p>
+    {%- endif %}
+  </section>
+  {%- endif %}
+
+  {%- if page.pricing and page.pricing != "" %}
+  <section class="app-section app-pricing" aria-labelledby="pricing">
+    <h2 id="pricing">Pricing</h2>
+    {{ page.pricing | markdownify }}
+  </section>
+  {%- endif %}
+
+  {%- if page.faq and page.faq.size > 0 %}
+  <section class="app-section app-faq" aria-labelledby="faq">
+    <h2 id="faq">FAQ</h2>
+    {%- for item in page.faq %}
+    <h3 class="app-faq__q">{{ item.q }}</h3>
+    <div class="app-faq__a">
+      {{- item.a | markdownify -}}
+    </div>
+    {%- endfor %}
+  </section>
+  {%- endif %}
+
+  {%- if app_docs.size > 0 %}
+  <section class="app-section app-legal" aria-labelledby="legal">
+    <h2 id="legal">Legal</h2>
+    <ul class="app-linklist">
+      {%- for doc in app_docs %}
+      <li><a href="{{ doc.url | relative_url }}">{{ doc.title }}</a></li>
+      {%- endfor %}
+    </ul>
+  </section>
+  {%- endif %}
+
+  <section class="app-section app-contact" aria-labelledby="contact">
+    <h2 id="contact">Contact</h2>
+    <ul class="app-linklist">
+      <li><a href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a></li>
+    </ul>
+  </section>
+
+  <section class="app-section app-copyright" aria-labelledby="copyright">
+    <h2 id="copyright">Copyright</h2>
+    {%- if page.copyright and page.copyright != "" %}
+    <p>{{ page.copyright }}</p>
+    {%- else %}
+    <p>&copy; {{ 'now' | date: "%Y" }} TurkWave. All rights reserved.</p>
+    {%- endif %}
+  </section>
 </article>
+
+{%- if page.screenshots and page.screenshots.size > 1 %}
+<script defer src="{{ '/assets/app-index.js' | relative_url }}"></script>
+{%- endif %}
