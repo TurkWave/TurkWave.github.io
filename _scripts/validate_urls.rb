@@ -91,7 +91,7 @@ Dir.glob(File.join(DOCS_DIR, "**", "*.{md,markdown}")).sort.each do |path|
     end
 
     # A content doc must use the collection default (legal-doc); the other
-    # layouts don't render the document chrome (title, dates, contact card).
+    # layouts don't render the document chrome (title, dates, app/contact line).
     if fm.key?("layout") && fm["layout"] != "legal-doc"
       errors << "#{rel}\n  collection docs must use  layout: legal-doc  (the default)\n" \
                 "  actual: #{fm["layout"].inspect}"

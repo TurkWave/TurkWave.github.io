@@ -204,51 +204,8 @@ th { font-weight: 600; }
   font-size: .9rem;
   margin: 0 0 2.5rem;
 }
-/* Contact / app-link card — legal-doc.html sidebar (always the --stack variant) */
-.contact-card {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .25rem .6rem;
-  margin-top: 2rem;
-  padding: 1rem 1.15rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-}
-.contact-card__label {
-  flex: none;
-  font-size: .66rem;
-  font-weight: 650;
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  color: var(--text-muted);
-}
-.contact-card__value {
-  color: var(--text);
-  font-weight: 550;
-  overflow-wrap: anywhere;
-}
 
-/* Stacked variant (legal-doc.html sidebar): label/value rows */
-.contact-card--stack {
-  flex-direction: column;
-  align-items: stretch;
-  gap: .15rem;
-}
-.contact-card--stack .contact-card__value {
-  font-size: .9rem;
-  font-weight: 400;
-}
-.contact-card--stack a.contact-card__value {
-  border: 0;
-  color: var(--text-muted);
-}
-.contact-card--stack a.contact-card__value:hover { color: var(--text); }
-.contact-card--stack .contact-card__value + .contact-card__label { margin-top: .6rem; }
-
-/* ---- Legal document pages: framed body + a contact/link card ---- */
-.doc-layout { display: flex; flex-direction: column; }
-
+/* ---- Legal document pages: a single framed body ---- */
 .doc-frame {
   min-width: 0;
   background: var(--surface);
@@ -259,22 +216,6 @@ th { font-weight: 600; }
 @media (max-width: 40rem) { .doc-frame { padding: 1.5rem; } }
 .doc-frame > h1 { margin-top: 0; }
 .doc-frame h2, .doc-frame h3 { scroll-margin-top: 5.5rem; }
-
-/* Narrow screens: the card sits stacked above the document */
-@media (max-width: 75.99rem) {
-  .doc-aside { order: -1; margin-bottom: 1.75rem; }
-}
-
-/* Wide screens: the card is pinned beside the document, fixed while scrolling */
-@media (min-width: 76rem) {
-  .doc-aside {
-    position: fixed;
-    top: 6rem;
-    left: calc(50% + 24rem);
-    width: 13rem;
-  }
-  .doc-aside .contact-card { margin-top: 0; }
-}
 
 /* ---- App index: one frame — about text, a divider, then plain doc links ---- */
 .app-frame {
