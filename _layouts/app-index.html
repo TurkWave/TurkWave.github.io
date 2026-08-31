@@ -1,6 +1,11 @@
 ---
 layout: default
 ---
+{%- comment -%}
+The app-index page is built entirely from index.md front matter (see the
+keys in _templates/new-app/index.md). The Markdown body is NOT rendered
+here - it only feeds the SEO meta description via jekyll-seo-tag.
+{%- endcomment -%}
 {% assign path_parts = page.path | split: "/" %}
 {% assign app_slug = path_parts[1] %}
 {% capture app_name %}{% include app-name.html slug=app_slug %}{% endcapture %}
