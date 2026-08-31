@@ -1,0 +1,7 @@
+{%- comment -%}
+App folder slug from a docs collection path.
+Usage: {% capture app_slug %}{% include app-slug.html path=page.path %}{% endcapture %}
+"_docs/example-app/privacy.md" -> "example-app". Emits the slug and nothing else
+(no surrounding whitespace) so callers can append it into URLs and filters.
+{%- endcomment -%}
+{%- assign _parts = include.path | split: "/" -%}{{- _parts[1] -}}

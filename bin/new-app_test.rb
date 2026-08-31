@@ -12,18 +12,19 @@ require "open3"
 require "fileutils"
 require "tmpdir"
 require "date"
+require_relative "../_scripts/lib/reserved_slugs"
 
 class NewAppTest < Minitest::Test
   REPO   = File.expand_path("..", __dir__)
   SCRIPT = File.join(REPO, "bin", "new-app")
+  LIBS   = Dir[File.join(REPO, "_scripts", "lib", "{front_matter,reserved_slugs}.rb")]
 
   def setup
     @root = Dir.mktmpdir("new-app-test-")
     FileUtils.mkdir_p(File.join(@root, "bin"))
     FileUtils.mkdir_p(File.join(@root, "_scripts", "lib"))
     FileUtils.cp(SCRIPT, File.join(@root, "bin", "new-app"))
-    FileUtils.cp(File.join(REPO, "_scripts", "lib", "front_matter.rb"),
-                 File.join(@root, "_scripts", "lib", "front_matter.rb"))
+    LIBS.each { |lib| FileUtils.cp(lib, File.join(@root, "_scripts", "lib", File.basename(lib))) }
     FileUtils.cp_r(File.join(REPO, "_templates"), File.join(@root, "_templates"))
     File.write(File.join(@root, "_config.yml"),
                %(url: "https://example.test"\nbaseurl: ""\n))
@@ -86,7 +87,7 @@ class NewAppTest < Minitest::Test
   end
 
   def test_reserved_slugs_are_refused_and_write_nothing
-    %w[apps assets sitemap robots 404 index].each do |slug|
+    ReservedSlugs::LIST.each do |slug|
       out, status = run_new_app(slug, "--no-edit")
       refute status.success?, "expected failure for reserved #{slug.inspect}: #{out}"
       assert_includes out, "reserved"

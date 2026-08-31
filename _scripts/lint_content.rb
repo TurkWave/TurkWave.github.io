@@ -26,13 +26,20 @@ TODAY     = Date.today
 # title "Replace With Document Title" can. "YYYY-MM-DD" is likewise omitted: an
 # unfilled template date is already rejected by the strict date-format check,
 # and a doc may legitimately mention the date format.
-# Extend this list with the exact wording of any new template placeholder.
+#
+# The "from _templates/" group is a sync contract with the real template
+# wording: _scripts/lint_content_test.rb runs this linter against the shipped
+# templates, so changing one without updating this list fails that suite. The
+# rest are freeform catch-alls with no template anchor.
 PLACEHOLDERS = [
+  # from _templates/ (kept honest by lint_content_test.rb):
+  "replace with document title",  # _templates/new-doc.md title
+  "replace with app name",        # _templates/new-app/index.md title (index.md is
+                                  # not linted; guards only a stray paste elsewhere)
+  "content goes here",            # "<X> content goes here." in every doc template body
+  # freeform catch-alls:
   "sample content",
   "demonstration only",
-  "replace with document title",  # _templates/new-doc.md title
-  "replace with app name",        # _templates/new-app/index.md title
-  "content goes here",            # "<X> content goes here." in every doc template body
   "lorem ipsum",
 ].freeze
 

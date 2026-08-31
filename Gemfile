@@ -2,6 +2,9 @@ source "https://rubygems.org"
 
 gem "jekyll", "~> 4.3"
 
+# Ruby 3.0+ dropped webrick from the standard library; `jekyll serve` needs it.
+gem "webrick", "~> 1.8"
+
 group :jekyll_plugins do
   gem "jekyll-seo-tag"
   gem "jekyll-include-cache"
