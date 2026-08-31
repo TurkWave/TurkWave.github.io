@@ -13,6 +13,7 @@ here - it only feeds the SEO meta description via jekyll-seo-tag.
 {% assign app_docs = site.docs | where_exp: "d", "d.path contains app_dir_prefix" | where_exp: "d", "d.url != page.url" | sort: "title" %}
 {% assign rating_max = page.rating.max | default: 5 %}
 
+{%- capture app_frame -%}
 <article class="app-frame">
   <header class="app-hero">
     {%- if page.logo and page.logo != "" %}
@@ -161,6 +162,12 @@ here - it only feeds the SEO meta description via jekyll-seo-tag.
     {%- endif %}
   </section>
 </article>
+{%- endcapture -%}
+
+<div class="page-toc-layout">
+{% include page-toc.html html=app_frame %}
+{{ app_frame }}
+</div>
 
 {%- if page.screenshots and page.screenshots.size > 1 %}
 <script defer src="{{ '/assets/app-index.js' | relative_url }}"></script>

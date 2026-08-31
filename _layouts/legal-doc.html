@@ -8,6 +8,8 @@ layout: default
 {% assign app_dir_prefix = "_docs/" | append: app_slug | append: "/" %}
 {% assign app_index = site.docs | where: "is_app_index", true | where_exp: "d", "d.path contains app_dir_prefix" | first %}
 
+<div class="page-toc-layout">
+{% include page-toc.html html=content %}
 <article class="doc-frame">
   <h1>{{ page.title }}</h1>
   <p class="doc-appline">
@@ -24,3 +26,4 @@ layout: default
 
   {{ content }}
 </article>
+</div>

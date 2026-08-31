@@ -402,6 +402,70 @@ th { font-weight: 600; }
 /* Copyright line at the foot of the frame */
 .app-copyright p { margin: 0; font-size: .9rem; color: var(--text-muted); }
 
+/* ---- "On this page" navigation (legal-doc + app-index only) ----
+   Narrow: a collapsed <details> above the content.
+   >= 76rem: a sticky rail in the left gutter; the content column keeps its
+   46rem width and stays centred. */
+.page-toc-layout { display: flow-root; }
+
+.page-toc {
+  margin: 0 0 1.75rem;
+  padding: .8rem 1.1rem;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: .85rem;
+}
+.page-toc__title {
+  cursor: pointer;
+  font-weight: 650;
+  list-style: none;
+}
+.page-toc__title::-webkit-details-marker { display: none; }
+.page-toc__title::before { content: "\25B8\A0"; color: var(--text-muted); }
+.page-toc[open] .page-toc__title::before { content: "\25BE\A0"; }
+.page-toc nav { margin-top: .6rem; }
+.page-toc ul { list-style: none; margin: 0; padding: 0; }
+.page-toc li { margin: 0; }
+.page-toc a {
+  display: block;
+  padding: .2rem 0;
+  border: 0;
+  line-height: 1.35;
+  color: var(--text-muted);
+}
+.page-toc a:hover { color: var(--text); }
+
+@media (min-width: 76rem) {
+  .page-toc {
+    float: left;
+    width: 12rem;
+    margin: 0 0 0 -13.5rem;
+    padding: 0;
+    background: none;
+    border: 0;
+    position: sticky;
+    top: 5.5rem;
+  }
+  .page-toc__title {
+    cursor: default;
+    font-size: .68rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--text-muted);
+  }
+  .page-toc__title::before,
+  .page-toc[open] .page-toc__title::before { content: ""; }
+  /* Show the list even when the <details> is closed (beats the UA rule). */
+  .page-toc > nav { display: block !important; }
+  .page-toc nav { margin-top: .5rem; }
+  .page-toc a {
+    padding: .22rem 0 .22rem .7rem;
+    border-left: 2px solid var(--border);
+  }
+  .page-toc a:hover { border-left-color: var(--text); }
+}
+
 /* App list (home) */
 .app-list {
   list-style: none;
