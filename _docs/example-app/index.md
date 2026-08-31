@@ -75,4 +75,4 @@ redirect_from:
   - /apps/example-app/
 ---
 
-Example App is a demo entry on this site; the sections above are all sample content.
+Example App is a demo entry on this site. Every value on this page is placeholder sample content. This body text is not shown on the page; it only supplies the SEO description.

@@ -16,13 +16,6 @@ layout: default
     <h1 class="app-hero__name">{{ app_name }}</h1>
   </header>
 
-  {%- assign intro = content | strip %}
-  {%- if intro != "" %}
-  <div class="app-section app-intro">
-    {{ content }}
-  </div>
-  {%- endif %}
-
   {%- if page.slogan and page.slogan != "" %}
   <div class="app-section app-slogan">
     <p>{{ page.slogan }}</p>
