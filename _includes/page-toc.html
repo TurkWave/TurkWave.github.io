@@ -1,0 +1,34 @@
+{%- comment -%}
+"On this page" navigation, built with no JavaScript.
+
+Scans the HTML passed in `include.html` for <h2 id="..."> headings and lists
+them as in-page anchor links, in document order. Renders nothing when fewer
+than two headings are found.
+
+  {% include page-toc.html html=content %}       (legal-doc: the rendered body)
+  {% include page-toc.html html=captured_frame %} (app-index: the <article>)
+
+Heading ids come from kramdown auto_ids on the document pages and from the
+explicit id="" on the app-index section headings.
+{%- endcomment -%}
+{%- assign _pieces = include.html | split: "</h2>" -%}
+{%- assign _items = "" -%}
+{%- for _p in _pieces -%}
+  {%- if _p contains "<h2 " and _p contains "id=" -%}
+    {%- assign _tag = _p | split: "<h2 " | last -%}
+    {%- assign _id = _tag | split: 'id="' | last | split: '"' | first -%}
+    {%- assign _text = _tag | split: ">" | last | strip_html | strip -%}
+    {%- if _id != "" and _text != "" -%}
+      {%- capture _items -%}{{ _items }}<li><a href="#{{ _id }}">{{ _text }}</a></li>{%- endcapture -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign _count = _items | split: "<li" | size | minus: 1 -%}
+{%- if _count >= 2 -%}
+<details class="page-toc">
+  <summary class="page-toc__title">On this page</summary>
+  <nav aria-label="On this page">
+    <ul>{{ _items }}</ul>
+  </nav>
+</details>
+{%- endif -%}
