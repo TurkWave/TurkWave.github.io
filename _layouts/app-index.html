@@ -16,19 +16,24 @@ here - it only feeds the SEO meta description via jekyll-seo-tag.
 <article class="app-frame">
   <header class="app-hero">
     {%- if page.logo and page.logo != "" %}
-    <img class="app-hero__logo" src="{{ page.logo | relative_url }}" alt="{{ page.logo_alt | default: app_name }}" width="56" height="56">
+    <img class="app-hero__logo" src="{{ page.logo | relative_url }}" alt="{{ page.logo_alt | default: app_name }}" width="96" height="96">
     {%- endif %}
-    <h1 class="app-hero__name">{{ app_name }}</h1>
+    <div class="app-hero__text">
+      <h1 class="app-hero__name">{{ app_name }}</h1>
+      {%- if page.subtitle and page.subtitle != "" %}
+      <p class="app-hero__subtitle">{{ page.subtitle }}</p>
+      {%- endif %}
+    </div>
   </header>
 
   {%- if page.slogan and page.slogan != "" %}
-  <div class="app-section app-slogan">
+  <div class="app-section app-section--plain app-slogan">
     <p>{{ page.slogan }}</p>
   </div>
   {%- endif %}
 
   {%- if page.screenshots and page.screenshots.size > 0 %}
-  <section class="app-section app-shots" aria-labelledby="screenshots">
+  <section class="app-section app-section--plain app-shots" aria-labelledby="screenshots">
     <h2 id="screenshots">Screenshots</h2>
     <ul class="app-shots__strip" tabindex="0" role="group" aria-label="Screenshots, scroll horizontally">
       {%- for shot in page.screenshots %}
@@ -38,6 +43,12 @@ here - it only feeds the SEO meta description via jekyll-seo-tag.
       {%- endfor %}
     </ul>
   </section>
+  {%- endif %}
+
+  {%- if page.sub_slogan and page.sub_slogan != "" %}
+  <details class="app-section app-subslogan">
+    <summary class="app-subslogan__summary"><span>{{ page.sub_slogan }}</span></summary>
+  </details>
   {%- endif %}
 
   {%- assign has_stores = false %}
@@ -61,12 +72,6 @@ here - it only feeds the SEO meta description via jekyll-seo-tag.
       {%- endif %}
     </ul>
   </section>
-  {%- endif %}
-
-  {%- if page.sub_slogan and page.sub_slogan != "" %}
-  <div class="app-section app-subslogan">
-    <p>{{ page.sub_slogan }}</p>
-  </div>
   {%- endif %}
 
   {%- assign has_social = false %}

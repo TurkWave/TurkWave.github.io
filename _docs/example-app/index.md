@@ -10,12 +10,15 @@ title: "Example App"
 # "platform" / "app_url" conditionals). All values here are DEMO DATA for the
 # sample entry and use example.com (IANA's reserved example domain) on purpose.
 
-# Logo shown at the top-left of the frame, with the app name to its right.
+# Logo shown large at the top-left of the frame, with the app name to its right.
 logo: "/assets/img/example-app/logo.svg"
 logo_alt: "Example App logo (placeholder)"
 
-# One-line taglines. "slogan" sits just under the header; "sub_slogan" sits
-# just above the Reviews section.
+# Free-text line under the app name (smaller, muted) - publisher + platforms.
+subtitle: "TurkWave · Mobile & PC · demo publisher line"
+
+# One-line taglines. "slogan" sits just under the header. "sub_slogan" is a
+# click-to-open drawer (closed by default) shown just above "Get the app".
 slogan: "A demo entry that shows how the app-index layout renders."
 sub_slogan: "The rating, download count and reviews below are sample data."
 
@@ -27,15 +30,18 @@ screenshots:
 
 # "Get the app" buttons. Known stores (canonical label applied): google-play,
 # app-store, microsoft-store. Anything else: { label: "...", url: "..." }.
-# The generic "app_url" below also renders as a "Website" button in this row.
 store_links:
   - { store: "google-play", url: "https://play.google.com/store/apps/details?id=com.example.demo" }
   - { store: "app-store", url: "https://apps.apple.com/app/id000000000" }
   - { store: "microsoft-store", url: "https://apps.microsoft.com/detail/0000000000000" }
   - { label: "Source on GitHub", url: "https://github.com/TurkWave" }
 
-# The app's own website / generic link. Also used by the home page listing and
-# by the document pages' "Open app" link.
+# Where the app lives. "platform" shows under the app name on the home page;
+# "app_url" is the app's own link - a "Website" button in the row above, the
+# "Open app" link on the document pages, and shown next to "platform" on the
+# home page. "platform" is left empty on purpose so the demo's home-page
+# listing stays unchanged.
+platform: ""
 app_url: "https://example.com/example-app"
 
 # Social proof. Omit any piece to hide it; omit all three to hide the section.
@@ -68,11 +74,14 @@ faq:
 # All rights reserved." Set it to name a different rights holder for an app.
 copyright: ""
 
-# Left empty on purpose so the home page listing is unchanged for the demo.
-platform: ""
-
+# --- Redirects -----------------------------------------------------------
+# example-app was migrated from the old /apps/... URL scheme, so its former
+# address is kept alive here (jekyll-redirect-from). A brand-new app has none.
 redirect_from:
   - /apps/example-app/
+
+# The one-line body below is not rendered on the page; jekyll-seo-tag uses it
+# as this page's <meta name="description">.
 ---
 
 Example App is a demo entry on this site; every value on this page is placeholder sample content.
