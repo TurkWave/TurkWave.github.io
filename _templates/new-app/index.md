@@ -25,7 +25,13 @@ subtitle: ""
 slogan: ""
 sub_slogan: ""
 
-# Horizontal screenshot strip. Each entry: { src: "/assets/img/<slug>/x.png", alt: "..." }
+# Horizontal media strip at a fixed height - portrait, landscape and mixed
+# sizes all fit, nothing is cropped or resized while scrolling. Each entry is
+# either an image or a YouTube video:
+#   - { src: "/assets/img/<slug>/1.png", alt: "Home screen" }
+#   - { youtube: "dQw4w9WgXcQ", alt: "Feature tour" }
+# A video loads only when clicked; add  poster: "/assets/img/<slug>/x.jpg"
+# to a video entry to skip the YouTube thumbnail request on page load.
 screenshots: []
 
 # "Get the app" buttons. Known stores (canonical label applied): google-play,
