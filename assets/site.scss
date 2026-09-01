@@ -55,7 +55,7 @@ a:hover { border-bottom-color: var(--text); }
   background: var(--bg);
   background: color-mix(in srgb, var(--bg) 88%, transparent);
   backdrop-filter: saturate(180%) blur(8px);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 2px solid var(--border-strong);
 }
 .site-header__inner {
   max-width: var(--content-width);
@@ -315,7 +315,8 @@ th { font-weight: 600; }
 
 /* Screenshots + video: a horizontal strip at a FIXED height. Each item keeps
    its own aspect ratio (portrait, landscape or mixed) and never resizes as
-   the strip scrolls. Wheel, click-drag, swipe and arrow keys all pan it. */
+   the strip scrolls. It pans freely - no snap points, no speed cap - via
+   wheel, click-drag (with a fling), swipe and arrow keys. */
 .app-shots__strip {
   --shot-h: clamp(12rem, 52vw, 17rem);
   list-style: none;
@@ -324,7 +325,6 @@ th { font-weight: 600; }
   display: flex;
   gap: .75rem;
   overflow-x: auto;
-  scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
@@ -336,13 +336,11 @@ th { font-weight: 600; }
   .app-shots__strip { cursor: grab; }
   .app-shots__strip.is-dragging { cursor: grabbing; }
 }
-.app-shots__strip.is-dragging { scroll-snap-type: none; scroll-behavior: auto; }
 
 .app-shots__item {
   flex: 0 0 auto;
   margin: 0;
   height: var(--shot-h);
-  scroll-snap-align: start;
   user-select: none;
 }
 .app-shots__item--video { aspect-ratio: 16 / 9; }
@@ -427,7 +425,6 @@ th { font-weight: 600; }
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
-  .app-shots > h2 { padding-left: 1.5rem; padding-right: 1.5rem; }
   .app-shots__strip { padding-left: 1.5rem; }
 }
 
@@ -641,10 +638,12 @@ th { font-weight: 600; }
 .app-list__link:hover { color: var(--text); }
 
 .site-footer {
+  border-top: 2px solid var(--border-strong);
+}
+.site-footer__inner {
   max-width: var(--content-width);
   margin: 0 auto;
   padding: 2rem 1.5rem 3rem;
-  border-top: 1px solid var(--border);
   color: var(--text-muted);
   font-size: .85rem;
 }

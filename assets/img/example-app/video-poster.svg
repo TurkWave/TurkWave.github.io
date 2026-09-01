@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Example App video poster placeholder">
-  <rect width="640" height="360" rx="16" fill="#e4e4e7"/>
-  <rect x="1" y="1" width="638" height="358" rx="15" fill="none" stroke="#a1a1aa" stroke-width="1.5"/>
-  <rect x="40" y="48" width="560" height="200" rx="12" fill="#c7cbe6"/>
-  <rect x="40" y="272" width="300" height="18" rx="9" fill="#b0b0b8"/>
-  <rect x="40" y="302" width="420" height="12" rx="6" fill="#c8c8cf"/>
-  <text x="320" y="168" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="26" font-weight="600" fill="#71717a" text-anchor="middle">Video poster</text>
-  <text x="320" y="200" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="16" fill="#a1a1aa" text-anchor="middle">placeholder (16:9)</text>
-</svg>

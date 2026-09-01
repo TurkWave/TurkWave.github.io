@@ -30,8 +30,8 @@ sub_slogan: ""
 # either an image or a YouTube video:
 #   - { src: "/assets/img/<slug>/1.png", alt: "Home screen" }
 #   - { youtube: "dQw4w9WgXcQ", alt: "Feature tour" }
-# A video loads only when clicked; add  poster: "/assets/img/<slug>/x.jpg"
-# to a video entry to skip the YouTube thumbnail request on page load.
+# A video shows its YouTube cover image and loads the player only on click;
+# add  poster: "/assets/img/<slug>/x.jpg"  to use a local cover instead.
 screenshots: []
 
 # "Get the app" buttons. Known stores (canonical label applied): google-play,
