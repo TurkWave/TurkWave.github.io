@@ -33,8 +33,7 @@ here - it only feeds the SEO meta description via jekyll-seo-tag.
   {%- endif %}
 
   {%- if page.screenshots and page.screenshots.size > 0 %}
-  <section class="app-section app-section--plain app-shots" aria-labelledby="screenshots">
-    <h2 id="screenshots">Screenshots</h2>
+  <section class="app-section app-section--plain app-shots" aria-label="Screenshots">
     <ul class="app-shots__strip" tabindex="0" role="group" aria-label="Screenshots, drag or scroll horizontally">
       {%- for shot in page.screenshots %}
       {%- if shot.youtube and shot.youtube != "" %}

@@ -24,12 +24,12 @@ sub_slogan: "The rating, download count and reviews below are sample data."
 
 # Horizontal media strip (drag / swipe / wheel / arrow keys) at a fixed
 # height - portrait, landscape and mixed sizes all fit, nothing is cropped or
-# resized while scrolling. Entries are images or YouTube videos; a video may
-# carry a local `poster` so the page makes no external request until it is
-# clicked to play.
+# resized while scrolling. Entries are images or YouTube videos. A video shows
+# its YouTube cover image and only loads the player when clicked; add
+# `poster: "/assets/img/<slug>/x.jpg"` to use a local cover instead.
 screenshots:
   - { src: "/assets/img/example-app/screenshot-1.svg", alt: "Home screen (placeholder)" }
-  - { youtube: "aqz-KE-bpKQ", poster: "/assets/img/example-app/video-poster.svg", alt: "Product tour (placeholder video: Blender 'Big Buck Bunny', CC BY)" }
+  - { youtube: "aqz-KE-bpKQ", alt: "Product tour (placeholder video: Blender 'Big Buck Bunny', CC BY)" }
   - { src: "/assets/img/example-app/screenshot-2.svg", alt: "Detail screen (placeholder)" }
   - { src: "/assets/img/example-app/screenshot-3.svg", alt: "Settings screen (placeholder)" }
 
