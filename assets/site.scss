@@ -223,7 +223,6 @@ th { font-weight: 600; }
   border-radius: var(--radius);
   padding: 2.75rem;
 }
-@media (max-width: 40rem) { .app-frame { padding: 1.5rem; } }
 .app-frame > :first-child { margin-top: 0; }
 
 /* Header: large logo left, app name (+ optional subtitle) right */
@@ -239,7 +238,11 @@ th { font-weight: 600; }
   border-radius: var(--radius);
   border: 1px solid var(--border);
 }
-.app-hero__text { min-width: 0; }
+.app-hero__text {
+  min-width: 0;
+  margin-left: auto;   /* push the name + subtitle flush to the right edge */
+  text-align: right;
+}
 .app-hero__name {
   margin: 0;
   min-width: 0;
@@ -310,15 +313,18 @@ th { font-weight: 600; }
   border-radius: 4px;
 }
 
-/* Screenshots: horizontal scroll-snap strip, scrollbar hidden */
+/* Screenshots + video: a horizontal strip at a FIXED height. Each item keeps
+   its own aspect ratio (portrait, landscape or mixed) and never resizes as
+   the strip scrolls. Wheel, click-drag, swipe and arrow keys all pan it. */
 .app-shots__strip {
+  --shot-h: clamp(12rem, 52vw, 17rem);
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   gap: .75rem;
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
@@ -326,21 +332,103 @@ th { font-weight: 600; }
 }
 .app-shots__strip::-webkit-scrollbar { display: none; }
 .app-shots__strip:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) {
+  .app-shots__strip { cursor: grab; }
+  .app-shots__strip.is-dragging { cursor: grabbing; }
+}
+.app-shots__strip.is-dragging { scroll-snap-type: none; scroll-behavior: auto; }
+
 .app-shots__item {
   flex: 0 0 auto;
   margin: 0;
-  width: clamp(9rem, 40vw, 12rem);
+  height: var(--shot-h);
   scroll-snap-align: start;
+  user-select: none;
 }
-.app-shots__item img {
+.app-shots__item--video { aspect-ratio: 16 / 9; }
+.app-shots__item > img {
   display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 9 / 16;
-  object-fit: cover;
+  height: 100%;
+  width: auto;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--bg-subtle);
+  -webkit-user-drag: none;
+}
+
+/* YouTube facade: poster + play badge; JS swaps in the iframe on click */
+.app-shots__item .yt-facade {
+  position: relative;
+  display: block;
+  height: 100%;
+  border: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #000;
+}
+.app-shots__item .yt-facade img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+  border-radius: var(--radius);
+  -webkit-user-drag: none;
+}
+.yt-facade__play {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 3.4rem;
+  height: 3.4rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, .55);
+  border: 2px solid #fff;
+}
+.yt-facade__play::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: .5rem 0 .5rem .85rem;
+  border-color: transparent transparent transparent #fff;
+  transform: translateX(.1rem);
+}
+.yt-facade:hover .yt-facade__play,
+.yt-facade:focus-visible .yt-facade__play {
+  background: #f00;
+  border-color: #f00;
+}
+.app-shots__item iframe {
+  display: block;
+  height: 100%;
+  width: 100%;
+  border: 0;
+  border-radius: var(--radius);
+}
+
+/* Phone: drop the card frame and run edge to edge. Prose keeps a small
+   gutter; the media strip stays full-bleed. (Placed after the base rules it
+   overrides - this sheet is desktop-first / max-width.) */
+@media (max-width: 40rem) {
+  .app-frame {
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    padding: 1.25rem 0;
+  }
+  .app-hero,
+  .app-section:not(.app-shots) {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  .app-shots > h2 { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .app-shots__strip { padding-left: 1.5rem; }
 }
 
 /* Get the app: outlined pill links */

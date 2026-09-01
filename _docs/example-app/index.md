@@ -22,9 +22,14 @@ subtitle: "TurkWave · Mobile & PC · demo publisher line"
 slogan: "A demo entry that shows how the app-index layout renders."
 sub_slogan: "The rating, download count and reviews below are sample data."
 
-# Horizontal screenshot strip (swipe / wheel / arrow keys).
+# Horizontal media strip (drag / swipe / wheel / arrow keys) at a fixed
+# height - portrait, landscape and mixed sizes all fit, nothing is cropped or
+# resized while scrolling. Entries are images or YouTube videos; a video may
+# carry a local `poster` so the page makes no external request until it is
+# clicked to play.
 screenshots:
   - { src: "/assets/img/example-app/screenshot-1.svg", alt: "Home screen (placeholder)" }
+  - { youtube: "aqz-KE-bpKQ", poster: "/assets/img/example-app/video-poster.svg", alt: "Product tour (placeholder video: Blender 'Big Buck Bunny', CC BY)" }
   - { src: "/assets/img/example-app/screenshot-2.svg", alt: "Detail screen (placeholder)" }
   - { src: "/assets/img/example-app/screenshot-3.svg", alt: "Settings screen (placeholder)" }
 

@@ -35,11 +35,26 @@ here - it only feeds the SEO meta description via jekyll-seo-tag.
   {%- if page.screenshots and page.screenshots.size > 0 %}
   <section class="app-section app-section--plain app-shots" aria-labelledby="screenshots">
     <h2 id="screenshots">Screenshots</h2>
-    <ul class="app-shots__strip" tabindex="0" role="group" aria-label="Screenshots, scroll horizontally">
+    <ul class="app-shots__strip" tabindex="0" role="group" aria-label="Screenshots, drag or scroll horizontally">
       {%- for shot in page.screenshots %}
-      <li class="app-shots__item">
-        <img src="{{ shot.src | relative_url }}" alt="{{ shot.alt }}" loading="lazy">
+      {%- if shot.youtube and shot.youtube != "" %}
+      {%- assign shot_label = shot.alt | default: "Video" %}
+      {%- if shot.poster and shot.poster != "" %}
+        {%- assign yt_poster = shot.poster | relative_url %}
+      {%- else %}
+        {%- assign yt_poster = "https://i.ytimg.com/vi/" | append: shot.youtube | append: "/hqdefault.jpg" %}
+      {%- endif %}
+      <li class="app-shots__item app-shots__item--video">
+        <a class="yt-facade" href="https://www.youtube.com/watch?v={{ shot.youtube | escape }}" data-yt="{{ shot.youtube | escape }}" data-title="{{ shot_label | escape }}" aria-label="Play video: {{ shot_label | escape }}">
+          <img src="{{ yt_poster }}" alt="{{ shot_label | escape }}" loading="lazy" draggable="false">
+          <span class="yt-facade__play" aria-hidden="true"></span>
+        </a>
       </li>
+      {%- else %}
+      <li class="app-shots__item">
+        <img src="{{ shot.src | relative_url }}" alt="{{ shot.alt }}" loading="lazy" draggable="false">
+      </li>
+      {%- endif %}
       {%- endfor %}
     </ul>
   </section>
@@ -173,6 +188,6 @@ here - it only feeds the SEO meta description via jekyll-seo-tag.
 {{ app_frame }}
 </div>
 
-{%- if page.screenshots and page.screenshots.size > 1 %}
+{%- if page.screenshots and page.screenshots.size > 0 %}
 <script defer src="{{ '/assets/app-index.js' | relative_url }}"></script>
 {%- endif %}
