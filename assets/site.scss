@@ -600,27 +600,35 @@ th { font-weight: 600; }
   .page-toc a:hover { border-left-color: var(--text); }
 }
 
-/* App list (home): no cards or rules - each app is a name (+ optional muted
-   sub-line) set apart by whitespace alone. */
+/* App list (home) */
 .app-list {
   list-style: none;
   padding: 0;
-  margin: 2.25rem 0 0;
+  margin: 2rem 0 0;
   display: grid;
-  gap: 1.9rem;
+  gap: .75rem;
 }
 .app-list li { margin: 0; }
-.app-list__item { padding: 0; }
+
+/* app list (home): a card holding the app name + an optional muted sub-line */
+.app-list__item {
+  padding: 1rem 1.15rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color .15s ease, background .15s ease, transform .15s ease;
+}
+.app-list__item:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-subtle);
+  transform: translateY(-1px);
+}
 .app-list__name {
   display: block;
   border: 0;
-  font-weight: 650;
-  font-size: 1.1rem;
-  letter-spacing: -0.01em;
+  font-weight: 550;
   overflow-wrap: anywhere;
-  transition: color .15s ease;
 }
-.app-list__name:hover { color: var(--text-muted); }
 .app-list__sub {
   display: flex;
   align-items: baseline;
