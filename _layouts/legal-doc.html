@@ -1,9 +1,9 @@
 ---
 layout: default
 ---
-{% capture app_slug %}{% include_cache app-slug.html path=page.path %}{% endcapture %}
+{% capture app_slug %}{% include app-slug.html path=page.path %}{% endcapture %}
 {% assign app_home_url = "/" | append: app_slug | append: "/" | relative_url %}
-{% capture app_name %}{% include_cache app-name.html slug=app_slug %}{% endcapture %}
+{% capture app_name %}{% include app-name.html slug=app_slug %}{% endcapture %}
 {% assign doc_base = page.path | split: "/" | last | split: "." | first %}
 
 {%- capture doc_body -%}
