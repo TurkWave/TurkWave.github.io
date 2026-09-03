@@ -11,8 +11,8 @@ Section switches: `page.sections` is the single control block in index.md.
 `sections:` block, or a missing key, leaves every section on - so this only
 adds an explicit off switch and never changes an existing page.
 {%- endcomment -%}
-{% capture app_slug %}{% include_cache app-slug.html path=page.path %}{% endcapture %}
-{% capture app_name %}{% include_cache app-name.html slug=app_slug %}{% endcapture %}
+{% capture app_slug %}{% include app-slug.html path=page.path %}{% endcapture %}
+{% capture app_name %}{% include app-name.html slug=app_slug %}{% endcapture %}
 {% assign app_dir_prefix = "_docs/" | append: app_slug | append: "/" %}
 {% assign app_docs = site.docs | where_exp: "d", "d.path contains app_dir_prefix" | where_exp: "d", "d.url != page.url" | sort: "title" %}
 {% assign rating_max = page.rating.max | default: 5 %}
@@ -120,7 +120,7 @@ adds an explicit off switch and never changes an existing page.
     <p class="app-social__stats">
       {%- if page.rating %}
       <span class="app-rating" role="img" aria-label="{{ page.rating.value }} out of {{ rating_max }}{% if page.rating.count %}{% if page.rating.count > 0 %}, {{ page.rating.count }} ratings{% endif %}{% endif %}">
-        {%- include_cache stars.html value=page.rating.value max=rating_max -%}
+        {%- include stars.html value=page.rating.value max=rating_max -%}
         <span class="app-rating__num">{{ page.rating.value }}</span>
       </span>
       {%- endif %}
@@ -137,7 +137,7 @@ adds an explicit off switch and never changes an existing page.
         <div class="app-review__head">
           {%- if review.rating %}{%- if review.rating > 0 %}
           <span class="app-rating app-rating--sm" role="img" aria-label="{{ review.rating }} out of 5">
-            {%- include_cache stars.html value=review.rating max=5 -%}
+            {%- include stars.html value=review.rating max=5 -%}
           </span>
           {%- endif %}{%- endif %}
           <figcaption>{{ review.author }}{% if review.date %} &middot; {{ review.date }}{% endif %}</figcaption>
