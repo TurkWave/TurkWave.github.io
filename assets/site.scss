@@ -779,8 +779,13 @@ th { font-weight: 600; }
   margin: 2rem 0 0;
   display: grid;
   gap: .75rem;
+  /* Phone: cards stack in a single column. Desktop: two side by side. */
+  grid-template-columns: 1fr;
 }
 .app-list li { margin: 0; }
+@media (min-width: 640px) {
+  .app-list { grid-template-columns: 1fr 1fr; }
+}
 
 /* Home card: app icon left, identity right; an optional muted platform line;
    a foot row carrying the slogan bottom-left and the price bottom-right. Every
@@ -871,6 +876,7 @@ th { font-weight: 600; }
   flex-wrap: wrap;
   gap: .2rem .9rem;
   margin: 0;
+  margin-top: auto; /* pin the slogan/price row to the card bottom when two cards in a row differ in height */
 }
 .app-list__slogan {
   min-width: 0;
