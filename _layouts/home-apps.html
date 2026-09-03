@@ -8,14 +8,36 @@ layout: default
 {% assign apps = site.docs | where: "is_app_index", true | sort: "path" %}
 <ul class="app-list">
   {% for app in apps %}
-  {% capture app_slug %}{% include app-slug.html path=app.path %}{% endcapture %}
+  {%- capture app_slug %}{% include app-slug.html path=app.path %}{% endcapture -%}
   <li class="app-list__item">
-    <a class="app-list__name" href="{{ app.url | relative_url }}">{% include app-name.html slug=app_slug %}</a>
+    <div class="app-list__head">
+      {%- if app.logo and app.logo != "" %}
+      <img class="app-list__logo" src="{{ app.logo | relative_url }}" alt="" width="48" height="48" loading="lazy">
+      {%- endif %}
+      <div class="app-list__id">
+        <a class="app-list__name" href="{{ app.url | relative_url }}">{% include app-name.html slug=app_slug %}</a>
+        {%- if app.subtitle and app.subtitle != "" %}
+        <span class="app-list__subtitle">{{ app.subtitle }}</span>
+        {%- endif %}
+      </div>
+    </div>
+
     {%- if app.platform and app.platform != "" %}
     <p class="app-list__sub">
       <span class="app-list__platform">{{ app.platform }}</span>
       {%- if app.app_url and app.app_url != "" %}
       <a class="app-list__link" href="{{ app.app_url }}">Open app</a>
+      {%- endif %}
+    </p>
+    {%- endif %}
+
+    {%- if (app.slogan and app.slogan != "") or (app.price_line and app.price_line != "") %}
+    <p class="app-list__foot">
+      {%- if app.slogan and app.slogan != "" %}
+      <span class="app-list__slogan">{{ app.slogan }}</span>
+      {%- endif %}
+      {%- if app.price_line and app.price_line != "" %}
+      <span class="app-list__price">{{ app.price_line }}</span>
       {%- endif %}
     </p>
     {%- endif %}

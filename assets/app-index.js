@@ -1,23 +1,100 @@
 // App-index media strip: click-hold-drag-to-pan with a free-coasting fling on
-// release, click-to-load for YouTube video items, and click-a-screenshot to
-// open it in a blurred-backdrop lightbox (Esc / click / browser Back to close -
-// the lightbox takes its own history entry, so Back closes it before leaving
-// the page). The strip pans without snap points or a speed cap. The mouse wheel
-// is left alone - vertical wheeling scrolls the page, not the strip. No other
-// JS on the site.
+// release, click-to-load for YouTube video items, and click-a-screenshot (or
+// the app icon) to open it in a blurred-backdrop lightbox (Esc / click /
+// browser Back to close - the lightbox takes its own history entry, so Back
+// closes it before leaving the page). The strip pans without snap points or a
+// speed cap. The mouse wheel is left alone - vertical wheeling scrolls the
+// page, not the strip. No other JS on the site.
 (function () {
   var strip = document.querySelector(".app-shots__strip");
-  if (!strip) return;
 
   var glide = 0;
   function stopGlide() {
     if (glide) { cancelAnimationFrame(glide); glide = 0; }
   }
 
-  // --- click, hold and drag to pan (mouse / pen; touch scrolls natively) ---
+  // Drag state - shared so the strip's own click handler can tell a pan from
+  // a tap. Stays at rest (moved = 0) when there is no strip on the page.
   var dragging = false, startX = 0, startLeft = 0, moved = 0;
   var vx = 0, lastX = 0, lastT = 0;
 
+  // --- enlarge an image (screenshot or app icon) over a blurred backdrop ---
+  var box = null, lastFocus = null, historyPushed = false;
+
+  function closeLightbox(fromPopstate) {
+    if (!box) return;
+    document.removeEventListener("keydown", onLightboxKey);
+    window.removeEventListener("popstate", onPopstate);
+    box.remove();
+    box = null;
+    document.body.style.overflow = "";
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+    // Undo the history entry the open pushed, so a later Back leaves the page -
+    // unless Back is what closed us, in which case that entry is already gone.
+    if (historyPushed && !fromPopstate) history.back();
+    historyPushed = false;
+  }
+
+  function onLightboxKey(e) {
+    if (e.key === "Escape" || e.key === "Esc") closeLightbox();
+  }
+
+  // Back button: pop our pushed entry, close the lightbox, stay on the page.
+  function onPopstate() { closeLightbox(true); }
+
+  function openLightbox(img) {
+    if (box) return;
+    lastFocus = document.activeElement;
+
+    box = document.createElement("div");
+    box.className = "shot-lightbox";
+    box.setAttribute("role", "dialog");
+    box.setAttribute("aria-modal", "true");
+    box.setAttribute("aria-label", img.alt || "Screenshot");
+
+    var big = document.createElement("img");
+    big.className = "shot-lightbox__img";
+    big.src = img.currentSrc || img.src;
+    big.alt = img.alt || "";
+    big.draggable = false;
+
+    var close = document.createElement("button");
+    close.type = "button";
+    close.className = "shot-lightbox__close";
+    close.setAttribute("aria-label", "Close");
+    close.innerHTML = "×";
+
+    box.appendChild(big);
+    box.appendChild(close);
+
+    box.addEventListener("click", function (e) {
+      if (e.target !== big) closeLightbox(); // backdrop or close button
+    });
+
+    document.body.appendChild(box);
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", onLightboxKey);
+    // Add a history entry so the browser Back button closes this view first
+    // and only then navigates away from the page.
+    try {
+      history.pushState({ shotLightbox: true }, "");
+      historyPushed = true;
+      window.addEventListener("popstate", onPopstate);
+    } catch (err) {
+      historyPushed = false;
+    }
+    close.focus();
+  }
+
+  // The app icon enlarges the same way a screenshot does.
+  var heroLogo = document.querySelector(".app-hero__logo");
+  if (heroLogo) {
+    heroLogo.addEventListener("click", function () { openLightbox(heroLogo); });
+  }
+
+  if (!strip) return;
+
+  // --- click, hold and drag to pan (mouse / pen; touch scrolls natively) ---
   strip.addEventListener("pointerdown", function (e) {
     if (e.pointerType === "touch" || e.button !== 0) return;
     stopGlide();
@@ -88,74 +165,7 @@
     facade.replaceWith(frame);
   });
 
-  // --- click a screenshot to enlarge it over a blurred backdrop -----------
-  var box = null, lastFocus = null, historyPushed = false;
-
-  function closeLightbox(fromPopstate) {
-    if (!box) return;
-    document.removeEventListener("keydown", onLightboxKey);
-    window.removeEventListener("popstate", onPopstate);
-    box.remove();
-    box = null;
-    document.body.style.overflow = "";
-    if (lastFocus && lastFocus.focus) lastFocus.focus();
-    // Undo the history entry the open pushed, so a later Back leaves the page -
-    // unless Back is what closed us, in which case that entry is already gone.
-    if (historyPushed && !fromPopstate) history.back();
-    historyPushed = false;
-  }
-
-  function onLightboxKey(e) {
-    if (e.key === "Escape" || e.key === "Esc") closeLightbox();
-  }
-
-  // Back button: pop our pushed entry, close the lightbox, stay on the page.
-  function onPopstate() { closeLightbox(true); }
-
-  function openLightbox(img) {
-    if (box) return;
-    lastFocus = document.activeElement;
-
-    box = document.createElement("div");
-    box.className = "shot-lightbox";
-    box.setAttribute("role", "dialog");
-    box.setAttribute("aria-modal", "true");
-    box.setAttribute("aria-label", img.alt || "Screenshot");
-
-    var big = document.createElement("img");
-    big.className = "shot-lightbox__img";
-    big.src = img.currentSrc || img.src;
-    big.alt = img.alt || "";
-    big.draggable = false;
-
-    var close = document.createElement("button");
-    close.type = "button";
-    close.className = "shot-lightbox__close";
-    close.setAttribute("aria-label", "Close");
-    close.innerHTML = "×";
-
-    box.appendChild(big);
-    box.appendChild(close);
-
-    box.addEventListener("click", function (e) {
-      if (e.target !== big) closeLightbox(); // backdrop or close button
-    });
-
-    document.body.appendChild(box);
-    document.body.style.overflow = "hidden";
-    document.addEventListener("keydown", onLightboxKey);
-    // Add a history entry so the browser Back button closes this view first
-    // and only then navigates away from the page.
-    try {
-      history.pushState({ shotLightbox: true }, "");
-      historyPushed = true;
-      window.addEventListener("popstate", onPopstate);
-    } catch (err) {
-      historyPushed = false;
-    }
-    close.focus();
-  }
-
+  // --- click a screenshot to enlarge it ----------------------------------
   strip.addEventListener("click", function (e) {
     if (moved > 6) return; // that gesture was a drag, not a click
     var t = e.target;
