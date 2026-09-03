@@ -8,9 +8,7 @@ body_class: page-about
 
 # About me
 
-I'm the developer behind **TurkWave** — the apps whose privacy policies, terms
-of use, and support documents are collected on this site.
-
+I'm the developer behind **TurkWave and HybridHabit** the apps. 
 I build small, focused applications and keep their legal and support material in
 one public place so it's easy to find and always current.
 
