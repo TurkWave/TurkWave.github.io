@@ -9,11 +9,13 @@
 # Example:
 #   bin/new-app my-app
 #
-# Creates _docs/<app-slug>/{index.md,privacy.md,terms.md,license.md,support.md}
+# Creates
+# _docs/<app-slug>/{index.md,privacy.md,terms.md,license.md,third-party.md,support.md}
 # with the permalink, title and dates filled in. The display name is derived
 # from the slug ("my-app" -> "My App"); the support address comes from
 # `contact_email` in _config.yml. The only thing left to do afterwards is write
-# the real text in privacy.md / terms.md / license.md / support.md.
+# the real text in privacy.md / terms.md / license.md / third-party.md /
+# support.md.
 
 require "date"
 require "fileutils"
@@ -158,7 +160,8 @@ puts "Name:   #{app_name} (derived from slug)"
 puts "Dates:  effective_date = last_updated = #{doc_date}"
 puts
 puts "Next: replace the placeholder body text in the generated docs (privacy.md,"
-puts "terms.md, license.md, support.md) with the real text, then commit & push."
+puts "terms.md, license.md, third-party.md, support.md) with the real text, then"
+puts "commit & push."
 puts "CI (content lint) fails until you do."
 
 # --- optional editor -----------------------------------------------------------

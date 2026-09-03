@@ -28,7 +28,7 @@ display name is derived from the slug (`my-app` → "My App") by both the layout
 this script, so it lives in exactly one place — the folder name. The support address
 comes from `contact_email` in `_config.yml`, shared by every page. Validates the slug,
 refuses an existing folder. Then write the real text into `privacy.md`, `terms.md`,
-`license.md` and `support.md`, and commit.
+`license.md`, `third-party.md` and `support.md`, and commit.
 
 ## URLs & redirects
 
