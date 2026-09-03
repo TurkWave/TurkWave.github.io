@@ -82,7 +82,14 @@ reviews:
     text: "A second placeholder review so the fade-out and the read-more link are visible on the page."
 reviews_url: "https://example.com/example-app/reviews"
 
-# Pricing: a Markdown block.
+# Short price line shown in the header, right under the subtitle. Free text,
+# printed verbatim (no forced "Pricing —" prefix). Mid-sized and full-strength,
+# not muted. It links down to the Pricing section when that section has content,
+# and rides the same switch: sections.pricing = off hides this line too.
+price_line: "Pricing — Free"
+
+# Pricing: a Markdown block - the detail behind the header's price line. The
+# section itself is unchanged; price_line above is just a header shortcut to it.
 pricing: |
   Free to download. This is sample pricing copy — an optional one-time
   "Pro" unlock is shown here only as an example.

@@ -256,6 +256,21 @@ th { font-weight: 600; }
   color: var(--text-muted);
   overflow-wrap: anywhere;
 }
+/* Header price line: sits under the subtitle, between the app name and the
+   subtitle in size, and at full strength (not muted). */
+.app-hero__price {
+  margin: .5rem 0 0;
+  font-size: clamp(1rem, .9rem + .5vw, 1.2rem);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.app-hero__price a {
+  border: 0;
+  color: inherit;
+}
+.app-hero__price a:hover { text-decoration: underline; }
 
 /* Blocks below the header: no rules - each section is set apart by whitespace
    alone. */
