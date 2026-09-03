@@ -22,7 +22,7 @@ adds an explicit off switch and never changes an existing page.
 <article class="app-frame">
   <header class="app-hero">
     {%- if page.logo and page.logo != "" %}
-    <img class="app-hero__logo" src="{{ page.logo | relative_url }}" alt="{{ page.logo_alt | default: app_name }}" width="96" height="96">
+    <img class="app-hero__logo" src="{{ page.logo | relative_url }}" alt="{{ page.logo_alt | default: app_name }}" width="120" height="120">
     {%- endif %}
     <div class="app-hero__text">
       <h1 class="app-hero__name">{{ app_name }}</h1>

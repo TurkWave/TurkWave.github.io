@@ -12,7 +12,7 @@ layout: default
   <li class="app-list__item">
     <div class="app-list__head">
       {%- if app.logo and app.logo != "" %}
-      <img class="app-list__logo" src="{{ app.logo | relative_url }}" alt="" width="48" height="48" loading="lazy">
+      <img class="app-list__logo" src="{{ app.logo | relative_url }}" alt="" width="60" height="60" loading="lazy">
       {%- endif %}
       <div class="app-list__id">
         <a class="app-list__name" href="{{ app.url | relative_url }}">{% include app-name.html slug=app_slug %}</a>
