@@ -14,8 +14,9 @@
   }
 
   // Drag state - shared so the strip's own click handler can tell a pan from
-  // a tap. Stays at rest (moved = 0) when there is no strip on the page.
-  var dragging = false, startX = 0, startLeft = 0, moved = 0;
+  // a tap. `dragged` is per-gesture: cleared on pointerdown, raised once the
+  // pointer moves past the tap threshold, and consumed by the click handler.
+  var dragging = false, startX = 0, startLeft = 0, dragged = false;
   var vx = 0, lastX = 0, lastT = 0;
 
   // --- enlarge an image (screenshot or app icon) over a blurred backdrop ---
@@ -99,7 +100,7 @@
     if (e.pointerType === "touch" || e.button !== 0) return;
     stopGlide();
     dragging = true;
-    moved = 0;
+    dragged = false;
     vx = 0;
     startX = lastX = e.clientX;
     startLeft = strip.scrollLeft;
@@ -111,7 +112,7 @@
   window.addEventListener("pointermove", function (e) {
     if (!dragging) return;
     var dx = e.clientX - startX;
-    if (Math.abs(dx) > moved) moved = Math.abs(dx);
+    if (Math.abs(dx) > 6) dragged = true; // past the tap threshold: it's a pan
     var dt = e.timeStamp - lastT;
     if (dt > 0) vx = (e.clientX - lastX) / dt; // px per ms, last sample wins
     lastX = e.clientX;
@@ -135,39 +136,35 @@
   window.addEventListener("pointercancel", release);
   strip.addEventListener("dragstart", function (e) { e.preventDefault(); });
 
-  // A real drag ends with a click - swallow it (capture phase) so a video
-  // facade or link under the cursor does not fire.
-  strip.addEventListener(
-    "click",
-    function (e) {
-      if (moved > 6) { e.preventDefault(); e.stopPropagation(); }
-    },
-    true
-  );
-
-  // --- YouTube facade: swap the poster for the real player on click --------
+  // One click handler for the whole strip. A drag ends with a synthetic click:
+  // swallow it and clear the flag, so a later keyboard activation (Enter on a
+  // focused item, which fires no pointerdown) is never suppressed. Otherwise a
+  // YouTube facade swaps in the real player, and a screenshot opens in the
+  // lightbox. No capture phase and no stopPropagation needed - preventDefault
+  // alone cancels the facade's link, and nothing else on the page listens for
+  // clicks.
   strip.addEventListener("click", function (e) {
+    if (dragged) { dragged = false; e.preventDefault(); return; }
+
     var facade = e.target.closest && e.target.closest(".yt-facade");
-    if (!facade) return;
-    e.preventDefault();
-    stopGlide();
-    var id = facade.getAttribute("data-yt");
-    if (!id) return;
-    var frame = document.createElement("iframe");
-    frame.src =
-      "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) + "?autoplay=1&rel=0";
-    frame.title = facade.getAttribute("data-title") || "YouTube video";
-    frame.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
-    frame.setAttribute("allowfullscreen", "");
-    frame.referrerPolicy = "strict-origin-when-cross-origin";
-    var item = facade.closest(".app-shots__item");
-    if (item) item.classList.add("is-playing");
-    facade.replaceWith(frame);
-  });
+    if (facade) {
+      e.preventDefault();
+      stopGlide();
+      var id = facade.getAttribute("data-yt");
+      if (!id) return;
+      var frame = document.createElement("iframe");
+      frame.src =
+        "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) + "?autoplay=1&rel=0";
+      frame.title = facade.getAttribute("data-title") || "YouTube video";
+      frame.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+      frame.setAttribute("allowfullscreen", "");
+      frame.referrerPolicy = "strict-origin-when-cross-origin";
+      var item = facade.closest(".app-shots__item");
+      if (item) item.classList.add("is-playing");
+      facade.replaceWith(frame);
+      return;
+    }
 
-  // --- click a screenshot to enlarge it ----------------------------------
-  strip.addEventListener("click", function (e) {
-    if (moved > 6) return; // that gesture was a drag, not a click
     var t = e.target;
     if (t.tagName === "IMG" && t.parentNode.classList.contains("app-shots__item")) {
       openLightbox(t);
