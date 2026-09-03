@@ -8,14 +8,14 @@ layout: default
 {% assign apps = site.docs | where: "is_app_index", true | sort: "path" %}
 <ul class="app-list">
   {% for app in apps %}
-  {%- capture app_slug %}{% include app-slug.html path=app.path %}{% endcapture -%}
+  {%- capture app_slug %}{% include_cache app-slug.html path=app.path %}{% endcapture -%}
   <li class="app-list__item">
     <div class="app-list__head">
       {%- if app.logo and app.logo != "" %}
       <img class="app-list__logo" src="{{ app.logo | relative_url }}" alt="" width="60" height="60" loading="lazy">
       {%- endif %}
       <div class="app-list__id">
-        <a class="app-list__name" href="{{ app.url | relative_url }}">{% include app-name.html slug=app_slug %}</a>
+        <a class="app-list__name" href="{{ app.url | relative_url }}">{% include_cache app-name.html slug=app_slug %}</a>
         {%- if app.subtitle and app.subtitle != "" %}
         <span class="app-list__subtitle">{{ app.subtitle }}</span>
         {%- endif %}

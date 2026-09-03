@@ -16,15 +16,15 @@
           <span class="crumbs__current">Home</span>
         </nav>
         {%- elsif page.layout == "app-index" or page.layout == "legal-doc" -%}
-        {%- capture crumb_slug %}{% include app-slug.html path=page.path %}{% endcapture -%}
+        {%- capture crumb_slug %}{% include_cache app-slug.html path=page.path %}{% endcapture -%}
         {%- assign crumb_app_url = "/" | append: crumb_slug | append: "/" | relative_url -%}
         <nav class="crumbs" aria-label="Breadcrumb">
           <a href="{{ '/' | relative_url }}">Home</a>
           <span class="crumbs__sep" aria-hidden="true">&gt;</span>
           {%- if page.layout == "app-index" -%}
-          <span class="crumbs__current">{% include app-name.html slug=crumb_slug %}</span>
+          <span class="crumbs__current">{% include_cache app-name.html slug=crumb_slug %}</span>
           {%- else -%}
-          <a href="{{ crumb_app_url }}">{% include app-name.html slug=crumb_slug %}</a>
+          <a href="{{ crumb_app_url }}">{% include_cache app-name.html slug=crumb_slug %}</a>
           <span class="crumbs__sep" aria-hidden="true">&gt;</span>
           <span class="crumbs__current">{{ page.title }}</span>
           {%- endif -%}
