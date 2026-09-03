@@ -29,6 +29,10 @@
         <nav class="crumbs" aria-label="Breadcrumb">
           <span class="crumbs__current">Home</span>
         </nav>
+        {%- elsif page.url == "/about/" -%}
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <span class="crumbs__current">About me</span>
+        </nav>
         {%- elsif page.layout == "app-index" or page.layout == "legal-doc" -%}
         {%- capture crumb_slug %}{% include app-slug.html path=page.path %}{% endcapture -%}
         {%- assign crumb_app_url = "/" | append: crumb_slug | append: "/" | relative_url -%}
