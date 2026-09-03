@@ -772,6 +772,17 @@ th { font-weight: 600; }
   .page-toc a:hover { border-left-color: var(--text); }
 }
 
+/* Home intro: centered heading + lead paragraph above the app list */
+.layout-home-apps main > h1,
+.layout-home-apps main > p {
+  text-align: center;
+}
+.layout-home-apps main > p {
+  max-width: 46rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* App list (home) */
 .app-list {
   list-style: none;
