@@ -3,6 +3,10 @@ description: "Privacy policies, terms of use, and support documents for TurkWave
 url: "https://turkwave.github.io"
 baseurl: ""
 
+# Abort the build on a malformed front-matter block instead of warning and
+# skipping the file - matches this repo's fail-fast validator philosophy.
+strict_front_matter: true
+
 # Single source of truth for the support address shown on every app and
 # document page. Change it here and it updates site-wide.
 contact_email: "Turk191906@outlook.com"
