@@ -851,6 +851,18 @@ th { font-weight: 600; }
   .page-toc a:hover { border-left-color: var(--text); }
 }
 
+/* About page: a short bio, centered. Drop the list bullets and the "Contact"
+   rule so the centered lines sit clean. */
+.page-about main { text-align: center; }
+.page-about main ul {
+  list-style: none;
+  padding: 0;
+}
+.page-about main h2 {
+  padding-top: 0;
+  border-top: 0;
+}
+
 /* Home intro: centered heading + lead paragraph above the app list */
 .layout-home-apps main > h1,
 .layout-home-apps main > p {
