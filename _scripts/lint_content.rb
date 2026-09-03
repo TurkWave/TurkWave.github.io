@@ -23,7 +23,7 @@ TODAY     = Date.today
 # Anchor each to a literal string from _templates/ so real legal prose is not
 # caught - e.g. "we may replace with a successor service" is legitimate, so the
 # bare phrase "replace with" cannot be on this list; the template's actual
-# title "Replace With Document Title" can. "YYYY-MM-DD" is likewise omitted: an
+# title "Replace With App Name" can. "YYYY-MM-DD" is likewise omitted: an
 # unfilled template date is already rejected by the strict date-format check,
 # and a doc may legitimately mention the date format.
 #
@@ -33,7 +33,6 @@ TODAY     = Date.today
 # rest are freeform catch-alls with no template anchor.
 PLACEHOLDERS = [
   # from _templates/ (kept honest by lint_content_test.rb):
-  "replace with document title",  # _templates/new-doc.md title
   "replace with app name",        # _templates/new-app/index.md title (index.md is
                                   # not linted; guards only a stray paste elsewhere)
   "content goes here",            # "<X> content goes here." in every doc template body

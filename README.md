@@ -10,7 +10,7 @@ Actions on every push to `main`.
 - `_docs/` — each app's documents, one folder per app (e.g. `_docs/<app-slug>/`). This is
   where the actual content (privacy policy, terms, etc.) lives.
 - `_layouts/` — Jekyll page templates that turn the documents in `_docs/` into site pages.
-- `_templates/` — copy-paste starting points for adding a new app or a new document.
+- `_templates/` — copy-paste starting point for adding a new app (`new-app/`).
 - `_config.yml` — site-wide configuration (plugins, the `docs` collection, URL scheme).
 - `.github/workflows/` — GitHub Actions workflow that builds and deploys the site.
 - `bin/new-app` — scaffolds a new app's folder from `_templates/new-app/`.
@@ -27,8 +27,8 @@ Creates `_docs/<app-slug>/` from the template with `permalink`, `title` and toda
 display name is derived from the slug (`my-app` → "My App") by both the layouts and
 this script, so it lives in exactly one place — the folder name. The support address
 comes from `contact_email` in `_config.yml`, shared by every page. Validates the slug,
-refuses an existing folder. Then write the real text into `privacy.md`, `terms.md` and
-`license.md`, and commit.
+refuses an existing folder. Then write the real text into `privacy.md`, `terms.md`,
+`license.md` and `support.md`, and commit.
 
 ## URLs & redirects
 

@@ -5,12 +5,18 @@ layout: default
 The app-index page is built entirely from index.md front matter (see the
 keys in _templates/new-app/index.md). The Markdown body is NOT rendered
 here - it only feeds the SEO meta description via jekyll-seo-tag.
+
+Section switches: `page.sections` is the single control block in index.md.
+`sec.<name> != false` means "show unless index.md set  <name>: off". A missing
+`sections:` block, or a missing key, leaves every section on - so this only
+adds an explicit off switch and never changes an existing page.
 {%- endcomment -%}
 {% capture app_slug %}{% include app-slug.html path=page.path %}{% endcapture %}
 {% capture app_name %}{% include app-name.html slug=app_slug %}{% endcapture %}
 {% assign app_dir_prefix = "_docs/" | append: app_slug | append: "/" %}
 {% assign app_docs = site.docs | where_exp: "d", "d.path contains app_dir_prefix" | where_exp: "d", "d.url != page.url" | sort: "title" %}
 {% assign rating_max = page.rating.max | default: 5 %}
+{% assign sec = page.sections %}
 
 {%- capture app_frame -%}
 <article class="app-frame">
@@ -26,13 +32,13 @@ here - it only feeds the SEO meta description via jekyll-seo-tag.
     </div>
   </header>
 
-  {%- if page.slogan and page.slogan != "" %}
+  {%- if page.slogan and page.slogan != "" and sec.slogan != false %}
   <div class="app-section app-slogan">
     <p>{{ page.slogan }}</p>
   </div>
   {%- endif %}
 
-  {%- if page.screenshots and page.screenshots.size > 0 %}
+  {%- if page.screenshots and page.screenshots.size > 0 and sec.screenshots != false %}
   <section class="app-section app-shots" aria-label="Screenshots">
     <ul class="app-shots__strip" tabindex="0" role="group" aria-label="Screenshots, drag or scroll horizontally">
       {%- for shot in page.screenshots %}
@@ -59,7 +65,7 @@ here - it only feeds the SEO meta description via jekyll-seo-tag.
   </section>
   {%- endif %}
 
-  {%- if page.sub_slogan and page.sub_slogan != "" %}
+  {%- if page.sub_slogan and page.sub_slogan != "" and sec.sub_slogan != false %}
   <details class="app-section app-subslogan">
     <summary class="app-subslogan__summary"><span>{{ page.sub_slogan }}</span></summary>
   </details>
@@ -68,7 +74,7 @@ here - it only feeds the SEO meta description via jekyll-seo-tag.
   {%- assign has_stores = false %}
   {%- if page.store_links and page.store_links.size > 0 %}{% assign has_stores = true %}{% endif %}
   {%- if page.app_url and page.app_url != "" %}{% assign has_stores = true %}{% endif %}
-  {%- if has_stores %}
+  {%- if has_stores and sec.stores != false %}
   <section class="app-section app-stores" aria-labelledby="get-the-app">
     <h2 id="get-the-app">Get the app</h2>
     <ul class="app-stores__list">
@@ -92,7 +98,7 @@ here - it only feeds the SEO meta description via jekyll-seo-tag.
   {%- if page.rating %}{% assign has_social = true %}{% endif %}
   {%- if page.downloads and page.downloads != "" %}{% assign has_social = true %}{% endif %}
   {%- if page.reviews and page.reviews.size > 0 %}{% assign has_social = true %}{% endif %}
-  {%- if has_social %}
+  {%- if has_social and sec.reviews != false %}
   <section class="app-section app-social" aria-labelledby="reviews">
     <h2 id="reviews">Reviews</h2>
 
@@ -134,14 +140,14 @@ here - it only feeds the SEO meta description via jekyll-seo-tag.
   </section>
   {%- endif %}
 
-  {%- if page.pricing and page.pricing != "" %}
+  {%- if page.pricing and page.pricing != "" and sec.pricing != false %}
   <section class="app-section app-pricing" aria-labelledby="pricing">
     <h2 id="pricing">Pricing</h2>
     {{ page.pricing | markdownify }}
   </section>
   {%- endif %}
 
-  {%- if page.faq and page.faq.size > 0 %}
+  {%- if page.faq and page.faq.size > 0 and sec.faq != false %}
   <section class="app-section app-faq" aria-labelledby="faq">
     <h2 id="faq">FAQ</h2>
     {%- for item in page.faq %}
@@ -153,7 +159,7 @@ here - it only feeds the SEO meta description via jekyll-seo-tag.
   </section>
   {%- endif %}
 
-  {%- if app_docs.size > 0 %}
+  {%- if app_docs.size > 0 and sec.legal != false %}
   <section class="app-section app-legal" aria-labelledby="legal">
     <h2 id="legal">Legal &amp; support</h2>
     <ul class="app-linklist">
@@ -164,13 +170,16 @@ here - it only feeds the SEO meta description via jekyll-seo-tag.
   </section>
   {%- endif %}
 
+  {%- if sec.contact != false %}
   <section class="app-section app-contact" aria-labelledby="contact">
     <h2 id="contact">Contact</h2>
     <ul class="app-linklist">
       <li><a href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a></li>
     </ul>
   </section>
+  {%- endif %}
 
+  {%- if sec.copyright != false %}
   <section class="app-section app-copyright" aria-labelledby="copyright">
     <h2 id="copyright">Copyright</h2>
     {%- if page.copyright and page.copyright != "" %}
@@ -179,6 +188,7 @@ here - it only feeds the SEO meta description via jekyll-seo-tag.
     <p>&copy; {{ 'now' | date: "%Y" }} TurkWave. All rights reserved.</p>
     {%- endif %}
   </section>
+  {%- endif %}
 </article>
 {%- endcapture -%}
 
@@ -187,6 +197,6 @@ here - it only feeds the SEO meta description via jekyll-seo-tag.
 {{ app_frame }}
 </div>
 
-{%- if page.screenshots and page.screenshots.size > 0 %}
+{%- if page.screenshots and page.screenshots.size > 0 and sec.screenshots != false %}
 <script defer src="{{ '/assets/app-index.js' | relative_url }}"></script>
 {%- endif %}
