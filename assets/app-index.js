@@ -1,6 +1,8 @@
 // App-index media strip: mouse-wheel-to-scroll, click-hold-drag-to-pan with a
-// free-coasting fling on release, and click-to-load for YouTube video items.
-// The strip pans without snap points or a speed cap. No other JS on the site.
+// free-coasting fling on release, click-to-load for YouTube video items, and
+// click-a-screenshot to open it in a blurred-backdrop lightbox (Esc / click to
+// close). The strip pans without snap points or a speed cap. No other JS on the
+// site.
 (function () {
   var strip = document.querySelector(".app-shots__strip");
   if (!strip) return;
@@ -98,5 +100,64 @@
     var item = facade.closest(".app-shots__item");
     if (item) item.classList.add("is-playing");
     facade.replaceWith(frame);
+  });
+
+  // --- click a screenshot to enlarge it over a blurred backdrop -----------
+  var box = null, lastFocus = null;
+
+  function closeLightbox() {
+    if (!box) return;
+    document.removeEventListener("keydown", onLightboxKey);
+    box.remove();
+    box = null;
+    document.body.style.overflow = "";
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  function onLightboxKey(e) {
+    if (e.key === "Escape" || e.key === "Esc") closeLightbox();
+  }
+
+  function openLightbox(img) {
+    if (box) return;
+    lastFocus = document.activeElement;
+
+    box = document.createElement("div");
+    box.className = "shot-lightbox";
+    box.setAttribute("role", "dialog");
+    box.setAttribute("aria-modal", "true");
+    box.setAttribute("aria-label", img.alt || "Screenshot");
+
+    var big = document.createElement("img");
+    big.className = "shot-lightbox__img";
+    big.src = img.currentSrc || img.src;
+    big.alt = img.alt || "";
+    big.draggable = false;
+
+    var close = document.createElement("button");
+    close.type = "button";
+    close.className = "shot-lightbox__close";
+    close.setAttribute("aria-label", "Close");
+    close.innerHTML = "×";
+
+    box.appendChild(big);
+    box.appendChild(close);
+
+    box.addEventListener("click", function (e) {
+      if (e.target !== big) closeLightbox(); // backdrop or close button
+    });
+
+    document.body.appendChild(box);
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", onLightboxKey);
+    close.focus();
+  }
+
+  strip.addEventListener("click", function (e) {
+    if (moved > 6) return; // that gesture was a drag, not a click
+    var t = e.target;
+    if (t.tagName === "IMG" && t.parentNode.classList.contains("app-shots__item")) {
+      openLightbox(t);
+    }
   });
 })();
