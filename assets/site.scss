@@ -1,5 +1,24 @@
 ---
 ---
+// Dark palette, applied either automatically (OS preference, no explicit
+// choice) or when the header menu pins  data-theme="dark"  on <html>.
+@mixin theme-dark {
+  --bg: #0b0b0c;
+  --bg-subtle: #161618;
+  --surface: #121214;
+  --text: #f4f4f5;
+  --text-muted: #a1a1aa;
+  --border: #27272a;
+  --border-strong: #3f3f46;
+}
+
+// Increased contrast: pull the muted tones back to full strength and harden
+// every hairline divider. Toggled from the header menu (data-contrast="more").
+@mixin contrast-more {
+  --text-muted: var(--text);
+  --border: var(--border-strong);
+}
+
 :root {
   color-scheme: light dark;
   --bg: #ffffff;
@@ -12,17 +31,16 @@
   --radius: 10px;
   --content-width: 46rem;
 }
+
+// Auto: follow the OS unless the reader explicitly picked light.
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0b0b0c;
-    --bg-subtle: #161618;
-    --surface: #121214;
-    --text: #f4f4f5;
-    --text-muted: #a1a1aa;
-    --border: #27272a;
-    --border-strong: #3f3f46;
-  }
+  :root:not([data-theme="light"]) { @include theme-dark; }
 }
+// Explicit choice from the menu always wins over the OS.
+:root[data-theme="dark"]  { @include theme-dark; color-scheme: dark; }
+:root[data-theme="light"] { color-scheme: light; }
+
+:root[data-contrast="more"] { @include contrast-more; }
 
 * { box-sizing: border-box; }
 
@@ -99,8 +117,9 @@ a:hover { border-bottom-color: var(--text); }
   overflow-wrap: anywhere;
 }
 
-/* Header drawer: a no-JS <details> pinned hard right. The panel drops under the
-   bar and is intentionally empty for now. */
+/* Header drawer: a <details> pinned hard right. The panel drops under the bar
+   and carries the About link, the theme + contrast toggles, and the contact
+   icons (see _layouts/default.html + assets/menu.js). */
 .site-drawer {
   flex: none;
   margin-left: auto; /* stay right even when the crumbs are short */
@@ -148,13 +167,73 @@ a:hover { border-bottom-color: var(--text); }
   right: 1.5rem;
   z-index: 1;
   width: min(20rem, calc(100vw - 3rem));
-  min-height: 4rem;
-  padding: 1rem 1.25rem;
+  padding: .8rem;
   background: var(--bg);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius);
   box-shadow: 0 .75rem 2rem rgba(0, 0, 0, .18);
 }
+
+/* Menu contents: About link on top, a two-up row of toggle buttons, then the
+   contact icons - each group separated by a hairline. */
+.site-menu { display: grid; gap: .3rem; }
+.site-menu__about {
+  display: block;
+  padding: .55rem .7rem;
+  border: 0;
+  border-radius: calc(var(--radius) - 3px);
+  font-weight: 650;
+  color: var(--text);
+}
+.site-menu__about:hover { background: var(--bg-subtle); }
+.site-menu__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .3rem;
+  margin-top: .3rem;
+  padding-top: .55rem;
+  border-top: 1px solid var(--border);
+}
+.site-menu__btn {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .5rem .6rem;
+  font: inherit;
+  font-size: .88rem;
+  font-weight: 550;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: calc(var(--radius) - 3px);
+  cursor: pointer;
+  transition: border-color .15s ease, background .15s ease;
+}
+.site-menu__btn:hover { border-color: var(--text); background: var(--bg-subtle); }
+.site-menu__btn:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+.site-menu__btn[aria-pressed="true"] { border-color: var(--text); background: var(--bg-subtle); }
+.site-menu__btn-icon { flex: none; font-size: 1.05rem; line-height: 1; }
+.site-menu__contact {
+  display: flex;
+  gap: .3rem;
+  margin-top: .3rem;
+  padding-top: .55rem;
+  border-top: 1px solid var(--border);
+}
+.site-menu__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: calc(var(--radius) - 3px);
+  transition: border-color .15s ease, background .15s ease;
+}
+.site-menu__icon:hover { border-color: var(--text); background: var(--bg-subtle); }
+.site-menu__icon:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+.site-menu__icon svg { display: block; width: 1.15rem; height: 1.15rem; }
 
 main {
   max-width: var(--content-width);
@@ -394,7 +473,7 @@ th { font-weight: 600; }
    click-drag (with a fling), swipe and arrow keys. The mouse wheel is left to
    the page. */
 .app-shots__strip {
-  --shot-h: clamp(12rem, 52vw, 17rem);
+  --shot-h: clamp(16rem, 74vw, 22rem);
   list-style: none;
   margin: 0;
   padding: 0;
