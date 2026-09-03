@@ -160,12 +160,14 @@ adds an explicit off switch and never changes an existing page.
   {%- assign faq_preview = 2 %}
   <section class="app-section app-faq" aria-labelledby="faq">
     <h2 id="faq">FAQ</h2>
-    {%- for item in page.faq limit: faq_preview %}
-    <h3 class="app-faq__q">{{ item.q }}</h3>
-    <div class="app-faq__a">
-      {{- item.a | markdownify -}}
+    <div class="app-faq__list{% if page.faq.size > faq_preview %} app-faq__list--faded{% endif %}">
+      {%- for item in page.faq limit: faq_preview %}
+      <h3 class="app-faq__q">{{ item.q }}</h3>
+      <div class="app-faq__a">
+        {{- item.a | markdownify -}}
+      </div>
+      {%- endfor %}
     </div>
-    {%- endfor %}
     {%- if page.faq.size > faq_preview %}
     <details class="app-faq__more">
       <summary class="app-faq__more-btn">
@@ -216,10 +218,7 @@ adds an explicit off switch and never changes an existing page.
 </article>
 {%- endcapture -%}
 
-<div class="page-toc-layout">
-{% include page-toc.html html=app_frame %}
 {{ app_frame }}
-</div>
 
 {%- if page.screenshots and page.screenshots.size > 0 and sec.screenshots != false %}
 <script defer src="{{ '/assets/app-index.js' | relative_url }}"></script>
