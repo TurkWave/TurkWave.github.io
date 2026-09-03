@@ -284,8 +284,8 @@ th { font-weight: 600; }
 }
 .app-hero__logo {
   flex: none;
-  width: clamp(72px, 17vw, 96px);
-  height: clamp(72px, 17vw, 96px);
+  width: clamp(88px, 21vw, 120px);
+  height: clamp(88px, 21vw, 120px);
   border-radius: var(--radius);
   border: 1px solid var(--border);
   cursor: zoom-in; /* click to enlarge, same as a screenshot */
@@ -795,6 +795,7 @@ th { font-weight: 600; }
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
+  cursor: pointer; /* the whole card is the app-page link */
   transition: border-color .15s ease, background .15s ease, transform .15s ease;
 }
 .app-list__item:hover {
@@ -809,24 +810,31 @@ th { font-weight: 600; }
 }
 .app-list__logo {
   flex: none;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 8px;
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 10px;
   border: 1px solid var(--border);
   background: var(--bg-subtle);
 }
-.app-list__id { min-width: 0; }
+.app-list__id {
+  min-width: 0;
+  margin-left: auto;   /* logo stays top-left; name + subtitle hug the right */
+  text-align: right;
+}
 .app-list__name {
   display: block;
   border: 0;
   font-weight: 600;
   overflow-wrap: anywhere;
 }
-/* Stretched link: cover the whole card so any click opens the app page. */
+/* Stretched link: cover the whole card so any click opens the app page. The
+   z-index puts the overlay above every static child; the "Open app" link sits
+   higher still (below). */
 .app-list__name::after {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 1;
   border-radius: inherit;
 }
 .app-list__subtitle {
@@ -850,7 +858,7 @@ th { font-weight: 600; }
 .app-list__platform { overflow-wrap: anywhere; }
 .app-list__link {
   position: relative; /* lift above the stretched card link */
-  z-index: 1;
+  z-index: 2;
   border: 0;
   color: var(--text-muted);
   white-space: nowrap;
