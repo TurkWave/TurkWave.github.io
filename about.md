@@ -3,6 +3,7 @@ layout: default
 title: About me
 description: About TurkWave, the developer behind these apps.
 permalink: /about/
+body_class: page-about
 ---
 
 # About me
