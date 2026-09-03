@@ -4,6 +4,25 @@ permalink: /example-app/
 is_app_index: true
 title: "Example App"
 
+# --- Section switches: the one control block ------------------------------
+# Turn any block of this page off from here without touching its content
+# below. Write  off  (or  false) to hide a section;  on  (or delete the line)
+# shows it. There is no on-page UI - this is edited in the source only. A
+# section with no content stays hidden regardless, exactly as before.
+#   slogan | screenshots | sub_slogan | stores | reviews | pricing | faq
+#   legal  | contact | copyright
+sections:
+  slogan: on
+  screenshots: on
+  sub_slogan: on
+  stores: on
+  reviews: on
+  pricing: on
+  faq: on
+  legal: on
+  contact: on
+  copyright: on
+
 # --- App-index page content -------------------------------------------------
 # Every block below is OPTIONAL. A section renders only when its key is set;
 # an empty value hides that section and its divider (same rule as the existing

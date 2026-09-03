@@ -4,6 +4,23 @@ permalink: /REPLACE-WITH-APP-SLUG/
 is_app_index: true
 title: "Replace With App Name"
 
+# --- Section switches: the one control block ------------------------------
+# Turn any block of this page off from here without touching its content
+# below. Write  off  (or  false) to hide a section;  on  (or delete the line)
+# shows it. There is no on-page UI - this is edited in the source only. A
+# section with no content stays hidden regardless.
+sections:
+  slogan: on
+  screenshots: on
+  sub_slogan: on
+  stores: on
+  reviews: on
+  pricing: on
+  faq: on
+  legal: on
+  contact: on
+  copyright: on
+
 # --- App-index page content ------------------------------------------------
 # Every key below is OPTIONAL. A section renders only when its key is set; an
 # empty value hides that section (same rule as "platform" / "app_url"). A brand-

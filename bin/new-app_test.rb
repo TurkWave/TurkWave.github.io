@@ -44,17 +44,17 @@ class NewAppTest < Minitest::Test
     Dir[File.join(@root, "_docs", slug, "*.md")].sort
   end
 
-  def test_valid_slug_scaffolds_four_files_with_fields_filled
+  def test_valid_slug_scaffolds_the_doc_set_with_fields_filled
     out, status = run_new_app("widget-viewer", "--no-edit", "--date", "2026-05-06")
     assert status.success?, out
-    assert_equal %w[index.md license.md privacy.md terms.md],
+    assert_equal %w[index.md license.md privacy.md support.md terms.md],
                  docs("widget-viewer").map { |f| File.basename(f) }
 
     index = File.read(File.join(@root, "_docs", "widget-viewer", "index.md"))
     assert_includes index, "permalink: /widget-viewer/\n"
     assert_includes index, %(title: "Widget Viewer"\n)
 
-    %w[privacy terms license].each do |name|
+    %w[privacy terms license support].each do |name|
       body = File.read(File.join(@root, "_docs", "widget-viewer", "#{name}.md"))
       assert_includes body, "effective_date: 2026-05-06\n"
       assert_includes body, "last_updated: 2026-05-06\n"
