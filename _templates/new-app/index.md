@@ -79,7 +79,8 @@ price_line: ""
 #     Free to download.
 pricing: ""
 
-# FAQ: a list of { q: "...", a: "..." } (answers are Markdown).
+# FAQ: a list of { q: "...", a: "..." } (answers are Markdown). The first two
+# entries show directly; any beyond that fold into a "Read more FAQs" toggle.
 faq: []
 
 # Rights holder for the in-frame copyright line. Empty -> "(c) <year> TurkWave.

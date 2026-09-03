@@ -338,7 +338,8 @@ th { font-weight: 600; }
 /* Screenshots + video: a horizontal strip at a FIXED height. Each item keeps
    its own aspect ratio (portrait, landscape or mixed) and never resizes as
    the strip scrolls. It pans freely - no snap points, no speed cap - via
-   wheel, click-drag (with a fling), swipe and arrow keys. */
+   click-drag (with a fling), swipe and arrow keys. The mouse wheel is left to
+   the page. */
 .app-shots__strip {
   --shot-h: clamp(12rem, 52vw, 17rem);
   list-style: none;
@@ -349,8 +350,10 @@ th { font-weight: 600; }
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
-  mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent);
+  /* Fade both edges, symmetrically, so items scroll in and out of view the
+     same way on the left as on the right. */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 2rem, #000 calc(100% - 2rem), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 2rem, #000 calc(100% - 2rem), transparent);
 }
 .app-shots__strip::-webkit-scrollbar { display: none; }
 .app-shots__strip:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
@@ -595,6 +598,32 @@ th { font-weight: 600; }
 .app-faq__q:first-of-type { margin-top: 0; }
 .app-faq__a > :last-child { margin-bottom: 0; }
 
+/* FAQ "Read more" drawer: entries past the preview fold behind a centered
+   toggle styled like the "Read more reviews" link. The toggle sits at the
+   foot of the list whether the drawer is open or closed. */
+.app-faq__more { margin-top: 1.5rem; }
+.app-faq__more[open] { display: flex; flex-direction: column; }
+.app-faq__more[open] .app-faq__more-btn { order: 1; margin-top: 1.5rem; }
+.app-faq__more-btn {
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+  padding: .1rem 0;
+  list-style: none;
+  cursor: pointer;
+  font-size: .95rem;
+  font-weight: 550;
+  color: var(--text);
+  border-bottom: 1px solid var(--border-strong);
+  transition: border-color .15s ease;
+}
+.app-faq__more-btn::-webkit-details-marker { display: none; }
+.app-faq__more-btn:hover { border-bottom-color: var(--text); }
+.app-faq__more-btn:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+.app-faq__more-btn__less { display: none; }
+.app-faq__more[open] .app-faq__more-btn__more { display: none; }
+.app-faq__more[open] .app-faq__more-btn__less { display: inline; }
+
 /* Legal + Contact: plain link lists */
 .app-linklist {
   list-style: none;
@@ -609,7 +638,7 @@ th { font-weight: 600; }
 /* Copyright line at the foot of the frame */
 .app-copyright p { margin: 0; font-size: .9rem; color: var(--text-muted); }
 
-/* ---- "On this page" navigation (legal-doc + app-index only) ----
+/* ---- "On this page" navigation (app-index only) ----
    Narrow: a collapsed <details> above the content.
    >= 76rem: a sticky rail in the left gutter; the content column keeps its
    46rem width and stays centred. */

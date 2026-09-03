@@ -94,12 +94,15 @@ pricing: |
   Free to download. This is sample pricing copy — an optional one-time
   "Pro" unlock is shown here only as an example.
 
-# FAQ: static question / answer pairs (answers are Markdown).
+# FAQ: static question / answer pairs (answers are Markdown). The first two
+# show directly; any further entries fold into a "Read more FAQs" toggle.
 faq:
   - q: "Is this a real app?"
     a: "No. Example App is a demo entry that shows how the app-index layout renders."
   - q: "Where does this content come from?"
     a: "Each app's `index.md` front matter. An empty key hides its section."
+  - q: "How is a long FAQ list handled?"
+    a: "Entries past the first two collapse behind a \"Read more FAQs\" toggle that expands and re-collapses the rest, right where you left off."
 
 # Copyright line at the foot of the frame. Empty -> "(c) <year> TurkWave.
 # All rights reserved." Set it to name a different rights holder for an app.

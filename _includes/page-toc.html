@@ -5,11 +5,10 @@ Scans the HTML passed in `include.html` for <h2 id="..."> headings and lists
 them as in-page anchor links, in document order. Renders nothing when fewer
 than two headings are found.
 
-  {% include page-toc.html html=content %}       (legal-doc: the rendered body)
   {% include page-toc.html html=captured_frame %} (app-index: the <article>)
 
-Heading ids come from kramdown auto_ids on the document pages and from the
-explicit id="" on the app-index section headings.
+Used by app-index.html only. Heading ids come from the explicit id="" on the
+app-index section headings.
 {%- endcomment -%}
 {%- assign _pieces = include.html | split: "</h2>" -%}
 {%- assign _items = "" -%}
