@@ -51,7 +51,11 @@
         </summary>
         <div class="site-drawer__panel">
           <nav class="site-menu" aria-label="Site menu">
+            {%- if page.url == "/about/" -%}
+            <a class="site-menu__about" href="{{ '/' | relative_url }}">Documents</a>
+            {%- else -%}
             <a class="site-menu__about" href="{{ '/about/' | relative_url }}">About me</a>
+            {%- endif -%}
 
             <div class="site-menu__row">
               <button type="button" class="site-menu__btn menu-theme" aria-pressed="false">
