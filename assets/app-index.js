@@ -1,8 +1,10 @@
 // App-index media strip: click-hold-drag-to-pan with a free-coasting fling on
 // release, click-to-load for YouTube video items, and click-a-screenshot to
-// open it in a blurred-backdrop lightbox (Esc / click to close). The strip pans
-// without snap points or a speed cap. The mouse wheel is left alone - vertical
-// wheeling scrolls the page, not the strip. No other JS on the site.
+// open it in a blurred-backdrop lightbox (Esc / click / browser Back to close -
+// the lightbox takes its own history entry, so Back closes it before leaving
+// the page). The strip pans without snap points or a speed cap. The mouse wheel
+// is left alone - vertical wheeling scrolls the page, not the strip. No other
+// JS on the site.
 (function () {
   var strip = document.querySelector(".app-shots__strip");
   if (!strip) return;
@@ -87,20 +89,28 @@
   });
 
   // --- click a screenshot to enlarge it over a blurred backdrop -----------
-  var box = null, lastFocus = null;
+  var box = null, lastFocus = null, historyPushed = false;
 
-  function closeLightbox() {
+  function closeLightbox(fromPopstate) {
     if (!box) return;
     document.removeEventListener("keydown", onLightboxKey);
+    window.removeEventListener("popstate", onPopstate);
     box.remove();
     box = null;
     document.body.style.overflow = "";
     if (lastFocus && lastFocus.focus) lastFocus.focus();
+    // Undo the history entry the open pushed, so a later Back leaves the page -
+    // unless Back is what closed us, in which case that entry is already gone.
+    if (historyPushed && !fromPopstate) history.back();
+    historyPushed = false;
   }
 
   function onLightboxKey(e) {
     if (e.key === "Escape" || e.key === "Esc") closeLightbox();
   }
+
+  // Back button: pop our pushed entry, close the lightbox, stay on the page.
+  function onPopstate() { closeLightbox(true); }
 
   function openLightbox(img) {
     if (box) return;
@@ -134,6 +144,15 @@
     document.body.appendChild(box);
     document.body.style.overflow = "hidden";
     document.addEventListener("keydown", onLightboxKey);
+    // Add a history entry so the browser Back button closes this view first
+    // and only then navigates away from the page.
+    try {
+      history.pushState({ shotLightbox: true }, "");
+      historyPushed = true;
+      window.addEventListener("popstate", onPopstate);
+    } catch (err) {
+      historyPushed = false;
+    }
     close.focus();
   }
 

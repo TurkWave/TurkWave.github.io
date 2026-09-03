@@ -6,7 +6,9 @@ layout: default
 {% capture app_name %}{% include app-name.html slug=app_slug %}{% endcapture %}
 {% assign app_dir_prefix = "_docs/" | append: app_slug | append: "/" %}
 {% assign app_index = site.docs | where: "is_app_index", true | where_exp: "d", "d.path contains app_dir_prefix" | first %}
+{% assign doc_base = page.path | split: "/" | last | split: "." | first %}
 
+{%- capture doc_body -%}
 <article class="doc-frame">
   <h1>{{ page.title }}</h1>
   <p class="doc-appline">
@@ -23,3 +25,17 @@ layout: default
 
   {{ content }}
 </article>
+{%- endcapture -%}
+
+{%- comment -%}
+"On this page" navigation is carried by the Support document only. License,
+privacy and terms render as a bare frame.
+{%- endcomment -%}
+{%- if doc_base == "support" -%}
+<div class="page-toc-layout">
+{% include page-toc.html html=content %}
+{{ doc_body }}
+</div>
+{%- else -%}
+{{ doc_body }}
+{%- endif -%}

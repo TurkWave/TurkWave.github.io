@@ -97,13 +97,6 @@ a:hover { border-bottom-color: var(--text); }
   min-width: 0;
   overflow-wrap: anywhere;
 }
-.site-header__tag {
-  font-size: .8rem;
-  color: var(--text-muted);
-  display: none;
-}
-@media (min-width: 640px) { .site-header__tag { display: block; } }
-
 main {
   max-width: var(--content-width);
   margin: 0 auto;
@@ -511,7 +504,9 @@ th { font-weight: 600; }
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
-  .app-shots__strip { padding-left: 1.5rem; }
+  /* Match the leading and trailing gutter so the first and last shot sit the
+     same distance from their screen edge at either end of the scroll. */
+  .app-shots__strip { padding-left: 1.5rem; padding-right: 1.5rem; }
 }
 
 /* Get the app: outlined pill links */
@@ -598,6 +593,17 @@ th { font-weight: 600; }
 .app-faq__q:first-of-type { margin-top: 0; }
 .app-faq__a > :last-child { margin-bottom: 0; }
 
+/* Collapsed preview fades out at its foot - the same cue the reviews list
+   gets under "Read more reviews". The fade lifts once the drawer is open. */
+.app-faq__list--faded {
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent);
+}
+.app-faq:has(.app-faq__more[open]) .app-faq__list--faded {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
 /* FAQ "Read more" drawer: entries past the preview fold behind a centered
    toggle styled like the "Read more reviews" link. The toggle sits at the
    foot of the list whether the drawer is open or closed. */
@@ -638,7 +644,7 @@ th { font-weight: 600; }
 /* Copyright line at the foot of the frame */
 .app-copyright p { margin: 0; font-size: .9rem; color: var(--text-muted); }
 
-/* ---- "On this page" navigation (app-index only) ----
+/* ---- "On this page" navigation (Support document only) ----
    Narrow: a collapsed <details> above the content.
    >= 76rem: a sticky rail in the left gutter; the content column keeps its
    46rem width and stays centred. */
@@ -758,6 +764,21 @@ th { font-weight: 600; }
   padding: 2rem 1.5rem 3rem;
   color: var(--text-muted);
   font-size: .85rem;
+  /* Phone: copyright first, the "App Legal & Support Documents" tag stacked
+     under it. */
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+}
+.site-footer__tag { color: var(--text-muted); }
+@media (min-width: 640px) {
+  /* Desktop: one row, the tag pulled to the far left, copyright to the right. */
+  .site-footer__inner {
+    flex-direction: row-reverse;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
 }
 
 ::selection { background: var(--text); color: var(--bg); }
