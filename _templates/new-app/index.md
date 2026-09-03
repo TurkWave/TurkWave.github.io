@@ -68,7 +68,13 @@ app_url: ""
 reviews: []
 reviews_url: ""
 
-# Pricing: a Markdown block, e.g.
+# Short price line shown in the header, right under the subtitle. Free text,
+# printed verbatim (no forced "Pricing -" prefix), mid-sized and not muted.
+# Links down to the Pricing section when it has content; hidden together with
+# that section when sections.pricing = off. Empty -> no header price line.
+price_line: ""
+
+# Pricing: a Markdown block - the detail behind the header's price line, e.g.
 #   pricing: |
 #     Free to download.
 pricing: ""

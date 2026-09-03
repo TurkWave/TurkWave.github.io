@@ -29,6 +29,15 @@ adds an explicit off switch and never changes an existing page.
       {%- if page.subtitle and page.subtitle != "" %}
       <p class="app-hero__subtitle">{{ page.subtitle }}</p>
       {%- endif %}
+      {%- if page.price_line and page.price_line != "" and sec.pricing != false %}
+      <p class="app-hero__price">
+        {%- if page.pricing and page.pricing != "" -%}
+        <a href="#pricing">{{ page.price_line }}</a>
+        {%- else -%}
+        {{ page.price_line }}
+        {%- endif -%}
+      </p>
+      {%- endif %}
     </div>
   </header>
 
