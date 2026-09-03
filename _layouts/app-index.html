@@ -50,23 +50,28 @@ adds an explicit off switch and never changes an existing page.
   {%- if page.screenshots and page.screenshots.size > 0 and sec.screenshots != false %}
   <section class="app-section app-shots" aria-label="Screenshots">
     <ul class="app-shots__strip" tabindex="0" role="group" aria-label="Screenshots, drag or scroll horizontally">
+      {%- comment %} The first item sits just below the hero (usually above the fold):
+      load it eagerly at high priority; lazy-load the rest. {%- endcomment %}
       {%- for shot in page.screenshots %}
+      {%- if forloop.first %}{% assign shot_loading = "eager" %}{% assign shot_priority = ' fetchpriority="high"' %}{% else %}{% assign shot_loading = "lazy" %}{% assign shot_priority = "" %}{% endif %}
       {%- if shot.youtube and shot.youtube != "" %}
       {%- assign shot_label = shot.alt | default: "Video" %}
       {%- if shot.poster and shot.poster != "" %}
         {%- assign yt_poster = shot.poster | relative_url %}
+        {%- assign yt_poster_dims = "" %}
       {%- else %}
         {%- assign yt_poster = "https://i.ytimg.com/vi/" | append: shot.youtube | append: "/hqdefault.jpg" %}
+        {%- assign yt_poster_dims = ' width="480" height="360"' %}
       {%- endif %}
       <li class="app-shots__item app-shots__item--video">
         <a class="yt-facade" href="https://www.youtube.com/watch?v={{ shot.youtube | escape }}" data-yt="{{ shot.youtube | escape }}" data-title="{{ shot_label | escape }}" aria-label="Play video: {{ shot_label | escape }}">
-          <img src="{{ yt_poster }}" alt="{{ shot_label | escape }}" loading="lazy" draggable="false">
+          <img src="{{ yt_poster }}"{{ yt_poster_dims }} alt="{{ shot_label | escape }}" loading="{{ shot_loading }}"{{ shot_priority }} draggable="false">
           <span class="yt-facade__play" aria-hidden="true"></span>
         </a>
       </li>
       {%- else %}
       <li class="app-shots__item">
-        <img src="{{ shot.src | relative_url }}" alt="{{ shot.alt }}" loading="lazy" draggable="false">
+        <img src="{{ shot.src | relative_url }}" alt="{{ shot.alt }}" loading="{{ shot_loading }}"{{ shot_priority }} draggable="false">
       </li>
       {%- endif %}
       {%- endfor %}
