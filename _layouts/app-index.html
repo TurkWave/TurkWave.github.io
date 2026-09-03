@@ -220,6 +220,13 @@ adds an explicit off switch and never changes an existing page.
 
 {{ app_frame }}
 
-{%- if page.screenshots and page.screenshots.size > 0 and sec.screenshots != false %}
+{%- comment -%}
+The script drives the screenshot strip and the click-to-enlarge lightbox. Load
+it when there is a strip OR an app icon to enlarge.
+{%- endcomment -%}
+{%- assign want_js = false %}
+{%- if page.screenshots and page.screenshots.size > 0 and sec.screenshots != false %}{% assign want_js = true %}{% endif %}
+{%- if page.logo and page.logo != "" %}{% assign want_js = true %}{% endif %}
+{%- if want_js %}
 <script defer src="{{ '/assets/app-index.js' | relative_url }}"></script>
 {%- endif %}

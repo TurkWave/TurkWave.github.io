@@ -288,6 +288,7 @@ th { font-weight: 600; }
   height: clamp(72px, 17vw, 96px);
   border-radius: var(--radius);
   border: 1px solid var(--border);
+  cursor: zoom-in; /* click to enlarge, same as a screenshot */
 }
 .app-hero__text {
   min-width: 0;
@@ -566,6 +567,10 @@ th { font-weight: 600; }
   /* Match the leading and trailing gutter so the first and last shot sit the
      same distance from their screen edge at either end of the scroll. */
   .app-shots__strip { padding-left: 1.5rem; padding-right: 1.5rem; }
+  /* Phone: same drawer button, minus the frame. */
+  .site-drawer__toggle { border-color: transparent; }
+  .site-drawer__toggle:hover,
+  .site-drawer[open] .site-drawer__toggle { background: transparent; }
 }
 
 /* Get the app: outlined pill links */
@@ -777,9 +782,16 @@ th { font-weight: 600; }
 }
 .app-list li { margin: 0; }
 
-/* app list (home): a card holding the app name + an optional muted sub-line */
+/* Home card: app icon left, identity right; an optional muted platform line;
+   a foot row carrying the slogan bottom-left and the price bottom-right. Every
+   value is pulled straight from the app's index.md front matter. The whole
+   card is a link to the app page (stretched-link trick on the name). */
 .app-list__item {
-  padding: 1rem 1.15rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  padding: 1.15rem 1.25rem;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -790,10 +802,39 @@ th { font-weight: 600; }
   background: var(--bg-subtle);
   transform: translateY(-1px);
 }
+.app-list__head {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+}
+.app-list__logo {
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-subtle);
+}
+.app-list__id { min-width: 0; }
 .app-list__name {
   display: block;
   border: 0;
-  font-weight: 550;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+/* Stretched link: cover the whole card so any click opens the app page. */
+.app-list__name::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+.app-list__subtitle {
+  display: block;
+  margin-top: .15rem;
+  font-size: .82rem;
+  line-height: 1.4;
+  color: var(--text-muted);
   overflow-wrap: anywhere;
 }
 .app-list__sub {
@@ -802,17 +843,40 @@ th { font-weight: 600; }
   justify-content: space-between;
   flex-wrap: wrap;
   gap: .1rem .9rem;
-  margin: .3rem 0 0;
+  margin: 0;
   font-size: .82rem;
   color: var(--text-muted);
 }
 .app-list__platform { overflow-wrap: anywhere; }
 .app-list__link {
+  position: relative; /* lift above the stretched card link */
+  z-index: 1;
   border: 0;
   color: var(--text-muted);
   white-space: nowrap;
 }
 .app-list__link:hover { color: var(--text); }
+.app-list__foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .2rem .9rem;
+  margin: 0;
+}
+.app-list__slogan {
+  min-width: 0;
+  font-size: .9rem;
+  font-weight: 550;
+  overflow-wrap: anywhere;
+}
+.app-list__price {
+  flex: none;
+  margin-left: auto; /* stay bottom-right even when the slogan is absent */
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--text);
+}
 
 .site-footer {
   border-top: 2px solid var(--border-strong);
