@@ -11,7 +11,11 @@
   <header class="site-header">
     <div class="site-header__inner">
       <div class="site-header__left">
-        {%- if page.layout == "app-index" or page.layout == "legal-doc" -%}
+        {%- if page.url == "/" -%}
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <span class="crumbs__current">Home</span>
+        </nav>
+        {%- elsif page.layout == "app-index" or page.layout == "legal-doc" -%}
         {%- capture crumb_slug %}{% include app-slug.html path=page.path %}{% endcapture -%}
         {%- assign crumb_app_url = "/" | append: crumb_slug | append: "/" | relative_url -%}
         <nav class="crumbs" aria-label="Breadcrumb">
@@ -27,6 +31,12 @@
         </nav>
         {%- endif -%}
       </div>
+      <details class="site-drawer">
+        <summary class="site-drawer__toggle" aria-label="Menu">
+          <span class="site-drawer__bars" aria-hidden="true"></span>
+        </summary>
+        <div class="site-drawer__panel"></div>
+      </details>
     </div>
   </header>
 

@@ -4,8 +4,6 @@ layout: default
 {% capture app_slug %}{% include app-slug.html path=page.path %}{% endcapture %}
 {% assign app_home_url = "/" | append: app_slug | append: "/" | relative_url %}
 {% capture app_name %}{% include app-name.html slug=app_slug %}{% endcapture %}
-{% assign app_dir_prefix = "_docs/" | append: app_slug | append: "/" %}
-{% assign app_index = site.docs | where: "is_app_index", true | where_exp: "d", "d.path contains app_dir_prefix" | first %}
 {% assign doc_base = page.path | split: "/" | last | split: "." | first %}
 
 {%- capture doc_body -%}
@@ -14,9 +12,6 @@ layout: default
   <p class="doc-appline">
     <a href="{{ app_home_url }}">{{ app_name }}</a>
     &middot; Contact: <a href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a>
-    {%- if app_index.app_url and app_index.app_url != "" %}
-    &middot; <a href="{{ app_index.app_url }}">Open app</a>
-    {%- endif %}
   </p>
   <p class="doc-meta">
     {% if page.effective_date %}Effective date: {{ page.effective_date }}{% endif %}

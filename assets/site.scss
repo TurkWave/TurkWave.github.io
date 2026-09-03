@@ -58,6 +58,7 @@ a:hover { border-bottom-color: var(--text); }
   border-bottom: 2px solid var(--border-strong);
 }
 .site-header__inner {
+  position: relative; /* containing block for the drawer panel */
   max-width: var(--content-width);
   margin: 0 auto;
   padding: 1rem 1.5rem;
@@ -97,6 +98,64 @@ a:hover { border-bottom-color: var(--text); }
   min-width: 0;
   overflow-wrap: anywhere;
 }
+
+/* Header drawer: a no-JS <details> pinned hard right. The panel drops under the
+   bar and is intentionally empty for now. */
+.site-drawer {
+  flex: none;
+  margin-left: auto; /* stay right even when the crumbs are short */
+}
+.site-drawer__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: var(--text);
+  list-style: none;
+  cursor: pointer;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  transition: border-color .15s ease, background .15s ease;
+}
+.site-drawer__toggle::-webkit-details-marker { display: none; }
+.site-drawer__toggle:hover { border-color: var(--text); background: var(--bg-subtle); }
+.site-drawer__toggle:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+.site-drawer[open] .site-drawer__toggle { border-color: var(--text); background: var(--bg-subtle); }
+.site-drawer__bars {
+  position: relative;
+  display: block;
+  width: 1.15rem;
+  height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+}
+.site-drawer__bars::before,
+.site-drawer__bars::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: currentColor;
+  border-radius: inherit;
+}
+.site-drawer__bars::before { top: -6px; }
+.site-drawer__bars::after { top: 6px; }
+.site-drawer__panel {
+  position: absolute;
+  top: calc(100% + 2px);
+  right: 1.5rem;
+  z-index: 1;
+  width: min(20rem, calc(100vw - 3rem));
+  min-height: 4rem;
+  padding: 1rem 1.25rem;
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  box-shadow: 0 .75rem 2rem rgba(0, 0, 0, .18);
+}
+
 main {
   max-width: var(--content-width);
   margin: 0 auto;
@@ -772,9 +831,9 @@ th { font-weight: 600; }
 }
 .site-footer__tag { color: var(--text-muted); }
 @media (min-width: 640px) {
-  /* Desktop: one row, the tag pulled to the far left, copyright to the right. */
+  /* Desktop: one row, copyright left, the tag pulled to the far right. */
   .site-footer__inner {
-    flex-direction: row-reverse;
+    flex-direction: row;
     align-items: baseline;
     justify-content: space-between;
     gap: 1rem;
