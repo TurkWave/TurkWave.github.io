@@ -54,11 +54,14 @@ Windows) there are shortcuts — recipes assume a POSIX shell, so use Git Bash o
 
 | Command        | Runs                                                            |
 |----------------|--------------------------------------------------------------- |
-| `make install` | `bundle install`                                               |
-| `make serve`   | `bundle exec jekyll serve --livereload`                        |
-| `make build`   | `JEKYLL_ENV=production bundle exec jekyll build` (matches CI)   |
-| `make clean`   | removes `_site` and `.jekyll-cache`                            |
-| `make preview` | `install`, then `serve`                                        |
+| `make install`  | `bundle install`                                              |
+| `make serve`    | `bundle exec jekyll serve --livereload`                       |
+| `make build`    | `JEKYLL_ENV=production bundle exec jekyll build` (matches CI)  |
+| `make lint`     | config + URL + content validators (bare Ruby, pre-build)      |
+| `make validate` | redirect validator (bare Ruby, needs a build first)          |
+| `make test`     | the Ruby test suites                                          |
+| `make clean`    | removes `_site` and `.jekyll-cache`                           |
+| `make preview`  | `install`, then `serve`                                       |
 
 ## Live site
 
