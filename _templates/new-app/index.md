@@ -82,6 +82,9 @@ pricing: ""
 # FAQ: a list of entries rendered in order. Two shapes, mix them freely:
 #   - { q: "...", a: "..." }   a question (the answer is Markdown)
 #   - { title: "..." }         a heading to group the questions beneath it
+# Write just the text: the layout prefixes each question with a bold "Q -" and
+# each answer with a bold "A -" - do not type those yourself. Question text and
+# answer text render in the same quiet style; only the "Q -" / "A -" are bold.
 # The first two QUESTIONS show directly; the rest - with their headings - fold
 # into a "Read more FAQs" toggle. Headings never count toward that two, so a
 # heading can't push a real question into the toggle on its own. Example:

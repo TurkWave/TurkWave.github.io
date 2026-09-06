@@ -728,10 +728,11 @@ th { font-weight: 600; }
 .app-social__more { margin: 1.25rem 0 0; text-align: center; }
 
 /* FAQ: optional  title:  group headings, then question / answer pairs. The
-   heading carries the section's weight - full-strength ink, larger; the Q and
-   A step back to the muted tone (still AA, and back to full ink under
-   data-contrast="more") and a smaller size, so a group reads as
-   "heading, then its quieter questions". The "FAQ" <h2> is left untouched. */
+   heading carries the section's weight - full-strength ink, larger. The Q and
+   A rows share ONE quiet style: the muted tone (still AA, and back to full ink
+   under data-contrast="more"), smaller, normal weight - question text and
+   answer text read identically. Only the injected "Q -" / "A -" markers are
+   bold, so the eye can still find each row. The "FAQ" <h2> is left untouched. */
 .app-faq__title {
   margin: 2.5rem 0 .75rem;
   font-size: 1.15rem;
@@ -743,7 +744,7 @@ th { font-weight: 600; }
 .app-faq__q {
   margin: 1.5rem 0 .3rem;
   font-size: .9rem;
-  font-weight: 600;
+  font-weight: 400;
   color: var(--text-muted);
 }
 .app-faq__q:first-of-type { margin-top: 0; }
@@ -753,6 +754,10 @@ th { font-weight: 600; }
   color: var(--text-muted);
 }
 .app-faq__a > :last-child { margin-bottom: 0; }
+/* The only bold ink in a Q/A row: the leading marker. Same weight on both -
+   a <span> on the question, the <strong> from "**A -**" on the answer. */
+.app-faq__marker,
+.app-faq__a > :first-child > strong:first-child { font-weight: 700; }
 
 /* Collapsed preview fades out at its foot - the same cue the reviews list
    gets under "Read more reviews". The fade lifts once the drawer is open. */

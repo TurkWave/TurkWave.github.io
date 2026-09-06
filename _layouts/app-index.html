@@ -183,9 +183,9 @@ adds an explicit off switch and never changes an existing page.
         {%- elsif item.q %}
           {%- assign faq_shown = faq_shown | plus: 1 %}
           {%- if faq_shown <= faq_preview %}
-      <h3 class="app-faq__q">{{ item.q }}</h3>
+      <h3 class="app-faq__q"><span class="app-faq__marker">Q -</span> {{ item.q }}</h3>
       <div class="app-faq__a">
-        {{- item.a | markdownify -}}
+        {{- item.a | strip | prepend: "**A -** " | markdownify -}}
       </div>
           {%- endif %}
         {%- endif %}
@@ -206,9 +206,9 @@ adds an explicit off switch and never changes an existing page.
         {%- elsif item.q %}
           {%- assign faq_seen = faq_seen | plus: 1 %}
           {%- if faq_seen > faq_preview %}
-      <h3 class="app-faq__q">{{ item.q }}</h3>
+      <h3 class="app-faq__q"><span class="app-faq__marker">Q -</span> {{ item.q }}</h3>
       <div class="app-faq__a">
-        {{- item.a | markdownify -}}
+        {{- item.a | strip | prepend: "**A -** " | markdownify -}}
       </div>
           {%- endif %}
         {%- endif %}
