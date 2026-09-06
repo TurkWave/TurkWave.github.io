@@ -94,15 +94,21 @@ pricing: |
   Free to download. This is sample pricing copy — an optional one-time
   "Pro" unlock is shown here only as an example.
 
-# FAQ: static question / answer pairs (answers are Markdown). The first two
-# show directly; any further entries fold into a "Read more FAQs" toggle.
+# FAQ: an ordered list mixing two shapes - { title: "..." } headings and
+# { q: "...", a: "..." } pairs (answers are Markdown). The first two QUESTIONS
+# show directly; the rest, with their headings, fold into a "Read more FAQs"
+# toggle. Headings never count toward that two.
 faq:
+  - title: "About this entry"
   - q: "Is this a real app?"
     a: "No. Example App is a demo entry that shows how the app-index layout renders."
   - q: "Where does this content come from?"
     a: "Each app's `index.md` front matter. An empty key hides its section."
+  - title: "Reading a long list"
   - q: "How is a long FAQ list handled?"
-    a: "Entries past the first two collapse behind a \"Read more FAQs\" toggle that expands and re-collapses the rest, right where you left off."
+    a: "Questions past the first two collapse behind a \"Read more FAQs\" toggle that expands and re-collapses the rest, right where you left off."
+  - q: "Do headings count toward the first two?"
+    a: "No - only questions do, so a `title:` heading never pushes a question into the toggle on its own."
 
 # Copyright line at the foot of the frame. Empty -> "(c) <year> TurkWave.
 # All rights reserved." Set it to name a different rights holder for an app.

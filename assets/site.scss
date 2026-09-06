@@ -727,13 +727,31 @@ th { font-weight: 600; }
 }
 .app-social__more { margin: 1.25rem 0 0; text-align: center; }
 
-/* FAQ: static question / answer pairs */
+/* FAQ: optional  title:  group headings, then question / answer pairs. The
+   heading carries the section's weight - full-strength ink, larger; the Q and
+   A step back to the muted tone (still AA, and back to full ink under
+   data-contrast="more") and a smaller size, so a group reads as
+   "heading, then its quieter questions". The "FAQ" <h2> is left untouched. */
+.app-faq__title {
+  margin: 2.5rem 0 .75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.app-faq__list > .app-faq__title:first-child,
+.app-faq__more > .app-faq__title:first-of-type { margin-top: 0; }
 .app-faq__q {
-  margin: 1.5rem 0 .4rem;
-  font-size: 1rem;
-  font-weight: 650;
+  margin: 1.5rem 0 .3rem;
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--text-muted);
 }
 .app-faq__q:first-of-type { margin-top: 0; }
+.app-faq__title + .app-faq__q { margin-top: .4rem; }
+.app-faq__a {
+  font-size: .9rem;
+  color: var(--text-muted);
+}
 .app-faq__a > :last-child { margin-bottom: 0; }
 
 /* Collapsed preview fades out at its foot - the same cue the reviews list
