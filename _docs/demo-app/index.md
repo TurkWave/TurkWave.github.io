@@ -94,8 +94,12 @@ pricing: |
   Free to download. This is placeholder pricing copy — an optional one-time
   "Pro" unlock is shown here only as an example.
 
-# FAQ: static question / answer pairs (answers are Markdown). The first two
-# show directly; any further entries fold into a "Read more FAQs" toggle.
+# FAQ: an ordered list mixing two shapes - { title: "..." } headings and
+# { q: "...", a: "..." } pairs (answers are Markdown). Write just the text; the
+# layout adds a bold "Q -" before each question and a bold "A -" before each
+# answer, both in the same quiet style as the text that follows. The first two
+# QUESTIONS show directly; the rest, with their headings, fold into a "Read
+# more FAQs" toggle. Headings never count toward that two.
 faq:
   - q: "Is this a real app?"
     a: "No. Demo App is a second demo entry that shows how two app cards sit side by side on the home page."

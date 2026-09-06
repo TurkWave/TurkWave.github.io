@@ -95,9 +95,11 @@ pricing: |
   "Pro" unlock is shown here only as an example.
 
 # FAQ: an ordered list mixing two shapes - { title: "..." } headings and
-# { q: "...", a: "..." } pairs (answers are Markdown). The first two QUESTIONS
-# show directly; the rest, with their headings, fold into a "Read more FAQs"
-# toggle. Headings never count toward that two.
+# { q: "...", a: "..." } pairs (answers are Markdown). Write just the text; the
+# layout adds a bold "Q -" before each question and a bold "A -" before each
+# answer, both rendered in the same quiet style as the text that follows. The
+# first two QUESTIONS show directly; the rest, with their headings, fold into a
+# "Read more FAQs" toggle. Headings never count toward that two.
 faq:
   - title: "About this entry"
   - q: "Is this a real app?"
