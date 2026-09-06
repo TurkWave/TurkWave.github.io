@@ -163,27 +163,55 @@ adds an explicit off switch and never changes an existing page.
 
   {%- if page.faq and page.faq.size > 0 and sec.faq != false %}
   {%- assign faq_preview = 2 %}
+  {%- comment %} Only questions count toward the preview fold; a  title:  entry is
+     a heading that rides along with the group of questions beneath it. {%- endcomment %}
+  {%- assign faq_q_total = 0 %}
+  {%- for item in page.faq %}
+    {%- if item.q %}{%- assign faq_q_total = faq_q_total | plus: 1 %}{%- endif %}
+  {%- endfor %}
+  {%- assign faq_has_more = false %}
+  {%- if faq_q_total > faq_preview %}{%- assign faq_has_more = true %}{%- endif %}
   <section class="app-section app-faq" aria-labelledby="faq">
     <h2 id="faq">FAQ</h2>
-    <div class="app-faq__list{% if page.faq.size > faq_preview %} app-faq__list--faded{% endif %}">
-      {%- for item in page.faq limit: faq_preview %}
+    <div class="app-faq__list{% if faq_has_more %} app-faq__list--faded{% endif %}">
+      {%- assign faq_shown = 0 %}
+      {%- for item in page.faq %}
+        {%- if item.title and item.title != "" %}
+          {%- unless faq_has_more and faq_shown >= faq_preview %}
+      <h3 class="app-faq__title">{{ item.title }}</h3>
+          {%- endunless %}
+        {%- elsif item.q %}
+          {%- assign faq_shown = faq_shown | plus: 1 %}
+          {%- if faq_shown <= faq_preview %}
       <h3 class="app-faq__q">{{ item.q }}</h3>
       <div class="app-faq__a">
         {{- item.a | markdownify -}}
       </div>
+          {%- endif %}
+        {%- endif %}
       {%- endfor %}
     </div>
-    {%- if page.faq.size > faq_preview %}
+    {%- if faq_has_more %}
     <details class="app-faq__more">
       <summary class="app-faq__more-btn">
         <span class="app-faq__more-btn__more">Read more FAQs</span>
         <span class="app-faq__more-btn__less">Show fewer FAQs</span>
       </summary>
-      {%- for item in page.faq offset: faq_preview %}
+      {%- assign faq_seen = 0 %}
+      {%- for item in page.faq %}
+        {%- if item.title and item.title != "" %}
+          {%- if faq_seen >= faq_preview %}
+      <h3 class="app-faq__title">{{ item.title }}</h3>
+          {%- endif %}
+        {%- elsif item.q %}
+          {%- assign faq_seen = faq_seen | plus: 1 %}
+          {%- if faq_seen > faq_preview %}
       <h3 class="app-faq__q">{{ item.q }}</h3>
       <div class="app-faq__a">
         {{- item.a | markdownify -}}
       </div>
+          {%- endif %}
+        {%- endif %}
       {%- endfor %}
     </details>
     {%- endif %}

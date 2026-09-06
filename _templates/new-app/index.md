@@ -79,8 +79,21 @@ price_line: ""
 #     Free to download.
 pricing: ""
 
-# FAQ: a list of { q: "...", a: "..." } (answers are Markdown). The first two
-# entries show directly; any beyond that fold into a "Read more FAQs" toggle.
+# FAQ: a list of entries rendered in order. Two shapes, mix them freely:
+#   - { q: "...", a: "..." }   a question (the answer is Markdown)
+#   - { title: "..." }         a heading to group the questions beneath it
+# The first two QUESTIONS show directly; the rest - with their headings - fold
+# into a "Read more FAQs" toggle. Headings never count toward that two, so a
+# heading can't push a real question into the toggle on its own. Example:
+#   faq:
+#     - title: "Billing"
+#     - q: "Is there a free tier?"
+#       a: "Yes - every core feature works without paying."
+#     - q: "How do I cancel?"
+#       a: "Open the app's settings and pick *Cancel subscription*."
+#     - title: "Privacy"
+#     - q: "Do you sell my data?"
+#       a: "No. See the Privacy Policy linked under Legal & support."
 faq: []
 
 # Rights holder for the in-frame copyright line. Empty -> "(c) <year> TurkWave.
