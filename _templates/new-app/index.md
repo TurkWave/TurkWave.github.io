@@ -91,9 +91,10 @@ subtitle: ""
 #
 #  Write "sub_slogan" as a  |  block: put the text on the lines below,
 #  every line indented by two spaces. Inside that block nothing needs
-#  escaping - quotes, question marks, m3 and blank lines between
-#  paragraphs are all fine. However long it is, the drawer shows it as a
-#  single run of text (newlines and blank lines collapse to spaces).
+#  escaping - quotes, question marks, symbols and blank lines between
+#  paragraphs are all fine. The open drawer keeps your layout exactly:
+#  every line break and indent you type is shown as-is. The closed drawer
+#  still shows just the first line as a one-line teaser.
 #  Leave the block empty ( sub_slogan: "" ) to hide the drawer.
 #
 #  e.g.

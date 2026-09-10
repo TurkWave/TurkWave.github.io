@@ -467,7 +467,15 @@ th { font-weight: 600; }
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.app-subslogan[open] .app-subslogan__summary > span { white-space: normal; }
+/* Open: lay the sub-slogan out exactly as authored - every newline and run of
+   spaces from the index.md block scalar is kept. Top-align the row so the ▾
+   marker rides with the first line. */
+.app-subslogan[open] .app-subslogan__summary { align-items: flex-start; }
+.app-subslogan[open] .app-subslogan__summary::after { margin-top: .15em; }
+.app-subslogan[open] .app-subslogan__summary > span {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
 
 /* Screenshots + video: a horizontal strip at a FIXED height. Each item keeps
    its own aspect ratio (portrait, landscape or mixed) and never resizes as
@@ -593,7 +601,17 @@ th { font-weight: 600; }
   border-radius: var(--radius);
   background: var(--bg-subtle);
   box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, .45);
-  cursor: default;
+  /* click / wheel / pinch zoom lives in assets/app-index.js: it sets a
+     translate()+scale() transform on this element. */
+  transform-origin: center center;
+  transition: transform .18s ease;
+  touch-action: none;
+  cursor: zoom-in;
+}
+.shot-lightbox__img.is-zoomed { cursor: grab; }
+.shot-lightbox__img.is-panning {
+  transition: none;
+  cursor: grabbing;
 }
 .shot-lightbox__close {
   position: absolute;
@@ -623,6 +641,7 @@ th { font-weight: 600; }
 }
 @media (prefers-reduced-motion: reduce) {
   .shot-lightbox { animation: none; }
+  .shot-lightbox__img { transition: none; }
 }
 
 /* Phone: drop every card frame (app index AND the legal-doc pages) and run
