@@ -44,6 +44,17 @@ sections:
   pricing: on
   faq: on
   legal: on
+  #  Per-document switches for the "Legal & support" list. Each key is
+  #  legal_<doc-file-name> with hyphens turned into underscores
+  #  (third-party.md -> legal_third_party). Set one to  off  to drop just
+  #  that link; the  legal:  switch above still hides the whole section. A
+  #  document with no key here stays listed, so a newly added doc shows up
+  #  on its own.
+  legal_terms: on
+  legal_privacy: on
+  legal_license: on
+  legal_third_party: on
+  legal_support: on
   contact: on
   copyright: on
 
@@ -78,11 +89,21 @@ subtitle: ""
 #  click-to-open drawer (closed by default) shown just above the
 #  "Get the app" buttons - use it for a secondary note.
 #
+#  Write "sub_slogan" as a  |  block: put the text on the lines below,
+#  every line indented by two spaces. Inside that block nothing needs
+#  escaping - quotes, question marks, m3 and blank lines between
+#  paragraphs are all fine. However long it is, the drawer shows it as a
+#  single run of text (newlines and blank lines collapse to spaces).
+#  Leave the block empty ( sub_slogan: "" ) to hide the drawer.
+#
 #  e.g.
 #    slogan: "Capture a thought before it's gone."
-#    sub_slogan: "Works offline. No account, no ads."
+#    sub_slogan: |
+#      Works fully offline. No account, no ads, no tracking.
+#
+#      "Where do my notes live?" On your device, full stop.
 slogan: ""
-sub_slogan: ""
+sub_slogan: "|"
 
 
 # --- Screenshots / video strip ----------------------------------
@@ -200,6 +221,25 @@ pricing: ""
 #      - q: "Is the Pro unlock a subscription?"
 #        a: "No - it is a one-time purchase."
 faq: []
+
+
+# --- Contact links -------------------------------
+#  EXPLANATION
+#  The rows of the "Contact" section, shown just above Copyright. Each
+#  row is a  { label:, url: }  pair: "url" is where it points, "label"
+#  is the visible text (defaults to the url if left out). A "url" with
+#  no scheme but an "@" is treated as an email and gets a  mailto:
+#  prefix. Leave the list empty ( contact_links: [] ) and the section
+#  falls back to the site-wide  contact_email  as a single mailto link.
+#  Hide the whole section from the  sections:  block above
+#  ( contact: off ).
+#
+#  e.g.
+#    contact_links:
+#      - { label: "Email support", url: "help@example.com" }
+#      - { label: "Support site", url: "https://example.com/support" }
+#      - { label: "Report an issue", url: "https://github.com/acme/app/issues" }
+contact_links: []
 
 
 # --- Copyright line -------------------------------
