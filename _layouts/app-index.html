@@ -80,10 +80,13 @@ adds an explicit off switch and never changes an existing page.
   {%- endif %}
 
   {%- comment %} sub_slogan is written in index.md as a  |  block scalar so any
-     text (quotes, blank lines, m3, ?) can be pasted in without escaping. The
-     drawer still shows it as one run of text: normalize_whitespace collapses
-     every newline / blank line to a single space. {%- endcomment %}
-  {%- assign sub_slogan_text = page.sub_slogan | normalize_whitespace %}
+     text (quotes, blank lines, symbols) can be pasted in without escaping. It
+     is rendered VERBATIM: `strip` only trims the leading / trailing blank
+     lines YAML keeps around a block scalar - every inner newline and run of
+     spaces survives. The closed drawer shows it as a one-line teaser (CSS
+     collapses the newlines to spaces and clips with an ellipsis); opening it
+     lays the text out exactly as typed via  white-space: pre-wrap. {%- endcomment %}
+  {%- assign sub_slogan_text = page.sub_slogan | strip %}
   {%- if sub_slogan_text != "" and sec.sub_slogan != false %}
   <details class="app-section app-subslogan">
     <summary class="app-subslogan__summary"><span>{{ sub_slogan_text }}</span></summary>
