@@ -79,9 +79,14 @@ adds an explicit off switch and never changes an existing page.
   </section>
   {%- endif %}
 
-  {%- if page.sub_slogan and page.sub_slogan != "" and sec.sub_slogan != false %}
+  {%- comment %} sub_slogan is written in index.md as a  |  block scalar so any
+     text (quotes, blank lines, m3, ?) can be pasted in without escaping. The
+     drawer still shows it as one run of text: normalize_whitespace collapses
+     every newline / blank line to a single space. {%- endcomment %}
+  {%- assign sub_slogan_text = page.sub_slogan | normalize_whitespace %}
+  {%- if sub_slogan_text != "" and sec.sub_slogan != false %}
   <details class="app-section app-subslogan">
-    <summary class="app-subslogan__summary"><span>{{ page.sub_slogan }}</span></summary>
+    <summary class="app-subslogan__summary"><span>{{ sub_slogan_text }}</span></summary>
   </details>
   {%- endif %}
 
@@ -218,22 +223,49 @@ adds an explicit off switch and never changes an existing page.
   </section>
   {%- endif %}
 
-  {%- if app_docs.size > 0 and sec.legal != false %}
+  {%- comment %} Per-document switches live in  page.sections  as
+     legal_<doc-slug>  keys, hyphens turned into underscores
+     (third-party.md -> legal_third_party). A doc with no key stays listed;
+     set its key to  off  to drop just that link. The  sec.legal  switch
+     still hides the whole section. {%- endcomment %}
+  {%- capture legal_items -%}
+  {%- for doc in app_docs -%}
+    {%- assign doc_slug = doc.path | split: "/" | last | split: "." | first -%}
+    {%- assign doc_key = doc_slug | replace: "-", "_" | prepend: "legal_" -%}
+    {%- unless sec[doc_key] == false -%}
+      <li><a href="{{ doc.url | relative_url }}">{{ doc.title }}</a></li>
+    {%- endunless -%}
+  {%- endfor -%}
+  {%- endcapture -%}
+  {%- if sec.legal != false and legal_items contains "<li" %}
   <section class="app-section app-legal" aria-labelledby="legal">
     <h2 id="legal">Legal &amp; support</h2>
     <ul class="app-linklist">
-      {%- for doc in app_docs %}
-      <li><a href="{{ doc.url | relative_url }}">{{ doc.title }}</a></li>
-      {%- endfor %}
+      {{- legal_items -}}
     </ul>
   </section>
   {%- endif %}
 
+  {%- comment %} page.contact_links is a list of  { label:, url: }  pairs. Each
+     row links to  url  with  label  as its visible text (label defaults to the
+     url). A url with no scheme but an "@" is treated as an email
+     (mailto: prefixed). With no contact_links the site-wide contact_email is
+     shown as a mailto, matching the old behaviour. {%- endcomment %}
   {%- if sec.contact != false %}
   <section class="app-section app-contact" aria-labelledby="contact">
     <h2 id="contact">Contact</h2>
     <ul class="app-linklist">
+      {%- if page.contact_links and page.contact_links.size > 0 -%}
+      {%- for link in page.contact_links -%}
+      {%- if link.url and link.url != "" -%}
+      {%- assign contact_href = link.url -%}
+      {%- unless contact_href contains ":" -%}{%- if contact_href contains "@" -%}{%- assign contact_href = contact_href | prepend: "mailto:" -%}{%- endif -%}{%- endunless -%}
+      <li><a href="{{ contact_href }}">{{ link.label | default: link.url }}</a></li>
+      {%- endif -%}
+      {%- endfor -%}
+      {%- else -%}
       <li><a href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a></li>
+      {%- endif -%}
     </ul>
   </section>
   {%- endif %}
