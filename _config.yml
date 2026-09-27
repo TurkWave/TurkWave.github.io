@@ -47,5 +47,6 @@ exclude:
   - Gemfile.lock
   - Makefile
   - README.md
+  - DEVELOPMENT.md
   - vendor
   - node_modules
