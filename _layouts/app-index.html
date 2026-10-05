@@ -4,7 +4,8 @@ layout: default
 {%- comment -%}
 The app-index page is built entirely from index.md front matter (see the
 keys in _templates/new-app/index.md). The Markdown body is NOT rendered
-here - it only feeds the SEO meta description via jekyll-seo-tag.
+here and is not used at all: the SEO meta description is the `description`
+front-matter key (jekyll-seo-tag), checked by _scripts/validate_metadata.rb.
 
 Section switches: `page.sections` is the single control block in index.md.
 `sec.<name> != false` means "show unless index.md set  <name>: off". A missing
@@ -287,6 +288,33 @@ adds an explicit off switch and never changes an existing page.
 {%- endcapture -%}
 
 {{ app_frame }}
+
+{%- comment -%}
+Structured data for the app itself. jekyll-seo-tag (in <head>) already types
+this URL as a WebPage; this says what the page is about. Only facts that are in
+index.md are emitted - no rating, price or category is invented. Optional
+fields come first, each ending in a comma, so that nothing is left dangling
+when they are absent: the required url is last. The name is page.title, not
+app_name, which is derived from the slug and has lost the Turkish letters.
+{%- endcomment %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  {%- if page.platform and page.platform != "" %}
+  "operatingSystem": {{ page.platform | jsonify }},
+  {%- endif %}
+  {%- if page.logo and page.logo != "" %}
+  "image": {{ page.logo | absolute_url | jsonify }},
+  {%- endif %}
+  {%- if page.lang and page.lang != "" %}
+  "inLanguage": {% if page.lang_also and page.lang_also != "" %}[{{ page.lang | jsonify }}, {{ page.lang_also | jsonify }}]{% else %}{{ page.lang | jsonify }}{% endif %},
+  {%- endif %}
+  "name": {{ page.title | jsonify }},
+  "description": {{ page.description | default: site.description | jsonify }},
+  "url": {{ page.url | absolute_url | jsonify }}
+}
+</script>
 
 {%- comment -%}
 The script drives the screenshot strip and the click-to-enlarge lightbox. Load

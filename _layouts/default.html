@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   {% seo %}
+  {%- comment %} jekyll-seo-tag emits no robots tag, so noindex is ours; it is set
+  per app in _config.yml (defaults). lang feeds <html lang> above and seo-tag's
+  og:locale; lang_also (a page written in two languages) is the og:locale:alternate.
+  An empty string is truthy in Liquid, hence the != "" test. {% endcomment -%}
+  {%- if page.noindex %}
+  <meta name="robots" content="noindex">
+  {%- endif %}
+  {%- if page.lang_also and page.lang_also != "" %}
+  <meta property="og:locale:alternate" content="{{ page.lang_also | replace: '-', '_' }}">
+  {%- endif %}
   <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}">
   {%- comment %} Apply the saved theme / contrast choice before first paint so
   the page never flashes the wrong palette. The menu buttons are wired up by

@@ -1,7 +1,11 @@
 ---
 title: Terms of Use
+description: "Terms of Use for Example App."
+lang: en-US
 effective_date: 2026-08-29
 last_updated: 2026-08-29
+date: 2026-08-29
+last_modified_at: 2026-08-29
 redirect_from:
   - /apps/example-app/terms/
 ---

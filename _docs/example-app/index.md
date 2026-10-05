@@ -23,6 +23,14 @@ sections:
   contact: on
   copyright: on
 
+# --- Search description & language ------------------------------------------
+# "description": the one sentence search engines show under the page title (and
+# the description in the app's structured data). "lang": the language the page
+# text is written in - en-US (English) or tr-TR (Turkish). "lang_also": optional,
+# only when the page repeats its text in the other of the two.
+description: "Example App is a demo entry on this site; every value on this page is placeholder sample content."
+lang: en-US
+
 # --- App-index page content -------------------------------------------------
 # Every block below is OPTIONAL. A section renders only when its key is set;
 # an empty value hides that section and its divider (same rule as the existing
@@ -122,8 +130,5 @@ copyright: ""
 redirect_from:
   - /apps/example-app/
 
-# The one-line body below is not rendered on the page; jekyll-seo-tag uses it
-# as this page's <meta name="description">.
+# The Markdown body is not used: the meta description is `description` above.
 ---
-
-Example App is a demo entry on this site; every value on this page is placeholder sample content.
