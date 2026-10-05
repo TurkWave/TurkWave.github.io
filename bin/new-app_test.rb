@@ -53,11 +53,19 @@ class NewAppTest < Minitest::Test
     index = File.read(File.join(@root, "_docs", "widget-viewer", "index.md"))
     assert_includes index, "permalink: /widget-viewer/\n"
     assert_includes index, %(title: "Widget Viewer"\n)
+    assert_includes index,
+                    %(description: "Widget Viewer: privacy policy, terms of use and support documents."\n)
+    # The language cannot be guessed, so it is left for the author to set.
+    assert_includes index, "lang: REPLACE-WITH-LANG\n"
 
-    %w[privacy terms license third-party support].each do |name|
+    titles = { "privacy" => "Privacy Policy", "terms" => "Terms of Use", "license" => "License",
+               "third-party" => "Third-Party Licenses", "support" => "Support" }
+    titles.each do |name, title|
       body = File.read(File.join(@root, "_docs", "widget-viewer", "#{name}.md"))
       assert_includes body, "effective_date: 2026-05-06\n"
       assert_includes body, "last_updated: 2026-05-06\n"
+      assert_includes body, %(description: "#{title} for Widget Viewer."\n)
+      assert_includes body, "lang: REPLACE-WITH-LANG\n"
     end
 
     assert_includes out, "Name:   Widget Viewer (derived from slug)"

@@ -11,11 +11,12 @@
 #
 # Creates
 # _docs/<app-slug>/{index.md,privacy.md,terms.md,license.md,third-party.md,support.md}
-# with the permalink, title and dates filled in. The display name is derived
-# from the slug ("my-app" -> "My App"); the support address comes from
-# `contact_email` in _config.yml. The only thing left to do afterwards is write
-# the real text in privacy.md / terms.md / license.md / third-party.md /
-# support.md.
+# with the permalink, title, description and dates filled in. The display name
+# is derived from the slug ("my-app" -> "My App"); the support address comes
+# from `contact_email` in _config.yml. What is left to do afterwards is set
+# `lang` (en-US or tr-TR) in every file - it cannot be guessed, and
+# _scripts/validate_metadata.rb fails until it is set - and write the real text
+# in privacy.md / terms.md / license.md / third-party.md / support.md.
 
 require "date"
 require "fileutils"
@@ -132,12 +133,17 @@ FileUtils.cp_r(TEMPLATE_DIR, target)
 Dir.glob(File.join(target, "*.md")).sort.each do |f|
   if File.basename(f) == "index.md"
     fill_front_matter(f,
-      "permalink" => "/#{slug}/",
-      "title"     => yq(app_name))
+      "permalink"   => "/#{slug}/",
+      "title"       => yq(app_name),
+      "description" => yq("#{app_name}: privacy policy, terms of use and support documents."))
   else
+    # A first description built from the template's own title, e.g.
+    # "Privacy Policy for Widget Viewer." - the author may reword it.
+    doc_title = (FrontMatter.parse_file(f) || {})["title"] || File.basename(f, ".md")
     fill_front_matter(f,
       "effective_date" => doc_date,
-      "last_updated"   => doc_date)
+      "last_updated"   => doc_date,
+      "description"    => yq("#{doc_title} for #{app_name}."))
   end
 end
 
@@ -163,6 +169,10 @@ puts "Next: replace the placeholder body text in the generated docs (privacy.md,
 puts "terms.md, license.md, third-party.md, support.md) with the real text, then"
 puts "commit & push."
 puts "CI (content lint) fails until you do."
+puts
+puts "Also set  lang  (en-US or tr-TR) in index.md and in every document. A first"
+puts "description was written for each; reword it if you like. CI (metadata check)"
+puts "fails until every lang is set."
 
 # --- optional editor -----------------------------------------------------------
 editor = ENV["EDITOR"] || ENV["VISUAL"]

@@ -8,8 +8,8 @@ title: "Replace With App Name"
 #  APP-INDEX PAGE
 #
 #  The whole page is built from this front matter. The Markdown body
-#  below the closing "---" is NOT shown on the page - it only feeds the
-#  SEO <meta description>. Put real content in the keys here.
+#  below the closing "---" is NOT shown on the page and is not used for
+#  anything. Put real content in the keys here.
 #
 #  HOW TO READ THIS FILE
 #  Each block has two parts:
@@ -57,6 +57,34 @@ sections:
   legal_support: on
   contact: on
   copyright: on
+
+
+# --- Search description & language -------------------------------------
+#  EXPLANATION
+#  "description" is the one sentence search engines show under the page
+#  title and AI readers use to summarise the app. bin/new-app writes a
+#  first version ("<App Name>: privacy policy, terms of use and support
+#  documents."); replace it with a real sentence about the app. It must
+#  not be empty. It is also the description in the app's structured data.
+#
+#  "lang" is the language the page text (slogan, FAQ, ...) is written in -
+#  exactly one of:
+#    en-US   English
+#    tr-TR   Turkish
+#  It sets <html lang> and og:locale and is published as the app's
+#  language in its structured data. bin/new-app cannot guess it, so the
+#  metadata check fails until you replace the placeholder below.
+#
+#  "lang_also" is optional: add it ONLY when the page also carries its text
+#  in a second language (the other of the two values). Leave it out
+#  otherwise.
+#
+#  e.g.
+#    description: "Note Jar is a fast offline note app for Android - capture a thought in one tap, no account required."
+#    lang: en-US
+#    lang_also: tr-TR
+description: ""
+lang: REPLACE-WITH-LANG
 
 
 # --- Header logo -----------------------------------------------------
@@ -265,12 +293,7 @@ copyright: ""
 ---
 
 {% comment %}
-This body is optional and is NOT rendered on the page. If you write one
-sentence here, jekyll-seo-tag uses it as this page's
-<meta name="description">; with nothing here the site-wide description
-is used. Put real content in the front-matter keys above, not here.
-
-Filled example:
-  Note Jar is a fast offline note app for Android, iOS and Windows -
-  capture a thought in one tap, no account required.
+This body is not used and is NOT rendered on the page. The meta description
+is the `description` key above; put real content in the front-matter keys,
+not here.
 {% endcomment %}

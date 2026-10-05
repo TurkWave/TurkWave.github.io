@@ -1,5 +1,7 @@
 ---
 title: License
+description: "License for Example App."
+lang: en-US
 effective_date: 2026-08-29
 last_updated: 2026-08-29
 redirect_from:

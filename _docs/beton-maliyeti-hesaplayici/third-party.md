@@ -1,5 +1,8 @@
 ---
 title: Third-Party Licenses
+description: "Third-party components bundled with Beton Maliyeti Hesaplayıcı, with their copyright and license notices. Beton Maliyeti Hesaplayıcı uygulamasında kullanılan üçüncü taraf bileşenler ve lisans bildirimleri."
+lang: en-US
+lang_also: tr-TR
 effective_date: 2026-09-10
 last_updated: 2026-09-10
 ---
