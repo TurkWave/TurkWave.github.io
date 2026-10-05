@@ -64,6 +64,9 @@ class NewAppTest < Minitest::Test
       body = File.read(File.join(@root, "_docs", "widget-viewer", "#{name}.md"))
       assert_includes body, "effective_date: 2026-05-06\n"
       assert_includes body, "last_updated: 2026-05-06\n"
+      # Anchored: "date: ..." is also a substring of "effective_date: ...".
+      assert_match(/^date: 2026-05-06$/, body)
+      assert_match(/^last_modified_at: 2026-05-06$/, body)
       assert_includes body, %(description: "#{title} for Widget Viewer."\n)
       assert_includes body, "lang: REPLACE-WITH-LANG\n"
     end

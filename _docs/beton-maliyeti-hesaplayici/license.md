@@ -4,6 +4,8 @@ description: "License of the Beton Maliyeti Hesaplayıcı app: proprietary softw
 lang: en-US
 effective_date: 2026-09-10
 last_updated: 2026-09-10
+date: 2026-09-10
+last_modified_at: 2026-09-10
 ---
 
 ## License

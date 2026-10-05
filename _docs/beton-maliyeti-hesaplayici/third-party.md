@@ -5,6 +5,8 @@ lang: en-US
 lang_also: tr-TR
 effective_date: 2026-09-10
 last_updated: 2026-09-10
+date: 2026-09-10
+last_modified_at: 2026-09-10
 ---
 
 # Third-Party Licenses / Üçüncü Taraf Lisansları

@@ -19,9 +19,14 @@
 #   effective_date  When this version takes effect. Strict YYYY-MM-DD.
 #   last_updated    Date of the most recent change. Strict YYYY-MM-DD,
 #                   on or after effective_date, never in the future.
+#   date            The same day as effective_date, repeated because search
+#                   engines read this key as the page's published date.
+#   last_modified_at  The same day as last_updated, repeated for the page's
+#                   modified date and the sitemap's lastmod.
 #
-# bin/new-app fills both dates with the scaffold date. Bump last_updated
-# by hand on every later edit.
+# bin/new-app fills all four dates with the scaffold date. On every later
+# edit bump last_updated AND last_modified_at together: the metadata check
+# fails if date or last_modified_at drifts from its twin.
 #
 # FRONT MATTER - filled example
 #   title: Privacy Policy
@@ -30,11 +35,15 @@
 #   lang_also: tr-TR
 #   effective_date: 2026-09-06
 #   last_updated: 2026-09-06
+#   date: 2026-09-06
+#   last_modified_at: 2026-09-06
 title: Privacy Policy
 description: ""
 lang: REPLACE-WITH-LANG
 effective_date: YYYY-MM-DD
 last_updated: YYYY-MM-DD
+date: YYYY-MM-DD
+last_modified_at: YYYY-MM-DD
 
 # Optional - add only if this page already lived at an older URL:
 #   redirect_from:

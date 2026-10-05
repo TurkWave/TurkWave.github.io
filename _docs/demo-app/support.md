@@ -4,6 +4,8 @@ description: "Support for Demo App."
 lang: en-US
 effective_date: 2026-09-03
 last_updated: 2026-09-03
+date: 2026-09-03
+last_modified_at: 2026-09-03
 ---
 
 Demo App is a demo entry on this site. This page shows how a support page

@@ -13,6 +13,12 @@
 #                  would abort the build.
 #   * lang_also    optional second language of a page that repeats its text;
 #                  one of LANGS and different from lang.
+#   * date,        documents only (an app index has no dates of its own): must
+#     last_modified_at  repeat effective_date and last_updated. Jekyll stamps
+#                  every collection document with the build time, which
+#                  jekyll-seo-tag publishes as the page's dates and
+#                  jekyll-sitemap as its lastmod; these two keys replace it with
+#                  the real ones. They are copies, so they are checked.
 #
 # Exit 0 when clean, 1 with a per-file report of field + issue.
 
@@ -51,6 +57,17 @@ files.each do |path|
 
   lang = fm["lang"]
   errors[rel] << "field 'lang': #{lang.inspect} must be one of #{LANGS.join(", ")}" unless LANGS.include?(lang)
+
+  unless File.basename(path) == "index.md"
+    # Both sides are YAML dates (Date objects), so 2026-09-05 == 2026-09-05.
+    { "date" => "effective_date", "last_modified_at" => "last_updated" }.each do |mirror, source|
+      if fm[mirror].nil?
+        errors[rel] << "field '#{mirror}': missing - repeat #{source} (#{fm[source]})"
+      elsif fm[mirror] != fm[source]
+        errors[rel] << "field '#{mirror}': #{fm[mirror]} must equal #{source} (#{fm[source]})"
+      end
+    end
+  end
 
   next unless fm.key?("lang_also")
 

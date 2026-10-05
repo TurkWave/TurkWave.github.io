@@ -4,6 +4,8 @@ description: "Beton Maliyeti Hesaplayıcı uygulamasının gizlilik politikası:
 lang: tr-TR
 effective_date: 2026-09-05
 last_updated: 2026-09-05
+date: 2026-09-05
+last_modified_at: 2026-09-05
 ---
 
 1) VERİ SORUMLUSU KİMLİĞİ VE İLETİŞİM
