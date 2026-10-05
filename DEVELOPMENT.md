@@ -61,6 +61,11 @@ JavaScript. What they are told about each page is front matter, checked by
   published / modified date and jekyll-sitemap as its `lastmod`. `bin/new-app` fills all
   four; when you edit a document, bump `last_updated` **and** `last_modified_at` together —
   the check fails if a copy drifts. (An app index still carries the build time.)
+- `image` — optional, in an app's `index.md`: the picture shown when the page is shared
+  (`og:image`, rendered as a small `summary` card by a `defaults` entry in `_config.yml`).
+  Use the app icon as a `/assets/...` path to a PNG / JPG / WebP / GIF; the check requires
+  the file to exist and rejects SVG (social previews do not render it). Leave the key out
+  rather than empty: jekyll-seo-tag would turn `image: ""` into the page's own URL.
 - Document pages are typed `WebPage` in the structured data (a `defaults` entry in
   `_config.yml`); an app index also carries a `SoftwareApplication` block
   (`_layouts/app-index.html`) built only from facts in its `index.md`.

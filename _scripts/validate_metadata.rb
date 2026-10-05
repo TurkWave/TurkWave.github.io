@@ -19,6 +19,10 @@
 #                  jekyll-seo-tag publishes as the page's dates and
 #                  jekyll-sitemap as its lastmod; these two keys replace it with
 #                  the real ones. They are copies, so they are checked.
+#   * image        optional, any page: the share-preview picture (og:image). A
+#                  /assets/ path to a PNG / JPG / WebP / GIF that exists in the
+#                  repo. Never empty: jekyll-seo-tag would turn "" into the
+#                  page's own URL. Never SVG: social previews do not render it.
 #
 # Exit 0 when clean, 1 with a per-file report of field + issue.
 
@@ -33,6 +37,9 @@ DOCS_DIR  = File.join(REPO_ROOT, "_docs")
 # which is deliberately not in this list: a new app fails until the language is
 # set by hand.
 LANGS = %w[en-US tr-TR].freeze
+
+# A share picture lives under /assets/ and is a raster format.
+IMAGE_RE = %r{\A/assets/\S+\.(?:png|jpe?g|webp|gif)\z}i
 
 errors = Hash.new { |h, k| h[k] = [] }
 
@@ -66,6 +73,19 @@ files.each do |path|
       elsif fm[mirror] != fm[source]
         errors[rel] << "field '#{mirror}': #{fm[mirror]} must equal #{source} (#{fm[source]})"
       end
+    end
+  end
+
+  if fm.key?("image")
+    image = fm["image"]
+    if !image.is_a?(String) || image.strip.empty?
+      errors[rel] << "field 'image': empty - it would publish the page's own address as the picture; " \
+                     "remove the line or give a /assets/... path"
+    elsif image !~ IMAGE_RE || image.include?("..")
+      errors[rel] << "field 'image': #{image.inspect} must be a /assets/... path ending in " \
+                     ".png, .jpg, .jpeg, .webp or .gif (SVG is not shown by social previews)"
+    elsif !File.file?(File.join(REPO_ROOT, image))
+      errors[rel] << "field 'image': #{image} does not exist in the repo (paths are case-sensitive on the CI runner)"
     end
   end
 

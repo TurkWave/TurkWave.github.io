@@ -28,14 +28,21 @@ class ValidateMetadataTest < Minitest::Test
            "date: 2026-01-01", "last_modified_at: 2026-01-02"].freeze
 
   # Copy the real checker + lib into a throwaway repo with the given _docs/ tree
-  # ({ "rel/path.md" => body }) and run it. Returns [combined_output, exit_code].
-  def run_check(docs)
+  # ({ "rel/path.md" => body }), plus any extra files given by their path from the
+  # repo root (e.g. an image under assets/), and run it.
+  # Returns [combined_output, exit_code].
+  def run_check(docs, files = {})
     root = Dir.mktmpdir("metadata-test-")
     FileUtils.mkdir_p(File.join(root, "_scripts", "lib"))
     FileUtils.cp(SCRIPT, File.join(root, "_scripts", "validate_metadata.rb"))
     FileUtils.cp(LIB, File.join(root, "_scripts", "lib", "front_matter.rb"))
     docs.each do |rel, body|
       abs = File.join(root, "_docs", rel)
+      FileUtils.mkdir_p(File.dirname(abs))
+      File.write(abs, body)
+    end
+    files.each do |rel, body|
+      abs = File.join(root, rel)
       FileUtils.mkdir_p(File.dirname(abs))
       File.write(abs, body)
     end
@@ -116,6 +123,30 @@ class ValidateMetadataTest < Minitest::Test
   def test_app_index_needs_no_dates
     out, code = run_check("acme/index.md" => page("title: Acme", 'description: "d"', "lang: en-US"))
     assert_equal 0, code, out
+  end
+
+  # `image` is optional, but when present it must be a real raster file under
+  # /assets/. An empty one is the dangerous case: jekyll-seo-tag would publish the
+  # page's own URL as the og:image.
+  def test_image_must_be_a_real_raster_asset_under_assets
+    base  = ["title: Acme", 'description: "d"', "lang: en-US"]
+    asset = { "assets/img/acme/logo.png" => "png bytes" }
+
+    out, code = run_check({ "acme/index.md" => page(*base, 'image: "/assets/img/acme/logo.png"') }, asset)
+    assert_equal 0, code, "an existing raster image should pass, got:\n#{out}"
+
+    {
+      'image: ""'                              => asset,
+      "image: 5"                               => asset,
+      'image: "/assets/img/acme/logo.svg"'     => { "assets/img/acme/logo.svg" => "<svg/>" },
+      'image: "/img/acme/logo.png"'            => { "img/acme/logo.png" => "x" },
+      'image: "/assets/img/acme/../logo.png"'  => { "assets/img/logo.png" => "x" },
+      'image: "/assets/img/acme/missing.png"'  => asset
+    }.each do |line, files|
+      out, code = run_check({ "acme/index.md" => page(*base, line) }, files)
+      assert_equal 1, code, "#{line} should fail, got:\n#{out}"
+      assert_includes out, "field 'image'", line
+    end
   end
 
   def test_missing_front_matter_and_bad_yaml_are_reported_not_raised

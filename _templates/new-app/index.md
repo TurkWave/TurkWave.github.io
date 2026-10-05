@@ -59,7 +59,7 @@ sections:
   copyright: on
 
 
-# --- Search description & language -------------------------------------
+# --- Search description, language & share image ------------------------
 #  EXPLANATION
 #  "description" is the one sentence search engines show under the page
 #  title and AI readers use to summarise the app. bin/new-app writes a
@@ -79,10 +79,19 @@ sections:
 #  in a second language (the other of the two values). Leave it out
 #  otherwise.
 #
+#  "image" is optional: the picture shown when the page is shared (og:image).
+#  Use the app icon - normally the same file as "logo" - as a site-absolute
+#  path under /assets/ to a PNG, JPG, WebP or GIF; SVG is not shown by social
+#  previews. Keep the file reasonably small. Add the line only when you have
+#  such a file: an empty  image: ""  would publish the page's own address as the
+#  picture, so the metadata check rejects it, and so it does a path to a file
+#  that does not exist.
+#
 #  e.g.
 #    description: "Note Jar is a fast offline note app for Android - capture a thought in one tap, no account required."
 #    lang: en-US
 #    lang_also: tr-TR
+#    image: "/assets/img/note-jar/logo.png"
 description: ""
 lang: REPLACE-WITH-LANG
 

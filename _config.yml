@@ -43,6 +43,11 @@ defaults:
       # These are policy / support pages, so say WebPage instead.
       seo:
         type: WebPage
+      # The only picture a page can have is an app icon, a square (index.md
+      # `image`). Share it as a small summary card, not as jekyll-seo-tag's
+      # default full-width one; pages without a picture are `summary` anyway.
+      twitter:
+        card: summary
   # Sample apps that exist only to preview page layouts. `noindex` adds a
   # robots meta tag (_layouts/default.html); `sitemap: false` keeps them out of
   # sitemap.xml (jekyll-sitemap) and llms.txt. The trailing slash matters: scope
