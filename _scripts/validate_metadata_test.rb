@@ -22,6 +22,11 @@ class ValidateMetadataTest < Minitest::Test
   # checker covers index.md too.
   TEMPLATES = Dir[File.join(TPL_DIR, "**", "*.md")].sort
 
+  # The four date keys of a valid document: `date` and `last_modified_at` repeat
+  # `effective_date` and `last_updated`.
+  DATES = ["effective_date: 2026-01-01", "last_updated: 2026-01-02",
+           "date: 2026-01-01", "last_modified_at: 2026-01-02"].freeze
+
   # Copy the real checker + lib into a throwaway repo with the given _docs/ tree
   # ({ "rel/path.md" => body }) and run it. Returns [combined_output, exit_code].
   def run_check(docs)
@@ -48,7 +53,7 @@ class ValidateMetadataTest < Minitest::Test
   def test_valid_pages_pass
     out, code = run_check(
       "acme/index.md"   => page("title: Acme", 'description: "Acme does a thing."', "lang: en-US"),
-      "acme/privacy.md" => page("title: Privacy Policy", 'description: "Privacy Policy for Acme."', "lang: tr-TR")
+      "acme/privacy.md" => page("title: Privacy Policy", 'description: "Privacy Policy for Acme."', "lang: tr-TR", *DATES)
     )
     assert_equal 0, code, out
     assert_includes out, "Metadata OK: 2 file(s) checked"
@@ -56,14 +61,14 @@ class ValidateMetadataTest < Minitest::Test
 
   def test_a_page_in_two_languages_passes
     out, code = run_check(
-      "acme/privacy.md" => page("title: P", 'description: "d"', "lang: tr-TR", "lang_also: en-US")
+      "acme/privacy.md" => page("title: P", 'description: "d"', "lang: tr-TR", "lang_also: en-US", *DATES)
     )
     assert_equal 0, code, out
   end
 
   def test_missing_or_blank_description_fails
     ["", 'description: ""', 'description: "   "', "description: 5"].each do |line|
-      lines = ["title: P", "lang: en-US"]
+      lines = ["title: P", "lang: en-US", *DATES]
       lines << line unless line.empty?
       out, code = run_check("acme/privacy.md" => page(*lines))
       assert_equal 1, code, "#{line.inspect} should fail, got:\n#{out}"
@@ -73,7 +78,7 @@ class ValidateMetadataTest < Minitest::Test
 
   def test_lang_must_be_one_of_the_two_supported_tags
     ["", "lang: en", "lang: tr", "lang: REPLACE-WITH-LANG", "lang: [tr-TR, en-US]"].each do |line|
-      lines = ["title: P", 'description: "d"']
+      lines = ["title: P", 'description: "d"', *DATES]
       lines << line unless line.empty?
       out, code = run_check("acme/privacy.md" => page(*lines))
       assert_equal 1, code, "#{line.inspect} should fail, got:\n#{out}"
@@ -82,12 +87,35 @@ class ValidateMetadataTest < Minitest::Test
   end
 
   def test_lang_also_must_be_valid_and_different_from_lang
-    base = ["title: P", 'description: "d"', "lang: tr-TR"]
+    base = ["title: P", 'description: "d"', "lang: tr-TR", *DATES]
     ["lang_also: tr-TR", "lang_also: de-DE", 'lang_also: ""'].each do |line|
       out, code = run_check("acme/privacy.md" => page(*base, line))
       assert_equal 1, code, "#{line.inspect} should fail, got:\n#{out}"
       assert_includes out, "field 'lang_also'"
     end
+  end
+
+  def test_document_dates_must_repeat_effective_date_and_last_updated
+    base = ["title: P", 'description: "d"', "lang: en-US",
+            "effective_date: 2026-01-01", "last_updated: 2026-01-02"]
+    cases = {
+      "date missing"             => [base, "field 'date'"],
+      "date differs"             => [base + ["date: 2026-01-03", "last_modified_at: 2026-01-02"], "field 'date'"],
+      "last_modified_at missing" => [base + ["date: 2026-01-01"], "field 'last_modified_at'"],
+      "last_modified_at differs" => [base + ["date: 2026-01-01", "last_modified_at: 2026-01-01"],
+                                     "field 'last_modified_at'"]
+    }
+    cases.each do |name, (lines, needle)|
+      out, code = run_check("acme/privacy.md" => page(*lines))
+      assert_equal 1, code, "#{name} should fail, got:\n#{out}"
+      assert_includes out, needle, name
+    end
+  end
+
+  # The app index has no effective_date / last_updated, so it has nothing to repeat.
+  def test_app_index_needs_no_dates
+    out, code = run_check("acme/index.md" => page("title: Acme", 'description: "d"', "lang: en-US"))
+    assert_equal 0, code, out
   end
 
   def test_missing_front_matter_and_bad_yaml_are_reported_not_raised

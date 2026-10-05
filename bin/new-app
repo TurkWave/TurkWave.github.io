@@ -140,10 +140,14 @@ Dir.glob(File.join(target, "*.md")).sort.each do |f|
     # A first description built from the template's own title, e.g.
     # "Privacy Policy for Widget Viewer." - the author may reword it.
     doc_title = (FrontMatter.parse_file(f) || {})["title"] || File.basename(f, ".md")
+    # date / last_modified_at repeat the two dates for search engines and the
+    # sitemap (checked by _scripts/validate_metadata.rb).
     fill_front_matter(f,
-      "effective_date" => doc_date,
-      "last_updated"   => doc_date,
-      "description"    => yq("#{doc_title} for #{app_name}."))
+      "effective_date"   => doc_date,
+      "last_updated"     => doc_date,
+      "date"             => doc_date,
+      "last_modified_at" => doc_date,
+      "description"      => yq("#{doc_title} for #{app_name}."))
   end
 end
 
@@ -163,7 +167,7 @@ Dir.glob(File.join(target, "*.md")).sort.each do |f|
   puts format("  %-11s -> %s", File.basename(f), url)
 end
 puts "Name:   #{app_name} (derived from slug)"
-puts "Dates:  effective_date = last_updated = #{doc_date}"
+puts "Dates:  effective_date = last_updated = date = last_modified_at = #{doc_date}"
 puts
 puts "Next: replace the placeholder body text in the generated docs (privacy.md,"
 puts "terms.md, license.md, third-party.md, support.md) with the real text, then"

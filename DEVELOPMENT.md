@@ -22,8 +22,8 @@ bin/new-app <app-slug>   # Windows: prefix with `ruby `
 ```
 
 Creates `_docs/<app-slug>/` from the template with `permalink`, `title`, a first
-`description` and today's `effective_date` / `last_updated` filled in (override with
-`--date YYYY-MM-DD`). The display name is derived from the slug (`my-app` → "My App")
+`description` and today's `effective_date` / `last_updated` (plus their `date` /
+`last_modified_at` copies) filled in (override with `--date YYYY-MM-DD`). The display name is derived from the slug (`my-app` → "My App")
 by both the layouts and this script, so it lives in exactly one place — the folder
 name. The support address comes from `contact_email` in `_config.yml`, shared by every
 page. Validates the slug, refuses an existing folder. Then set `lang` in `index.md` and
@@ -55,6 +55,12 @@ JavaScript. What they are told about each page is front matter, checked by
   (`og:locale:alternate`). `bin/new-app` leaves `lang: REPLACE-WITH-LANG`, so a new app
   fails the check until the language is set. It must stay a single string: jekyll-seo-tag
   calls `String#tr` on it, and a YAML list would abort the build.
+- `date` and `last_modified_at` — documents only (not the app index). They repeat
+  `effective_date` and `last_updated` under the keys search engines read: Jekyll otherwise
+  stamps every document with the build time, which jekyll-seo-tag publishes as its
+  published / modified date and jekyll-sitemap as its `lastmod`. `bin/new-app` fills all
+  four; when you edit a document, bump `last_updated` **and** `last_modified_at` together —
+  the check fails if a copy drifts. (An app index still carries the build time.)
 - Document pages are typed `WebPage` in the structured data (a `defaults` entry in
   `_config.yml`); an app index also carries a `SoftwareApplication` block
   (`_layouts/app-index.html`) built only from facts in its `index.md`.
