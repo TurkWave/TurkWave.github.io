@@ -1,7 +1,11 @@
 ---
 title: License
+description: "License for Demo App."
+lang: en-US
 effective_date: 2026-09-03
 last_updated: 2026-09-03
+date: 2026-09-03
+last_modified_at: 2026-09-03
 ---
 
 Demo App is released under the MIT License. Its full text is reproduced

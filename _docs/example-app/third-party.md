@@ -1,7 +1,11 @@
 ---
 title: Third-Party Licenses
+description: "Third-Party Licenses for Example App."
+lang: en-US
 effective_date: 2026-08-29
 last_updated: 2026-08-29
+date: 2026-08-29
+last_modified_at: 2026-08-29
 ---
 
 Example App is a demo entry on this site. This page shows how a small, offline
