@@ -1,5 +1,7 @@
 ---
 title: Third-Party Licenses
+description: "Third-Party Licenses for Demo App."
+lang: en-US
 effective_date: 2026-09-03
 last_updated: 2026-09-03
 ---

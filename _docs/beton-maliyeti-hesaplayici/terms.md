@@ -1,5 +1,7 @@
 ---
 title: Terms of Use
+description: "Beton Maliyeti Hesaplayıcı uygulamasının kullanım koşulları: kapsam ve kabul, fiyat, ödeme ve iadeler, garantilerin reddi ve sorumluluğun sınırlandırılması, değişiklikler."
+lang: tr-TR
 effective_date: 2026-09-10
 last_updated: 2026-09-10
 ---

@@ -1,5 +1,7 @@
 ---
 title: Support
+description: "Beton Maliyeti Hesaplayıcı için destek: yardım alma, iletişim, sorun bildirme, özellik istekleri, satın alma ve geri ödemeler, verilerin ve yedeklerin durumu."
+lang: tr-TR
 effective_date: 2026-09-10
 last_updated: 2026-09-10
 ---

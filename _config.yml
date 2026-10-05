@@ -38,6 +38,26 @@ defaults:
       type: "docs"
     values:
       layout: legal-doc
+      # jekyll-seo-tag types any dated document BlogPosting, and every
+      # collection document is dated (Jekyll stamps it with the build time).
+      # These are policy / support pages, so say WebPage instead.
+      seo:
+        type: WebPage
+  # Sample apps that exist only to preview page layouts. `noindex` adds a
+  # robots meta tag (_layouts/default.html); `sitemap: false` keeps them out of
+  # sitemap.xml (jekyll-sitemap) and llms.txt. The trailing slash matters: scope
+  # paths match by string prefix, so "_docs/demo-app" would also catch
+  # "_docs/demo-app-2". Delete an entry to publish that app normally.
+  - scope:
+      path: "_docs/demo-app/"
+    values:
+      noindex: true
+      sitemap: false
+  - scope:
+      path: "_docs/example-app/"
+    values:
+      noindex: true
+      sitemap: false
 
 exclude:
   - _templates

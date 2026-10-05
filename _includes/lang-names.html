@@ -1,0 +1,10 @@
+{%- comment -%}
+Plain-English names for a page's language tags (front-matter lang / lang_also).
+Usage: {% include lang-names.html lang=page.lang also=page.lang_also %}
+"tr-TR" -> "Turkish";  "en-US" + "tr-TR" -> "English, Turkish". Emits the names
+and nothing else. An unknown or missing tag adds nothing.
+{%- endcomment -%}
+{%- assign _names = "" -%}
+{%- if include.lang == "tr-TR" -%}{%- assign _names = "Turkish" -%}{%- elsif include.lang == "en-US" -%}{%- assign _names = "English" -%}{%- endif -%}
+{%- if include.also == "tr-TR" -%}{%- assign _names = _names | append: ", Turkish" -%}{%- elsif include.also == "en-US" -%}{%- assign _names = _names | append: ", English" -%}{%- endif -%}
+{{- _names -}}

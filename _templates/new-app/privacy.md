@@ -3,6 +3,19 @@
 #
 #   title           Heading shown on the page and in the "Legal & support"
 #                   list on the app index. Keep the wording below.
+#   description     One sentence for search engines and AI readers: what this
+#                   document covers. bin/new-app writes a first version
+#                   ("<Title> for <App Name>."); reword it if you like. Must
+#                   not be empty.
+#   lang            Language the text is written in - exactly one of:
+#                     en-US   English
+#                     tr-TR   Turkish
+#                   Sets <html lang> and og:locale. bin/new-app cannot guess it,
+#                   so the metadata check fails until you replace the
+#                   placeholder below.
+#   lang_also       Optional. Only for a page that repeats its text in a second
+#                   language: that other language (same two values, not the
+#                   same as lang). Leave the line out otherwise.
 #   effective_date  When this version takes effect. Strict YYYY-MM-DD.
 #   last_updated    Date of the most recent change. Strict YYYY-MM-DD,
 #                   on or after effective_date, never in the future.
@@ -12,9 +25,14 @@
 #
 # FRONT MATTER - filled example
 #   title: Privacy Policy
+#   description: "Privacy Policy for Note Jar."
+#   lang: en-US
+#   lang_also: tr-TR
 #   effective_date: 2026-09-06
 #   last_updated: 2026-09-06
 title: Privacy Policy
+description: ""
+lang: REPLACE-WITH-LANG
 effective_date: YYYY-MM-DD
 last_updated: YYYY-MM-DD
 

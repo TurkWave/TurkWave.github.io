@@ -1,5 +1,7 @@
 ---
 title: Privacy Policy
+description: "Beton Maliyeti Hesaplayıcı uygulamasının gizlilik politikası: veri sorumlusu, işlenen veriler ve amaçları, saklama ve imha, KVKK kapsamındaki haklarınız ve iletişim."
+lang: tr-TR
 effective_date: 2026-09-05
 last_updated: 2026-09-05
 ---
