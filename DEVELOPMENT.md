@@ -13,7 +13,8 @@ automatically by GitHub Actions on every push to `main`.
 - `_config.yml` — site-wide configuration (plugins, the `docs` collection, URL scheme).
 - `.github/workflows/` — GitHub Actions workflow that builds and deploys the site.
 - `bin/new-app` — scaffolds a new app's folder from `_templates/new-app/`.
-- `index.md` — the site's home page.
+- `index.md` — the landing page (intro + the `links:` cards, rendered by `_layouts/home.html`).
+- `docs.md` — the app documents index at `/docs/` (lists every app index, `_layouts/home-apps.html`).
 
 ## Adding an app
 
@@ -36,7 +37,7 @@ commit.
 Documents publish at `/<app-slug>/<doc-slug>/` and each app index at `/<app-slug>/`,
 derived mechanically from the file path — no link list is kept by hand. `<app-slug>`
 may not be one of the reserved top-level names (`apps`, `assets`, `sitemap`, `robots`,
-`404`, `index`); `_scripts/validate_urls.rb` enforces that. The previous
+`404`, `index`, `docs`); `_scripts/validate_urls.rb` enforces that. The previous
 `/apps/<app-slug>/…` scheme still works: every old URL redirects to its new location
 via `jekyll-redirect-from` (`redirect_from:` entries in `_docs/*/*.md`), and
 `_scripts/validate_redirects.rb` verifies each one after the build.

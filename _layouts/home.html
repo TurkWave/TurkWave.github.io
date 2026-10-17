@@ -1,0 +1,24 @@
+---
+layout: default
+---
+<h1>{{ page.title }}</h1>
+
+{{ content }}
+
+{%- comment %} page.links is a list of  { label:, url:, description: }  entries.
+   An entry with a ":" in its url (https:, mailto:) is used as written; any
+   other url is a site path and goes through relative_url. {%- endcomment %}
+<ul class="home-links">
+  {%- for link in page.links %}
+  {%- if link.url and link.url != "" %}
+  {%- assign link_href = link.url %}
+  {%- unless link_href contains ":" %}{%- assign link_href = link_href | relative_url %}{%- endunless %}
+  <li class="home-links__item">
+    <a class="home-links__label" href="{{ link_href }}">{{ link.label | default: link.url }}</a>
+    {%- if link.description and link.description != "" %}
+    <span class="home-links__desc">{{ link.description }}</span>
+    {%- endif %}
+  </li>
+  {%- endif %}
+  {%- endfor %}
+</ul>

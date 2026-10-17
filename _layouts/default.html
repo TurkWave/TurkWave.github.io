@@ -43,6 +43,12 @@
         <nav class="crumbs" aria-label="Breadcrumb">
           <span class="crumbs__current">About me</span>
         </nav>
+        {%- elsif page.url == "/docs/" -%}
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <a href="{{ '/' | relative_url }}">Home</a>
+          <span class="crumbs__sep" aria-hidden="true">&gt;</span>
+          <span class="crumbs__current">Documents</span>
+        </nav>
         {%- elsif page.layout == "app-index" or page.layout == "legal-doc" -%}
         {%- capture crumb_slug %}{% include app-slug.html path=page.path %}{% endcapture -%}
         {%- assign crumb_app_url = "/" | append: crumb_slug | append: "/" | relative_url -%}
@@ -65,11 +71,9 @@
         </summary>
         <div class="site-drawer__panel">
           <nav class="site-menu" aria-label="Site menu">
-            {%- if page.url == "/about/" -%}
-            <a class="site-menu__about" href="{{ '/' | relative_url }}">Documents</a>
-            {%- else -%}
-            <a class="site-menu__about" href="{{ '/about/' | relative_url }}">About me</a>
-            {%- endif -%}
+            <a class="site-menu__about" href="{{ '/' | relative_url }}"{% if page.url == "/" %} aria-current="page"{% endif %}>Home</a>
+            <a class="site-menu__about" href="{{ '/docs/' | relative_url }}"{% if page.url == "/docs/" %} aria-current="page"{% endif %}>Documents</a>
+            <a class="site-menu__about" href="{{ '/about/' | relative_url }}"{% if page.url == "/about/" %} aria-current="page"{% endif %}>About me</a>
 
             <div class="site-menu__row">
               <button type="button" class="site-menu__btn menu-theme" aria-pressed="false">
@@ -107,7 +111,7 @@
 
   <footer class="site-footer">
     <div class="site-footer__inner">
-      <span class="site-footer__copy">&copy; {{ 'now' | date: "%Y" }} TurkWave. All rights reserved.</span>
+      <span class="site-footer__copy">&copy; {{ 'now' | date: "%Y" }} {{ site.title }}. All rights reserved.</span>
       <span class="site-footer__tag">App Legal &amp; Support Documents</span>
     </div>
   </footer>
