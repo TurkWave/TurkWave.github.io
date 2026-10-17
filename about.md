@@ -31,5 +31,5 @@ entry that remembers your theme and contrast preference, and it never leaves you
 device.
 
 For privacy and support questions about a specific app, see that app's own
-documents linked from the [home page]({{ '/' | relative_url }}). For anything
+documents linked from the [documents page]({{ '/docs/' | relative_url }}). For anything
 about this site itself, email [{{ site.contact_email }}](mailto:{{ site.contact_email }}).
