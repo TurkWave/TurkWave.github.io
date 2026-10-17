@@ -10,3 +10,5 @@ links:
 ---
 
 Turkwave and HybridHabit build small, focused applications. This site keeps their legal and support documents in one public place so they are easy to find and always current.
+
+I publish these apps in many places. This site brings them together in one spot: here I list what I have published, what each app is, what it is for, and more.

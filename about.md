@@ -8,9 +8,12 @@ body_class: page-about
 
 # About me
 
-I'm the developer behind **TurkWave and HybridHabit** the apps. 
-I build small, focused applications and keep their legal and support material in
-one public place so it's easy to find and always current.
+Hello! I publish apps, programs, websites and similar projects under the names
+**TurkWave** and **HybridHabit**. I'm Türk and I live in Türkiye.
+
+I work on and take an interest in many areas: applications, npm packages,
+websites, dashboards, and programs for Windows and Linux, among others. I'm
+always learning and always trying to improve myself.
 
 ## Contact
 
