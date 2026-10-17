@@ -7,11 +7,12 @@
 #
 # Each would publish to a URL that shadows (or is shadowed by) a real top-level
 # path: /assets/*, jekyll-sitemap's /sitemap.xml + /robots.txt, /404.html, the
-# site root, and the /apps/... redirect stubs kept for the old URL scheme.
+# site root, the /docs/ app list page, and the /apps/... redirect stubs kept
+# for the old URL scheme.
 #
 # Stdlib-only: required with a bare `ruby` (the validators run without
 # `bundle exec`).
 
 module ReservedSlugs
-  LIST = %w[apps assets sitemap robots 404 index].freeze
+  LIST = %w[apps assets sitemap robots 404 index docs].freeze
 end

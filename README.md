@@ -1,6 +1,6 @@
-# TurkWave App Legal & Support Documents
+# Turkwave & HybridHabit
 
-Privacy policies, terms of use, and other legal and support documents for TurkWave's apps.
+The Turkwave and HybridHabit site: the apps' privacy policies, terms of use, and other legal and support documents.
 
 **Visit the site: [turkwave.github.io](https://turkwave.github.io/)**
 

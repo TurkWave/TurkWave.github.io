@@ -74,7 +74,7 @@ Dir.glob(File.join(DOCS_DIR, "**", "*.{md,markdown}")).sort.each do |path|
       errors << "#{rel}\n  index.md must set  permalink: #{expected}\n  actual: #{actual.inspect}"
     end
 
-    # index.md must render as the app index: the home page lists it and the
+    # index.md must render as the app index: the /docs/ page lists it and the
     # app-index layout builds the per-app document list from it.
     if fm["layout"] != "app-index"
       errors << "#{rel}\n  index.md must set  layout: app-index\n  actual: #{fm["layout"].inspect}"
@@ -103,13 +103,13 @@ Dir.glob(File.join(DOCS_DIR, "**", "*.{md,markdown}")).sort.each do |path|
 end
 
 # Every app folder that ships a doc must also ship an index.md. home-apps.html
-# lists an app only through its index.md (is_app_index: true), and
-# legal-doc.html resolves `app_index` from it. A folder with docs but no
-# index.md passes every per-file check above yet is invisible on the home page,
+# (the /docs/ page) lists an app only through its index.md (is_app_index: true),
+# and legal-doc.html resolves `app_index` from it. A folder with docs but no
+# index.md passes every per-file check above yet is invisible on the /docs/ page,
 # and its doc pages link to a /<app-slug>/ page that is never generated.
 (app_dirs.keys - app_index_seen.keys).sort.each do |slug|
   errors << "_docs/#{slug}/\n  no index.md: the folder has document(s) but no app index\n" \
-            "  - it would be absent from the home list (home-apps.html filters on is_app_index)\n" \
+            "  - it would be absent from the /docs/ list (home-apps.html filters on is_app_index)\n" \
             "  - its doc pages resolve app_index to nil and link to a missing /#{slug}/ page"
 end
 
