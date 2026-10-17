@@ -70,8 +70,10 @@ JavaScript. What they are told about each page is front matter, checked by
 - Document pages are typed `WebPage` in the structured data (a `defaults` entry in
   `_config.yml`); an app index also carries a `SoftwareApplication` block
   (`_layouts/app-index.html`) built only from facts in its `index.md`.
-- `/llms.txt` (`llms.txt`) is generated from that front matter. `/sitemap.xml` and
-  `/robots.txt` come from `jekyll-sitemap`.
+- `/llms.txt` (`llms.txt`) is generated from that front matter: a "Site" section for the
+  root Markdown pages that have a `description` (`index.md`, `docs.md`, `about.md`), then
+  one section per app. `/sitemap.xml` and `/robots.txt` come from `jekyll-sitemap`, which
+  includes the root pages automatically.
 - The sample apps (`demo-app`, `example-app`) are `noindex` and left out of `sitemap.xml`
   and `llms.txt` by `defaults` entries in `_config.yml`. Delete an entry to publish that
   app normally. Scope paths match by string prefix, hence the trailing slash.

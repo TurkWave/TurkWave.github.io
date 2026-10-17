@@ -4,18 +4,27 @@ permalink: /llms.txt
 {%- comment -%}
 Plain-text index for AI readers (the llms.txt convention). Generated from each
 page's front matter, so it never needs editing by hand. Apps marked noindex in
-_config.yml (the sample apps) are left out, like in sitemap.xml. Only the index
-is published: Liquid receives every document already converted to HTML, so a
-clean Markdown copy of the full text is not available here.
+_config.yml (the sample apps) are left out, like in sitemap.xml. The "Site"
+section lists the root Markdown pages (landing, /docs/, /about/) that carry a
+description. Only the index is published: Liquid receives every document
+already converted to HTML, so a clean Markdown copy of the full text is not
+available here.
 {%- endcomment -%}
 {%- assign visible = site.docs | where_exp: "d", "d.noindex != true" -%}
 {%- assign apps = visible | where: "is_app_index", true | sort: "title" -%}
+{%- assign site_pages = site.pages | where_exp: "p", "p.name contains '.md'" | where_exp: "p", "p.description" | where_exp: "p", "p.noindex != true" | sort: "url" -%}
 # {{ site.title }}
 
 > {{ site.description }}
 
 Every page below is static HTML and needs no JavaScript to read. Each entry says which language its text is written in. Contact: {{ site.contact_email }}
-{% for app in apps %}
+
+## Site
+
+{% for p in site_pages -%}
+- [{{ p.title }}]({{ p.url | absolute_url }}): {{ p.description }}
+{% endfor %}
+{%- for app in apps %}
 {%- assign parts = app.path | split: "/" -%}
 {%- assign app_prefix = "_docs/" | append: parts[1] | append: "/" -%}
 {%- capture app_langs %}{% include lang-names.html lang=app.lang also=app.lang_also %}{% endcapture -%}
