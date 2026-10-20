@@ -3,6 +3,11 @@ description: "Apps by Turkwave and HybridHabit, with their legal and support doc
 url: "https://turkwave.github.io"
 baseurl: ""
 
+# All site sources (pages, _docs, _layouts, _includes, assets) live in src/.
+# Tooling, templates, validators and docs stay at the repo root, outside the
+# build, so they need no `exclude` entries. The build output stays in _site/.
+source: src
+
 # Abort the build on a malformed front-matter block instead of warning and
 # skipping the file - matches this repo's fail-fast validator philosophy.
 strict_front_matter: true
@@ -63,15 +68,3 @@ defaults:
     values:
       noindex: true
       sitemap: false
-
-exclude:
-  - _templates
-  - _scripts
-  - bin
-  - Gemfile
-  - Gemfile.lock
-  - Makefile
-  - README.md
-  - DEVELOPMENT.md
-  - vendor
-  - node_modules

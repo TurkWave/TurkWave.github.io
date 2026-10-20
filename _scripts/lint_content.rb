@@ -16,7 +16,7 @@ require "yaml"
 require_relative "lib/front_matter"
 
 REPO_ROOT = File.expand_path("..", __dir__)
-DOCS_DIR  = File.join(REPO_ROOT, "_docs")
+DOCS_DIR  = File.join(REPO_ROOT, "src", "_docs")
 TODAY     = Date.today
 
 # Case-insensitive substrings that mean a template was published unedited.
@@ -28,7 +28,7 @@ TODAY     = Date.today
 # and a doc may legitimately mention the date format.
 #
 # The "from _templates/" group is a sync contract with the real template
-# wording: _scripts/lint_content_test.rb runs this linter against the shipped
+# wording: tests/lint_content_test.rb runs this linter against the shipped
 # templates, so changing one without updating this list fails that suite. The
 # rest are freeform catch-alls with no template anchor.
 PLACEHOLDERS = [

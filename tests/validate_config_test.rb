@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 #
 # Tests for _scripts/validate_config.rb. Stdlib only. Run directly:
-#   ruby _scripts/validate_config_test.rb
+#   ruby tests/validate_config_test.rb
 #
 # Drives the real script against a throwaway REPO_ROOT holding just a _config.yml.
 
@@ -11,7 +11,7 @@ require "fileutils"
 require "tmpdir"
 
 class ValidateConfigTest < Minitest::Test
-  SCRIPT = File.expand_path("validate_config.rb", __dir__)
+  SCRIPT = File.expand_path("../_scripts/validate_config.rb", __dir__)
 
   def check(config_body)
     root = Dir.mktmpdir("cfg-test-")

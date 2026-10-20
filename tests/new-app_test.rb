@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 #
 # Tests for bin/new-app. Stdlib only (minitest ships with Ruby). Run directly:
-#   ruby bin/new-app_test.rb
+#   ruby tests/new-app_test.rb
 #
 # Each test runs the real script against a throwaway REPO_ROOT built from the
 # repo's own _templates/new-app/ and _scripts/lib/, so it exercises the actual
@@ -41,7 +41,7 @@ class NewAppTest < Minitest::Test
   end
 
   def docs(slug)
-    Dir[File.join(@root, "_docs", slug, "*.md")].sort
+    Dir[File.join(@root, "src", "_docs", slug, "*.md")].sort
   end
 
   def test_valid_slug_scaffolds_the_doc_set_with_fields_filled
@@ -50,7 +50,7 @@ class NewAppTest < Minitest::Test
     assert_equal %w[index.md license.md privacy.md support.md terms.md third-party.md],
                  docs("widget-viewer").map { |f| File.basename(f) }
 
-    index = File.read(File.join(@root, "_docs", "widget-viewer", "index.md"))
+    index = File.read(File.join(@root, "src", "_docs", "widget-viewer", "index.md"))
     assert_includes index, "permalink: /widget-viewer/\n"
     assert_includes index, %(title: "Widget Viewer"\n)
     assert_includes index,
@@ -61,7 +61,7 @@ class NewAppTest < Minitest::Test
     titles = { "privacy" => "Privacy Policy", "terms" => "Terms of Use", "license" => "License",
                "third-party" => "Third-Party Licenses", "support" => "Support" }
     titles.each do |name, title|
-      body = File.read(File.join(@root, "_docs", "widget-viewer", "#{name}.md"))
+      body = File.read(File.join(@root, "src", "_docs", "widget-viewer", "#{name}.md"))
       assert_includes body, "effective_date: 2026-05-06\n"
       assert_includes body, "last_updated: 2026-05-06\n"
       # Anchored: "date: ..." is also a substring of "effective_date: ...".
@@ -77,7 +77,7 @@ class NewAppTest < Minitest::Test
   def test_default_date_is_today
     _out, status = run_new_app("today-app", "--no-edit")
     assert status.success?
-    privacy = File.read(File.join(@root, "_docs", "today-app", "privacy.md"))
+    privacy = File.read(File.join(@root, "src", "_docs", "today-app", "privacy.md"))
     assert_includes privacy, "effective_date: #{Date.today.iso8601}\n"
   end
 
@@ -85,7 +85,7 @@ class NewAppTest < Minitest::Test
     out, status = run_new_app("my-cool-app", "--no-edit")
     assert status.success?
     assert_includes out, "Name:   My Cool App (derived from slug)"
-    assert_includes File.read(File.join(@root, "_docs", "my-cool-app", "index.md")),
+    assert_includes File.read(File.join(@root, "src", "_docs", "my-cool-app", "index.md")),
                     %(title: "My Cool App"\n)
   end
 
@@ -93,7 +93,7 @@ class NewAppTest < Minitest::Test
     ["Upper", "-lead", "trail-", "dou--ble", "sp ace", "under_score"].each do |slug|
       out, status = run_new_app(slug, "--no-edit")
       refute status.success?, "expected failure for #{slug.inspect}: #{out}"
-      refute File.exist?(File.join(@root, "_docs", slug)), "#{slug.inspect} left a folder"
+      refute File.exist?(File.join(@root, "src", "_docs", slug)), "#{slug.inspect} left a folder"
     end
   end
 
@@ -102,7 +102,7 @@ class NewAppTest < Minitest::Test
       out, status = run_new_app(slug, "--no-edit")
       refute status.success?, "expected failure for reserved #{slug.inspect}: #{out}"
       assert_includes out, "reserved"
-      refute File.exist?(File.join(@root, "_docs", slug)), "#{slug.inspect} left a folder"
+      refute File.exist?(File.join(@root, "src", "_docs", slug)), "#{slug.inspect} left a folder"
     end
   end
 
@@ -118,7 +118,7 @@ class NewAppTest < Minitest::Test
     out, status = run_new_app("future-app", "--no-edit", "--date", "9999-01-01")
     refute status.success?
     assert_includes out, "future"
-    refute File.exist?(File.join(@root, "_docs", "future-app"))
+    refute File.exist?(File.join(@root, "src", "_docs", "future-app"))
   end
 
   def test_malformed_date_is_refused
@@ -153,7 +153,7 @@ class NewAppTest < Minitest::Test
 
     _out, status = run_new_app("fence-app", "--no-edit", "--date", "2026-02-03")
     assert status.success?
-    data = File.read(File.join(@root, "_docs", "fence-app", "data.md"))
+    data = File.read(File.join(@root, "src", "_docs", "fence-app", "data.md"))
     assert_includes data, "effective_date: 2026-02-03\n"
     assert_includes data, "last_updated: 2026-02-03\n"
     assert_includes data, "effective_date: SENTINEL-must-survive\n"

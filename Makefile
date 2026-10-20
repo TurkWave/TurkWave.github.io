@@ -47,12 +47,12 @@ validate:
 	ruby _scripts/validate_redirects.rb
 
 test:
-	ruby _scripts/lib/front_matter_test.rb
-	ruby _scripts/validate_config_test.rb
-	ruby _scripts/validate_urls_test.rb
-	ruby _scripts/lint_content_test.rb
-	ruby _scripts/validate_metadata_test.rb
-	ruby bin/new-app_test.rb
+	ruby tests/front_matter_test.rb
+	ruby tests/validate_config_test.rb
+	ruby tests/validate_urls_test.rb
+	ruby tests/lint_content_test.rb
+	ruby tests/validate_metadata_test.rb
+	ruby tests/new-app_test.rb
 
 clean:
 	rm -rf _site .jekyll-cache

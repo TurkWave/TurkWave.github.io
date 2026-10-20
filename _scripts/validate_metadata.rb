@@ -29,7 +29,8 @@
 require_relative "lib/front_matter"
 
 REPO_ROOT = File.expand_path("..", __dir__)
-DOCS_DIR  = File.join(REPO_ROOT, "_docs")
+SRC_DIR   = File.join(REPO_ROOT, "src")
+DOCS_DIR  = File.join(SRC_DIR, "_docs")
 
 # The two languages the site is written in. Each carries its region so that one
 # value is valid both as <html lang> (BCP 47) and, with "-" turned into "_", as
@@ -84,7 +85,7 @@ files.each do |path|
     elsif image !~ IMAGE_RE || image.include?("..")
       errors[rel] << "field 'image': #{image.inspect} must be a /assets/... path ending in " \
                      ".png, .jpg, .jpeg, .webp or .gif (SVG is not shown by social previews)"
-    elsif !File.file?(File.join(REPO_ROOT, image))
+    elsif !File.file?(File.join(SRC_DIR, image))
       errors[rel] << "field 'image': #{image} does not exist in the repo (paths are case-sensitive on the CI runner)"
     end
   end

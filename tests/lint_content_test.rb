@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 #
 # Tests for _scripts/lint_content.rb. Stdlib only (minitest ships with Ruby).
-# Run directly:  ruby _scripts/lint_content_test.rb
+# Run directly:  ruby tests/lint_content_test.rb
 #
 # The point of this suite: PLACEHOLDERS in lint_content.rb is hand-maintained
 # and a comment says it "must be kept in sync" with _templates/. Nothing else
@@ -15,8 +15,8 @@ require "fileutils"
 require "tmpdir"
 
 class LintContentTest < Minitest::Test
-  SCRIPT  = File.expand_path("lint_content.rb", __dir__)
-  LIB     = File.expand_path("lib/front_matter.rb", __dir__)
+  SCRIPT  = File.expand_path("../_scripts/lint_content.rb", __dir__)
+  LIB     = File.expand_path("../_scripts/lib/front_matter.rb", __dir__)
   TPL_DIR = File.expand_path("../_templates", __dir__)
 
   # Every shipped template EXCEPT the app index (lint_content skips index.md).
@@ -35,7 +35,7 @@ class LintContentTest < Minitest::Test
     FileUtils.cp(SCRIPT, File.join(root, "_scripts", "lint_content.rb"))
     FileUtils.cp(LIB, File.join(root, "_scripts", "lib", "front_matter.rb"))
     docs.each do |rel, body|
-      abs = File.join(root, "_docs", rel)
+      abs = File.join(root, "src", "_docs", rel)
       FileUtils.mkdir_p(File.dirname(abs))
       File.write(abs, body)
     end

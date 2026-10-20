@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 #
 # Tests for _scripts/validate_metadata.rb. Stdlib only (minitest ships with Ruby).
-# Run directly:  ruby _scripts/validate_metadata_test.rb
+# Run directly:  ruby tests/validate_metadata_test.rb
 #
 # Like lint_content_test.rb, these run the real checker - here against throwaway
 # _docs/ trees and against the real shipped templates, so a template that stops
@@ -14,8 +14,8 @@ require "fileutils"
 require "tmpdir"
 
 class ValidateMetadataTest < Minitest::Test
-  SCRIPT  = File.expand_path("validate_metadata.rb", __dir__)
-  LIB     = File.expand_path("lib/front_matter.rb", __dir__)
+  SCRIPT  = File.expand_path("../_scripts/validate_metadata.rb", __dir__)
+  LIB     = File.expand_path("../_scripts/lib/front_matter.rb", __dir__)
   TPL_DIR = File.expand_path("../_templates", __dir__)
 
   # Every shipped template, the app index included: unlike lint_content, this
@@ -29,7 +29,7 @@ class ValidateMetadataTest < Minitest::Test
 
   # Copy the real checker + lib into a throwaway repo with the given _docs/ tree
   # ({ "rel/path.md" => body }), plus any extra files given by their path from the
-  # repo root (e.g. an image under assets/), and run it.
+  # src/ (e.g. an image under assets/), and run it.
   # Returns [combined_output, exit_code].
   def run_check(docs, files = {})
     root = Dir.mktmpdir("metadata-test-")
@@ -37,12 +37,12 @@ class ValidateMetadataTest < Minitest::Test
     FileUtils.cp(SCRIPT, File.join(root, "_scripts", "validate_metadata.rb"))
     FileUtils.cp(LIB, File.join(root, "_scripts", "lib", "front_matter.rb"))
     docs.each do |rel, body|
-      abs = File.join(root, "_docs", rel)
+      abs = File.join(root, "src", "_docs", rel)
       FileUtils.mkdir_p(File.dirname(abs))
       File.write(abs, body)
     end
     files.each do |rel, body|
-      abs = File.join(root, rel)
+      abs = File.join(root, "src", rel)
       FileUtils.mkdir_p(File.dirname(abs))
       File.write(abs, body)
     end

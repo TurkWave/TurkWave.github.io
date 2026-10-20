@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 #
 # Tests for the shared front-matter helper. Stdlib only (minitest ships with
-# Ruby). Run directly:  ruby _scripts/lib/front_matter_test.rb
+# Ruby). Run directly:  ruby tests/front_matter_test.rb
 
 require "minitest/autorun"
 require "date"
-require_relative "front_matter"
+require_relative "../_scripts/lib/front_matter"
 
 class FrontMatterTest < Minitest::Test
   DOC = <<~MD

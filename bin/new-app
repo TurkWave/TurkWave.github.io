@@ -26,7 +26,7 @@ require_relative "../_scripts/lib/reserved_slugs"
 
 REPO_ROOT    = File.expand_path("..", __dir__)
 TEMPLATE_DIR = File.join(REPO_ROOT, "_templates", "new-app")
-DOCS_DIR     = File.join(REPO_ROOT, "_docs")
+DOCS_DIR     = File.join(REPO_ROOT, "src", "_docs")
 
 # Slugs that would publish to a URL clashing with a real top-level path -
 # one list, shared with _scripts/validate_urls.rb.
@@ -83,7 +83,7 @@ die("template dir not found: #{TEMPLATE_DIR}") unless Dir.exist?(TEMPLATE_DIR)
 app_name = slug.split("-").map(&:capitalize).join(" ")
 
 target = File.join(DOCS_DIR, slug)
-die("#{File.join("_docs", slug)} already exists") if File.exist?(target)
+die("#{File.join("src", "_docs", slug)} already exists") if File.exist?(target)
 
 # --- resolve date ------------------------------------------------------------
 today = Date.today
@@ -160,7 +160,7 @@ end
 # --- summary ---------------------------------------------------------------
 cfg  = (YAML.safe_load(File.read(File.join(REPO_ROOT, "_config.yml"))) rescue {}) || {}
 base = "#{cfg["url"]}#{cfg["baseurl"]}"
-puts "Created #{File.join("_docs", slug)}/"
+puts "Created #{File.join("src", "_docs", slug)}/"
 Dir.glob(File.join(target, "*.md")).sort.each do |f|
   name = File.basename(f, ".md")
   url  = name == "index" ? "#{base}/#{slug}/" : "#{base}/#{slug}/#{name}/"

@@ -22,7 +22,7 @@ require_relative "lib/front_matter"
 require_relative "lib/reserved_slugs"
 
 REPO_ROOT = File.expand_path("..", __dir__)
-DOCS_DIR  = File.join(REPO_ROOT, "_docs")
+DOCS_DIR  = File.join(REPO_ROOT, "src", "_docs")
 SLUG_RE   = /\A[a-z0-9]+(?:-[a-z0-9]+)*\z/
 
 # Top-level names already taken by the built site - one list, shared with

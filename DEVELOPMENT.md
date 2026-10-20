@@ -6,15 +6,21 @@ automatically by GitHub Actions on every push to `main`.
 
 ## What's where
 
-- `_docs/` — each app's documents, one folder per app (e.g. `_docs/<app-slug>/`). This is
+All Jekyll sources live in `src/` (`source: src` in `_config.yml`); everything else at the
+repo root is tooling and stays outside the build. Paths below are relative to `src/` unless
+they start with a root-level name.
+
+- `src/_docs/` — each app's documents, one folder per app (e.g. `src/_docs/<app-slug>/`). This is
   where the actual content (privacy policy, terms, etc.) lives.
-- `_layouts/` — Jekyll page templates that turn the documents in `_docs/` into site pages.
+- `src/_layouts/`, `src/_includes/`, `src/assets/` — Jekyll page templates, partials and static assets.
 - `_templates/` — copy-paste starting point for adding a new app (`new-app/`).
 - `_config.yml` — site-wide configuration (plugins, the `docs` collection, URL scheme).
 - `.github/workflows/` — GitHub Actions workflow that builds and deploys the site.
 - `bin/new-app` — scaffolds a new app's folder from `_templates/new-app/`.
-- `index.md` — the landing page (intro + the `links:` cards, rendered by `_layouts/home.html`).
-- `docs.md` — the app documents index at `/docs/` (lists every app index, `_layouts/home-apps.html`).
+- `_scripts/` — the validators run by `make lint` / `make validate`.
+- `tests/` — all Ruby test suites (`*_test.rb`) for the scripts and `bin/new-app`; run with `make test`.
+- `src/index.md` — the landing page (intro + the `links:` cards, rendered by `_layouts/home.html`).
+- `src/docs.md` — the app documents index at `/docs/` (lists every app index, `_layouts/home-apps.html`).
 
 ## Adding an app
 
@@ -22,7 +28,7 @@ automatically by GitHub Actions on every push to `main`.
 bin/new-app <app-slug>   # Windows: prefix with `ruby `
 ```
 
-Creates `_docs/<app-slug>/` from the template with `permalink`, `title`, a first
+Creates `src/_docs/<app-slug>/` from the template with `permalink`, `title`, a first
 `description` and today's `effective_date` / `last_updated` (plus their `date` /
 `last_modified_at` copies) filled in (override with `--date YYYY-MM-DD`). The display name is derived from the slug (`my-app` → "My App")
 by both the layouts and this script, so it lives in exactly one place — the folder
@@ -97,6 +103,6 @@ Windows) there are shortcuts — recipes assume a POSIX shell, so use Git Bash o
 | `make build`    | `JEKYLL_ENV=production bundle exec jekyll build` (matches CI)  |
 | `make lint`     | config + URL + content + metadata validators (bare Ruby, pre-build) |
 | `make validate` | redirect validator (bare Ruby, needs a build first)          |
-| `make test`     | the Ruby test suites                                          |
+| `make test`     | the Ruby test suites in `tests/`                              |
 | `make clean`    | removes `_site` and `.jekyll-cache`                           |
 | `make preview`  | `install`, then `serve`                                       |

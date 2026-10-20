@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 #
 # Tests for _scripts/validate_urls.rb. Stdlib only (minitest ships with Ruby).
-# Run directly:  ruby _scripts/validate_urls_test.rb
+# Run directly:  ruby tests/validate_urls_test.rb
 #
 # Each test builds a throwaway REPO_ROOT holding a copy of the validator + the
 # shared libs it requires and a synthetic _docs/ tree, then runs the real
@@ -11,11 +11,11 @@ require "minitest/autorun"
 require "open3"
 require "fileutils"
 require "tmpdir"
-require_relative "lib/reserved_slugs"
+require_relative "../_scripts/lib/reserved_slugs"
 
 class ValidateUrlsTest < Minitest::Test
-  SCRIPT = File.expand_path("validate_urls.rb", __dir__)
-  LIBS   = Dir[File.expand_path("lib/{front_matter,reserved_slugs}.rb", __dir__)]
+  SCRIPT = File.expand_path("../_scripts/validate_urls.rb", __dir__)
+  LIBS   = Dir[File.expand_path("../_scripts/lib/{front_matter,reserved_slugs}.rb", __dir__)]
 
   INDEX_OK = <<~MD
     ---
@@ -44,7 +44,7 @@ class ValidateUrlsTest < Minitest::Test
     FileUtils.cp(SCRIPT, File.join(root, "_scripts", "validate_urls.rb"))
     LIBS.each { |lib| FileUtils.cp(lib, File.join(root, "_scripts", "lib", File.basename(lib))) }
     docs.each do |rel, body|
-      abs = File.join(root, "_docs", rel)
+      abs = File.join(root, "src", "_docs", rel)
       FileUtils.mkdir_p(File.dirname(abs))
       File.write(abs, body)
     end

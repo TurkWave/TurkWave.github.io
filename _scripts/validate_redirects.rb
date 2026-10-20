@@ -14,7 +14,7 @@
 require_relative "lib/front_matter"
 
 REPO_ROOT = File.expand_path("..", __dir__)
-DOCS_DIR  = File.join(REPO_ROOT, "_docs")
+DOCS_DIR  = File.join(REPO_ROOT, "src", "_docs")
 SITE_DIR  = File.join(REPO_ROOT, "_site")
 
 unless Dir.exist?(SITE_DIR)
