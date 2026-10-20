@@ -31,7 +31,10 @@ layout: default
     </p>
     {%- endif %}
 
-    {%- if (app.slogan and app.slogan != "") or (app.price_line and app.price_line != "") %}
+    {%- assign has_foot = false %}
+    {%- if app.slogan and app.slogan != "" %}{% assign has_foot = true %}{% endif %}
+    {%- if app.price_line and app.price_line != "" %}{% assign has_foot = true %}{% endif %}
+    {%- if has_foot %}
     <p class="app-list__foot">
       {%- if app.slogan and app.slogan != "" %}
       <span class="app-list__slogan">{{ app.slogan }}</span>

@@ -125,7 +125,10 @@ adds an explicit off switch and never changes an existing page.
   <section class="app-section app-social" aria-labelledby="reviews">
     <h2 id="reviews">Reviews</h2>
 
-    {%- if page.rating or (page.downloads and page.downloads != "") %}
+    {%- assign has_stats = false %}
+    {%- if page.rating %}{% assign has_stats = true %}{% endif %}
+    {%- if page.downloads and page.downloads != "" %}{% assign has_stats = true %}{% endif %}
+    {%- if has_stats %}
     <p class="app-social__stats">
       {%- if page.rating %}
       <span class="app-rating" role="img" aria-label="{{ page.rating.value }} out of {{ rating_max }}{% if page.rating.count %}{% if page.rating.count > 0 %}, {{ page.rating.count }} ratings{% endif %}{% endif %}">
