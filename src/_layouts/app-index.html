@@ -89,9 +89,12 @@ adds an explicit off switch and never changes an existing page.
      lays the text out exactly as typed via  white-space: pre-wrap. {%- endcomment %}
   {%- assign sub_slogan_text = page.sub_slogan | strip %}
   {%- if sub_slogan_text != "" and sec.sub_slogan != false %}
-  <details class="app-section app-subslogan">
-    <summary class="app-subslogan__summary"><span>{{ sub_slogan_text }}</span></summary>
-  </details>
+  <section class="app-section app-detail" aria-labelledby="detailed-description">
+    <h2 id="detailed-description">Detailed description</h2>
+    <details class="app-subslogan">
+      <summary class="app-subslogan__summary"><span>{{ sub_slogan_text }}</span></summary>
+    </details>
+  </section>
   {%- endif %}
 
   {%- assign has_stores = false %}
