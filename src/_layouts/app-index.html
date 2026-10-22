@@ -65,7 +65,7 @@ adds an explicit off switch and never changes an existing page.
         {%- assign yt_poster_dims = ' width="480" height="360"' %}
       {%- endif %}
       <li class="app-shots__item app-shots__item--video">
-        <a class="yt-facade" href="https://www.youtube.com/watch?v={{ shot.youtube | escape }}" data-yt="{{ shot.youtube | escape }}" data-title="{{ shot_label | escape }}" aria-label="Play video: {{ shot_label | escape }}">
+        <a class="yt-facade" draggable="false" href="https://www.youtube.com/watch?v={{ shot.youtube | escape }}" data-yt="{{ shot.youtube | escape }}" data-title="{{ shot_label | escape }}" aria-label="Play video: {{ shot_label | escape }}">
           <img src="{{ yt_poster }}"{{ yt_poster_dims }} alt="{{ shot_label | escape }}" loading="{{ shot_loading }}"{{ shot_priority }} draggable="false">
           <span class="yt-facade__play" aria-hidden="true"></span>
         </a>

@@ -539,6 +539,7 @@ th { font-weight: 600; }
   border-radius: var(--radius);
   overflow: hidden;
   background: #000;
+  -webkit-user-drag: none;
 }
 .app-shots__item .yt-facade img {
   display: block;
@@ -583,6 +584,9 @@ th { font-weight: 600; }
   border: 0;
   border-radius: var(--radius);
 }
+/* A pan that crosses a playing video would otherwise hand the pointer to the
+   iframe: the page stops getting pointermove / pointerup and the strip sticks. */
+.app-shots__strip.is-dragging iframe { pointer-events: none; }
 
 /* Lightbox: click a screenshot to enlarge it, centred over a blurred page.
    Built by assets/app-index.js; no markup in the layout. */
