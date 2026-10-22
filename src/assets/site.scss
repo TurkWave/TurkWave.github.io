@@ -1109,21 +1109,7 @@ th { font-weight: 600; }
   padding: 2rem 1.5rem 3rem;
   color: var(--text-muted);
   font-size: .85rem;
-  /* Phone: copyright first, the "App Legal & Support Documents" tag stacked
-     under it. */
-  display: flex;
-  flex-direction: column;
-  gap: .35rem;
-}
-.site-footer__tag { color: var(--text-muted); }
-@media (min-width: 640px) {
-  /* Desktop: one row, copyright left, the tag pulled to the far right. */
-  .site-footer__inner {
-    flex-direction: row;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-  }
+  text-align: center;
 }
 
 ::selection { background: var(--text); color: var(--bg); }
