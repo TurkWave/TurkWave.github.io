@@ -6,8 +6,9 @@
 // click / double-tap toggles 1x <-> 2.5x, the mouse wheel zooms toward the
 // cursor, two-finger pinch zooms on touch, and while zoomed you drag to pan.
 // The strip pans without snap points or a speed cap. The mouse wheel is left
-// alone on the strip - vertical wheeling scrolls the page. No other JS on the
-// site.
+// alone on the strip - vertical wheeling scrolls the page. The FAQ card strip
+// gets its own click-hold-drag that eases to the nearest card. No other JS on
+// the site.
 (function () {
   var strip = document.querySelector(".app-shots__strip");
 
@@ -197,6 +198,80 @@
   var heroLogo = document.querySelector(".app-hero__logo");
   if (heroLogo) {
     heroLogo.addEventListener("click", function () { openLightbox(heroLogo); });
+  }
+
+  // --- FAQ cards: one card per view; mouse users click-hold-drag, then the
+  // strip eases to the nearest card (a flick moves one card). Touch scrolls and
+  // snaps natively. Snapping is off while dragging, or it fights scrollLeft. ---
+  var faq = document.querySelector(".app-faq__strip");
+  if (faq) {
+    var fDown = false, fMoved = false, fStartX = 0, fStartLeft = 0;
+    var fVx = 0, fLastX = 0, fLastT = 0, fStartIdx = 0;
+
+    // Cards snap by their centre, so compare centres, not left edges.
+    function centerX(el) {
+      var r = el.getBoundingClientRect();
+      return r.left + r.width / 2;
+    }
+    function nearestFaqCard(cards, center) {
+      var best = 0, bestDist = Infinity;
+      for (var i = 0; i < cards.length; i++) {
+        var d = Math.abs(centerX(cards[i]) - center);
+        if (d < bestDist) { bestDist = d; best = i; }
+      }
+      return best;
+    }
+
+    faq.addEventListener("pointerdown", function (e) {
+      if (e.pointerType === "touch" || e.button !== 0) return;
+      fDown = true;
+      fStartIdx = nearestFaqCard(faq.querySelectorAll(".app-faq__card"), centerX(faq));
+      fMoved = false;
+      fVx = 0;
+      fStartX = fLastX = e.clientX;
+      fStartLeft = faq.scrollLeft;
+      fLastT = e.timeStamp;
+      faq.classList.add("is-dragging");
+    });
+
+    window.addEventListener("pointermove", function (e) {
+      if (!fDown) return;
+      var dx = e.clientX - fStartX;
+      if (Math.abs(dx) > 6) fMoved = true;
+      var dt = e.timeStamp - fLastT;
+      if (dt > 0) fVx = (e.clientX - fLastX) / dt;
+      fLastX = e.clientX;
+      fLastT = e.timeStamp;
+      faq.scrollLeft = fStartLeft - dx;
+    });
+
+    function faqRelease() {
+      if (!fDown) return;
+      fDown = false;
+      var cards = faq.querySelectorAll(".app-faq__card");
+      var center = centerX(faq);
+      var best = nearestFaqCard(cards, center);
+      // A quick flick advances one card even if the drag was short - but only
+      // when the drag still lands on the card it started from.
+      if (best === fStartIdx && Math.abs(fVx) > 0.4) {
+        best = Math.max(0, Math.min(cards.length - 1, best + (fVx < 0 ? 1 : -1)));
+      }
+      if (cards[best]) {
+        faq.scrollTo({
+          left: faq.scrollLeft + centerX(cards[best]) - center,
+          behavior: "smooth"
+        });
+      }
+      setTimeout(function () { faq.classList.remove("is-dragging"); }, 400);
+    }
+    window.addEventListener("pointerup", faqRelease);
+    window.addEventListener("pointercancel", faqRelease);
+
+    // A drag ends with a synthetic click on the <summary>: swallow it so the
+    // card doesn't open/close after a pan.
+    faq.addEventListener("click", function (e) {
+      if (fMoved) { fMoved = false; e.preventDefault(); }
+    });
   }
 
   if (!strip) return;

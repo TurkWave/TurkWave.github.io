@@ -749,79 +749,83 @@ th { font-weight: 600; }
 }
 .app-social__more { margin: 1.25rem 0 0; text-align: center; }
 
-/* FAQ: optional  title:  group headings, then question / answer pairs. The
-   heading carries the section's weight - full-strength ink, larger. The Q and
-   A rows share ONE quiet style: full ink, smaller, normal weight - question
-   text and answer text read identically. Only the injected "Q -" / "A -"
-   markers are bold, so the eye can still find each row. The "FAQ" <h2> is
-   left untouched. */
-.app-faq__title {
-  margin: 2.5rem 0 .75rem;
-  font-size: 1.15rem;
-  font-weight: 700;
+/* FAQ: a horizontal strip of cards. Swipe / scroll sideways, tap a card to
+   open its answer. Cards snap into place and keep their own height
+   (align-items: flex-start), so opening one doesn't stretch its neighbours.
+   An optional  title:  group label shows as a small eyebrow on the card. */
+.app-faq h2 {
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  text-align: center;
+}
+.app-faq__strip {
+  display: flex;
+  align-items: flex-start;
+  gap: .75rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  /* Side padding lets the first / last card centre too, and leaves a sliver of
+     the neighbouring card showing as a swipe hint. */
+  padding: .25rem 8% 1rem;
+  scrollbar-width: none;
+}
+.app-faq__strip::-webkit-scrollbar { display: none; }
+.app-faq__strip:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+/* Mouse drag (app-index.js) switches snapping off while the pointer is held. */
+.app-faq__strip.is-dragging { scroll-snap-type: none; }
+@media (hover: hover) and (pointer: fine) {
+  .app-faq__strip { cursor: grab; }
+  .app-faq__strip.is-dragging { cursor: grabbing; user-select: none; }
+}
+.app-faq__card {
+  flex: 0 0 100%;
+  box-sizing: border-box;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
   color: var(--text);
-}
-.app-faq__list > .app-faq__title:first-child,
-.app-faq__more > .app-faq__title:first-of-type { margin-top: 0; }
-.app-faq__q {
-  margin: 1.5rem 0 .3rem;
-  font-size: .9rem;
-  font-weight: 400;
-  color: var(--text);
-}
-.app-faq__q:first-of-type { margin-top: 0; }
-.app-faq__title + .app-faq__q { margin-top: .4rem; }
-.app-faq__a {
-  font-size: .9rem;
-  color: var(--text);
-}
-.app-faq__a > :last-child { margin-bottom: 0; }
-/* The only bold ink in a Q/A row: the leading "Q -" / "A -" marker. Darker
-   than the row text and heavier than plain bold, so the eye lands on it
-   first. Same treatment on both - a <span> on the question, the <strong>
-   from "**A -**" on the answer. */
-.app-faq__marker,
-.app-faq__a > :first-child > strong:first-child {
-  font-weight: 800;
-  color: var(--ink-strong);
-}
-
-/* Collapsed preview fades out at its foot - the same cue the reviews list
-   gets under "Read more reviews". The fade lifts once the drawer is open. */
-.app-faq__list--faded {
-  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
-  mask-image: linear-gradient(to bottom, #000 55%, transparent);
-}
-.app-faq:has(.app-faq__more[open]) .app-faq__list--faded {
-  -webkit-mask-image: none;
-  mask-image: none;
-}
-
-/* FAQ "Read more" drawer: entries past the preview fold behind a centered
-   toggle styled like the "Read more reviews" link. The toggle sits at the
-   foot of the list whether the drawer is open or closed. */
-.app-faq__more { margin-top: 1.5rem; }
-.app-faq__more[open] { display: flex; flex-direction: column; }
-.app-faq__more[open] .app-faq__more-btn { order: 1; margin-top: 1.5rem; }
-.app-faq__more-btn {
-  display: block;
-  width: fit-content;
-  margin: 0 auto;
-  padding: .1rem 0;
-  list-style: none;
-  cursor: pointer;
-  font-size: .95rem;
-  font-weight: 550;
-  color: var(--text);
-  border-bottom: 1px solid var(--border-strong);
   transition: border-color .15s ease;
 }
-.app-faq__more-btn::-webkit-details-marker { display: none; }
-.app-faq__more-btn:hover { border-bottom-color: var(--text); }
-.app-faq__more-btn:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
-.app-faq__more-btn__less { display: none; }
-.app-faq__more[open] .app-faq__more-btn__more { display: none; }
-.app-faq__more[open] .app-faq__more-btn__less { display: inline; }
+.app-faq__card:hover,
+.app-faq__card[open] { border-color: var(--text); }
+.app-faq__q {
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  padding: 1.25rem 1.25rem 1.25rem 1.25rem;
+  cursor: pointer;
+  list-style: none;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.app-faq__q::-webkit-details-marker { display: none; }
+.app-faq__q:focus-visible { outline: 2px solid var(--text); outline-offset: -2px; border-radius: var(--radius); }
+.app-faq__group {
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.app-faq__a {
+  padding: 0 1.25rem 1.25rem;
+  font-size: 1.05rem;
+  line-height: 1.55;
+}
+/* Divider between question and answer: inset by the card padding so it never
+   touches the card edge, and both ends fade out. */
+.app-faq__a::before {
+  content: "";
+  display: block;
+  height: 2.5px;
+  margin-bottom: 1rem;
+  background: linear-gradient(to right, transparent, var(--border-strong) 20%, var(--border-strong) 80%, transparent);
+}
+.app-faq__a > :last-child { margin-bottom: 0; }
 
 /* Legal + Contact: plain link lists */
 .app-linklist {

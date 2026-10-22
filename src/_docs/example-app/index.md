@@ -104,10 +104,9 @@ pricing: |
 
 # FAQ: an ordered list mixing two shapes - { title: "..." } headings and
 # { q: "...", a: "..." } pairs (answers are Markdown). Write just the text; the
-# layout adds a bold "Q -" before each question and a bold "A -" before each
-# answer, both rendered in the same quiet style as the text that follows. The
-# first two QUESTIONS show directly; the rest, with their headings, fold into a
-# "Read more FAQs" toggle. Headings never count toward that two.
+# layout renders each question as a card in a swipeable row (touch swipe or
+# mouse click-hold-drag; tap a card to open its answer). A heading shows as a
+# small label on every card beneath it, until the next heading.
 faq:
   - title: "About this entry"
   - q: "Is this a real app?"
@@ -116,9 +115,9 @@ faq:
     a: "Each app's `index.md` front matter. An empty key hides its section."
   - title: "Reading a long list"
   - q: "How is a long FAQ list handled?"
-    a: "Questions past the first two collapse behind a \"Read more FAQs\" toggle that expands and re-collapses the rest, right where you left off."
-  - q: "Do headings count toward the first two?"
-    a: "No - only questions do, so a `title:` heading never pushes a question into the toggle on its own."
+    a: "Every question is a card in one row. Swipe or drag sideways to move between cards, and tap a card to open its answer."
+  - q: "What does a `title:` heading do?"
+    a: "It shows as a small label on each card beneath it, until the next heading."
 
 # Copyright line at the foot of the frame. Empty -> "(c) <year> TurkWave.
 # All rights reserved." Set it to name a different rights holder for an app.

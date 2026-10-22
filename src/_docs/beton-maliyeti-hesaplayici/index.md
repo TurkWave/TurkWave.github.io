@@ -240,13 +240,11 @@ pricing: "Google Play Store aracılığı ile yapılıyor tek seferlik ödeme t�
 #  An ordered list. Two shapes, mix them freely:
 #    - { q: "...", a: "..." }   a question (the answer is Markdown)
 #    - { title: "..." }         a heading grouping the questions below it
-#  Write just the text: the layout prefixes each question with a bold
-#  "Q -" and each answer with a bold "A -" - do not type those. Question
-#  and answer text render in the same quiet style; only the markers are
-#  bold. The first TWO QUESTIONS show directly; the rest - with their
-#  headings - fold into a "Read more FAQs" toggle. Headings never count
-#  toward that two, so a heading alone can't push a question into the
-#  toggle.
+#  Write just the text; do not type "Q -" / "A -" prefixes. The FAQ renders
+#  as a row of cards, one per question, centred with a sliver of the next
+#  card showing. Swipe (touch) or click-hold-drag (mouse) to move between
+#  cards; tap a card to open its answer. A heading shows as a small label
+#  on every card beneath it, until the next heading.
 #
 #  e.g.
 #    faq:
