@@ -6,6 +6,8 @@ effective_date: 2026-09-10
 last_updated: 2026-09-10
 date: 2026-09-10
 last_modified_at: 2026-09-10
+redirect_from:
+  - /beton-maliyeti-hesaplayici/support/
 ---
 
 Bu sayfa, Beton Maliyeti Hesaplayıcı uygulamasıyla ilgili nasıl yardım

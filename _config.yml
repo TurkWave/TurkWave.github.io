@@ -30,13 +30,15 @@ plugins:
 collections:
   docs:
     output: true
-    # Public URL scheme:  /<app-slug>/<doc-slug>/  (app index: /<app-slug>/).
-    # :path is the collection-relative path without extension, e.g.
-    # _docs/acme/privacy.md -> acme/privacy -> /acme/privacy/. Each index.md
-    # sets an explicit  permalink: /<app-slug>/  (Jekyll would otherwise emit
-    # /<app-slug>/index/). Former /apps/... URLs are kept alive by
-    # jekyll-redirect-from (see redirect_from: in _docs/*/*.md).
-    permalink: /:path/
+    # Public URL scheme:  /docs/<app-slug>/<doc-slug>/  (app index:
+    # /docs/<app-slug>/). :path is the collection-relative path without
+    # extension, e.g. _docs/acme/privacy.md -> acme/privacy ->
+    # /docs/acme/privacy/. Each index.md sets an explicit
+    # permalink: /docs/<app-slug>/  (Jekyll would otherwise emit
+    # /docs/<app-slug>/index/). Former /apps/... and root /<app-slug>/... URLs
+    # are kept alive by jekyll-redirect-from (see redirect_from: in
+    # _docs/*/*.md).
+    permalink: /docs/:path/
 
 defaults:
   - scope:

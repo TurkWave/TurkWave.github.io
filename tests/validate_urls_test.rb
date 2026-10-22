@@ -20,7 +20,7 @@ class ValidateUrlsTest < Minitest::Test
   INDEX_OK = <<~MD
     ---
     layout: app-index
-    permalink: /good-app/
+    permalink: /docs/good-app/
     is_app_index: true
     title: "Good App"
     ---
@@ -72,20 +72,20 @@ class ValidateUrlsTest < Minitest::Test
 
   def test_index_must_use_the_new_scheme_permalink
     assert_rejected(
-      { "good-app/index.md" => INDEX_OK.sub("permalink: /good-app/", "permalink: /apps/good-app/") },
-      "index.md must set  permalink: /good-app/",
+      { "good-app/index.md" => INDEX_OK.sub("permalink: /docs/good-app/", "permalink: /good-app/") },
+      "index.md must set  permalink: /docs/good-app/",
     )
   end
 
   def test_index_missing_permalink_is_rejected
     assert_rejected(
-      { "good-app/index.md" => INDEX_OK.sub("permalink: /good-app/\n", "") },
-      "index.md must set  permalink: /good-app/",
+      { "good-app/index.md" => INDEX_OK.sub("permalink: /docs/good-app/\n", "") },
+      "index.md must set  permalink: /docs/good-app/",
     )
   end
 
   def test_custom_permalink_on_a_doc_is_rejected
-    doc = DOC_OK.sub("last_updated: 2026-01-01\n", "last_updated: 2026-01-01\npermalink: /good-app/privacy/\n")
+    doc = DOC_OK.sub("last_updated: 2026-01-01\n", "last_updated: 2026-01-01\npermalink: /docs/good-app/privacy/\n")
     assert_rejected(
       { "good-app/index.md" => INDEX_OK, "good-app/privacy.md" => doc },
       "custom 'permalink' is not allowed",
@@ -95,7 +95,7 @@ class ValidateUrlsTest < Minitest::Test
   def test_reserved_app_slug_is_rejected
     ReservedSlugs::LIST.each do |slug|
       assert_rejected(
-        { "#{slug}/index.md" => INDEX_OK.sub("permalink: /good-app/", "permalink: /#{slug}/") },
+        { "#{slug}/index.md" => INDEX_OK.sub("permalink: /docs/good-app/", "permalink: /docs/#{slug}/") },
         "reserved top-level name",
       )
     end
@@ -118,7 +118,7 @@ class ValidateUrlsTest < Minitest::Test
 
   def test_uppercase_app_slug_is_rejected
     assert_rejected(
-      { "BadApp/index.md" => INDEX_OK.sub("permalink: /good-app/", "permalink: /BadApp/") },
+      { "BadApp/index.md" => INDEX_OK.sub("permalink: /docs/good-app/", "permalink: /docs/BadApp/") },
       "not lowercase kebab-case",
     )
   end
@@ -131,6 +131,6 @@ class ValidateUrlsTest < Minitest::Test
   end
 
   def test_app_folder_with_only_index_still_passes
-    assert_ok("solo-app/index.md" => INDEX_OK.sub("permalink: /good-app/", "permalink: /solo-app/"))
+    assert_ok("solo-app/index.md" => INDEX_OK.sub("permalink: /docs/good-app/", "permalink: /docs/solo-app/"))
   end
 end

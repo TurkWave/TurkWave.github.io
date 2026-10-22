@@ -133,7 +133,7 @@ FileUtils.cp_r(TEMPLATE_DIR, target)
 Dir.glob(File.join(target, "*.md")).sort.each do |f|
   if File.basename(f) == "index.md"
     fill_front_matter(f,
-      "permalink"   => "/#{slug}/",
+      "permalink"   => "/docs/#{slug}/",
       "title"       => yq(app_name),
       "description" => yq("#{app_name}: privacy policy, terms of use and support documents."))
   else
@@ -153,8 +153,8 @@ end
 
 # --- self-check: permalink must match the folder ----------------------------
 idx_fm = FrontMatter.parse_file(File.join(target, "index.md")) || {}
-unless idx_fm["permalink"] == "/#{slug}/"
-  die("internal: generated permalink #{idx_fm["permalink"].inspect} != /#{slug}/")
+unless idx_fm["permalink"] == "/docs/#{slug}/"
+  die("internal: generated permalink #{idx_fm["permalink"].inspect} != /docs/#{slug}/")
 end
 
 # --- summary ---------------------------------------------------------------
@@ -163,7 +163,7 @@ base = "#{cfg["url"]}#{cfg["baseurl"]}"
 puts "Created #{File.join("src", "_docs", slug)}/"
 Dir.glob(File.join(target, "*.md")).sort.each do |f|
   name = File.basename(f, ".md")
-  url  = name == "index" ? "#{base}/#{slug}/" : "#{base}/#{slug}/#{name}/"
+  url  = name == "index" ? "#{base}/docs/#{slug}/" : "#{base}/docs/#{slug}/#{name}/"
   puts format("  %-11s -> %s", File.basename(f), url)
 end
 puts "Name:   #{app_name} (derived from slug)"

@@ -1,6 +1,6 @@
 ---
 layout: app-index
-permalink: /beton-maliyeti-hesaplayici/
+permalink: /docs/beton-maliyeti-hesaplayici/
 is_app_index: true
 title: "Beton Maliyeti Hesaplayıcı"
 
@@ -172,7 +172,7 @@ screenshots:
 #    store_links:
 #      - { store: "google-play", url: "https://play.google.com/store/apps/details?id=com.turkwave.notejar" }
 #      - { store: "app-store", url: "https://apps.apple.com/app/id1234567890" }
-#      - { label: "Download for Windows", url: "https://turkwave.github.io/note-jar/win" }
+#      - { label: "Download for Windows", url: "https://turkwave.github.io/docs/note-jar/win" }
 store_links: []
 
 
@@ -185,7 +185,7 @@ store_links: []
 #
 #  e.g.
 #    platform: "Android, iOS, Windows"
-#    app_url: "https://turkwave.github.io/note-jar/"
+#    app_url: "https://turkwave.github.io/docs/note-jar/"
 platform: "Android"
 app_url: ""
 
@@ -377,6 +377,8 @@ copyright: "© 2026 HybridHabit. All rights reserved."
 #  e.g.
 #    redirect_from:
 #      - /apps/note-jar/
+redirect_from:
+  - /beton-maliyeti-hesaplayici/
 ---
 
 {% comment %}

@@ -3,9 +3,11 @@ title: Privacy Policy
 description: "Beton Maliyeti Hesaplayıcı uygulamasının gizlilik politikası: veri sorumlusu, işlenen veriler ve amaçları, saklama ve imha, KVKK kapsamındaki haklarınız ve iletişim."
 lang: tr-TR
 effective_date: 2026-09-05
-last_updated: 2026-09-05
+last_updated: 2026-10-22
 date: 2026-09-05
-last_modified_at: 2026-09-05
+last_modified_at: 2026-10-22
+redirect_from:
+  - /beton-maliyeti-hesaplayici/privacy/
 ---
 
 1) VERİ SORUMLUSU KİMLİĞİ VE İLETİŞİM
@@ -314,7 +316,7 @@ sonra yapılacak değişikliklerde yeni sürüm numarası ve tarihle birlikte
 bu belgenin başındaki bilgi bloğu güncellenir.
 
 Bu politika ayrıca şu adreste yayınlanacaktır:
-https://turkwave.github.io/beton-maliyeti-hesaplayici/privacy/
+https://turkwave.github.io/docs/beton-maliyeti-hesaplayici/privacy/
 (Bu adres hazırlık aşamasındadır; yayına alındığında uygulama
 içindeki "adresi aç" düğmesi de bu adrese yönlendirilecektir.)
 

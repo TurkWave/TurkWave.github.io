@@ -1,6 +1,6 @@
 ---
 layout: app-index
-permalink: /example-app/
+permalink: /docs/example-app/
 is_app_index: true
 title: "Example App"
 

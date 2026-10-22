@@ -1,19 +1,20 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 #
-# Enforce the URL scheme  /<app-slug>/<doc-slug>/  (app index: /<app-slug>/)
-# for every file in the docs collection. Pure front-matter scan - run it before
+# Enforce the URL scheme  /docs/<app-slug>/<doc-slug>/  (app index:
+# /docs/<app-slug>/) for every file in the docs collection. Pure front-matter scan - run it before
 # `jekyll build`.
 #
 #   * every doc lives exactly one level deep:  _docs/<app-slug>/<file>.md
 #   * <app-slug> and <doc-slug> are lowercase kebab-case
 #   * <app-slug> is not one of RESERVED_SLUGS (it would collide with a real
 #     top-level path such as /assets/ or the /apps/... redirect tree)
-#   * index.md MUST declare  permalink: /<app-slug>/   (Jekyll would otherwise
-#     emit /<app-slug>/index/ from the collection's  /:path/  permalink)
+#   * index.md MUST declare  permalink: /docs/<app-slug>/   (Jekyll would
+#     otherwise emit /docs/<app-slug>/index/ from the collection's
+#     /docs/:path/  permalink)
 #   * any other doc MUST NOT declare a custom `permalink`
 #
-# Former /apps/<app-slug>/... URLs stay alive via jekyll-redirect-from
+# Former /apps/<app-slug>/... and root /<app-slug>/... URLs stay alive via jekyll-redirect-from
 # (redirect_from: entries in _docs/*/*.md), checked by validate_redirects.rb.
 #
 # Exit 0 when clean, 1 with a report listing file + expected vs actual URL.
@@ -68,7 +69,7 @@ Dir.glob(File.join(DOCS_DIR, "**", "*.{md,markdown}")).sort.each do |path|
 
   if file == "index.md"
     app_index_seen[app_slug] = true
-    expected = "/#{app_slug}/"
+    expected = "/docs/#{app_slug}/"
     actual   = fm["permalink"]
     if actual != expected
       errors << "#{rel}\n  index.md must set  permalink: #{expected}\n  actual: #{actual.inspect}"
@@ -88,7 +89,7 @@ Dir.glob(File.join(DOCS_DIR, "**", "*.{md,markdown}")).sort.each do |path|
     errors << "#{rel}\n  doc slug #{doc_slug.inspect} is not lowercase kebab-case" unless doc_slug =~ SLUG_RE
 
     if fm.key?("permalink")
-      expected = "/#{app_slug}/#{doc_slug}/"
+      expected = "/docs/#{app_slug}/#{doc_slug}/"
       errors << "#{rel}\n  custom 'permalink' is not allowed on collection docs\n" \
                 "  expected (from path): #{expected}\n  actual (front matter): #{fm["permalink"].inspect}"
     end
@@ -106,15 +107,15 @@ end
 # (the /docs/ page) lists an app only through its index.md (is_app_index: true),
 # and legal-doc.html resolves `app_index` from it. A folder with docs but no
 # index.md passes every per-file check above yet is invisible on the /docs/ page,
-# and its doc pages link to a /<app-slug>/ page that is never generated.
+# and its doc pages link to a /docs/<app-slug>/ page that is never generated.
 (app_dirs.keys - app_index_seen.keys).sort.each do |slug|
   errors << "_docs/#{slug}/\n  no index.md: the folder has document(s) but no app index\n" \
             "  - it would be absent from the /docs/ list (home-apps.html filters on is_app_index)\n" \
-            "  - its doc pages resolve app_index to nil and link to a missing /#{slug}/ page"
+            "  - its doc pages resolve app_index to nil and link to a missing /docs/#{slug}/ page"
 end
 
 if errors.empty?
-  puts "URL scheme OK: #{count} document(s), all resolve to /<app-slug>/<doc-slug>/"
+  puts "URL scheme OK: #{count} document(s), all resolve to /docs/<app-slug>/<doc-slug>/"
   exit 0
 end
 

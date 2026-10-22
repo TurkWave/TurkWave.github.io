@@ -1,6 +1,6 @@
 ---
 layout: app-index
-permalink: /demo-app/
+permalink: /docs/demo-app/
 is_app_index: true
 title: "Demo App"
 

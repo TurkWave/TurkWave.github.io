@@ -40,11 +40,12 @@ commit.
 
 ## URLs & redirects
 
-Documents publish at `/<app-slug>/<doc-slug>/` and each app index at `/<app-slug>/`,
-derived mechanically from the file path — no link list is kept by hand. `<app-slug>`
+Documents publish at `/docs/<app-slug>/<doc-slug>/` and each app index at
+`/docs/<app-slug>/`, derived mechanically from the file path — no link list is kept by
+hand. `<app-slug>`
 may not be one of the reserved top-level names (`apps`, `assets`, `sitemap`, `robots`,
 `404`, `index`, `docs`); `_scripts/validate_urls.rb` enforces that. The previous
-`/apps/<app-slug>/…` scheme still works: every old URL redirects to its new location
+`/apps/<app-slug>/…` and root `/<app-slug>/…` schemes still work: every old URL redirects to its new location
 via `jekyll-redirect-from` (`redirect_from:` entries in `_docs/*/*.md`), and
 `_scripts/validate_redirects.rb` verifies each one after the build.
 

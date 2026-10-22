@@ -51,7 +51,7 @@ class NewAppTest < Minitest::Test
                  docs("widget-viewer").map { |f| File.basename(f) }
 
     index = File.read(File.join(@root, "src", "_docs", "widget-viewer", "index.md"))
-    assert_includes index, "permalink: /widget-viewer/\n"
+    assert_includes index, "permalink: /docs/widget-viewer/\n"
     assert_includes index, %(title: "Widget Viewer"\n)
     assert_includes index,
                     %(description: "Widget Viewer: privacy policy, terms of use and support documents."\n)

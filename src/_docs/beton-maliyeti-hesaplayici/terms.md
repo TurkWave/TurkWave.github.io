@@ -3,9 +3,11 @@ title: Terms of Use
 description: "Beton Maliyeti Hesaplayıcı uygulamasının kullanım koşulları: kapsam ve kabul, fiyat, ödeme ve iadeler, garantilerin reddi ve sorumluluğun sınırlandırılması, değişiklikler."
 lang: tr-TR
 effective_date: 2026-09-10
-last_updated: 2026-09-10
+last_updated: 2026-10-22
 date: 2026-09-10
-last_modified_at: 2026-09-10
+last_modified_at: 2026-10-22
+redirect_from:
+  - /beton-maliyeti-hesaplayici/terms/
 ---
 
 # Beton Maliyeti Hesaplayıcı — Kullanım Koşulları
@@ -136,7 +138,7 @@ Uygulamanın hesabı olmadığı için:
 
 ## 13. Değişiklikler ve bildirim
 
-13.1 HybridHabit bu Koşulları zaman zaman güncelleyebilir. Güncel metin, yeni bir yürürlük tarihiyle birlikte Uygulamanın içinde (Ayarlar → Detaylar → Kullanım Koşulları) ve `https://turkwave.github.io/beton-maliyeti-hesaplayici/terms/` adresinde yayımlanır. Önemli bir değişiklik ayrıca Uygulamanın sürüm notlarında belirtilir.
+13.1 HybridHabit bu Koşulları zaman zaman güncelleyebilir. Güncel metin, yeni bir yürürlük tarihiyle birlikte Uygulamanın içinde (Ayarlar → Detaylar → Kullanım Koşulları) ve `https://turkwave.github.io/docs/beton-maliyeti-hesaplayici/terms/` adresinde yayımlanır. Önemli bir değişiklik ayrıca Uygulamanın sürüm notlarında belirtilir.
 
 13.2 Güncellenmiş Koşullar yürürlüğe girdikten sonra Uygulamayı kullanmaya devam etmeniz, değişiklikleri kabul ettiğiniz anlamına gelir. Bunları kabul etmiyorsanız Uygulamayı kullanmayı bırakın ve kaldırın.
 
