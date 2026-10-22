@@ -5,6 +5,7 @@
 // closes it before leaving the page). Inside the lightbox the image zooms:
 // click / double-tap toggles 1x <-> 2.5x, the mouse wheel zooms toward the
 // cursor, two-finger pinch zooms on touch, and while zoomed you drag to pan.
+// Prev / next buttons (and the arrow keys) step through the strip's screenshots.
 // The strip pans without snap points or a speed cap. The mouse wheel is left
 // alone on the strip - vertical wheeling scrolls the page. The FAQ card strip
 // gets its own click-hold-drag that eases to the nearest card. No other JS on
@@ -24,10 +25,11 @@
   var vx = 0, lastX = 0, lastT = 0;
 
   // --- enlarge an image (screenshot or app icon) over a blurred backdrop ---
-  var box = null, lastFocus = null, historyPushed = false;
+  var box = null, lastFocus = null, historyPushed = false, stepLightbox = null;
 
   function closeLightbox(fromPopstate) {
     if (!box) return;
+    stepLightbox = null;
     document.removeEventListener("keydown", onLightboxKey);
     window.removeEventListener("popstate", onPopstate);
     box.remove();
@@ -42,14 +44,20 @@
 
   function onLightboxKey(e) {
     if (e.key === "Escape" || e.key === "Esc") closeLightbox();
+    else if (e.key === "ArrowLeft" && stepLightbox) stepLightbox(-1);
+    else if (e.key === "ArrowRight" && stepLightbox) stepLightbox(1);
   }
 
   // Back button: pop our pushed entry, close the lightbox, stay on the page.
   function onPopstate() { closeLightbox(true); }
 
-  function openLightbox(img) {
+  // `gallery` is the list of images the arrows step through (the screenshots);
+  // a lone image, such as the app icon, gets no arrows.
+  function openLightbox(img, gallery) {
     if (box) return;
     lastFocus = document.activeElement;
+    var list = gallery && gallery.length > 1 ? gallery : [img];
+    var index = Math.max(0, list.indexOf(img));
 
     box = document.createElement("div");
     box.className = "shot-lightbox";
@@ -72,6 +80,25 @@
     box.appendChild(big);
     box.appendChild(close);
 
+    function makeNav(dir, label, glyph) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "shot-lightbox__nav shot-lightbox__nav--" + (dir < 0 ? "prev" : "next");
+      b.setAttribute("aria-label", label);
+      b.innerHTML = glyph;
+      b.addEventListener("click", function (e) {
+        e.stopPropagation(); // must not reach the backdrop's close handler
+        stepLightbox(dir);
+      });
+      box.appendChild(b);
+      return b;
+    }
+    var prev = null, next = null;
+    if (list.length > 1) {
+      prev = makeNav(-1, "Previous image", "‹");
+      next = makeNav(1, "Next image", "›");
+    }
+
     // --- zoom + pan, scoped to this lightbox instance -------------------------
     // `scale`/`tx`/`ty` drive a single CSS transform on the image. Zooming
     // toward a point keeps that point under the cursor; panning is only live
@@ -87,6 +114,7 @@
       big.style.transform =
         "translate(" + tx + "px," + ty + "px) scale(" + scale + ")";
       big.classList.toggle("is-zoomed", scale > MIN + 0.001);
+      box.classList.toggle("has-zoom", scale > MIN + 0.001);
     }
     function clampPan() {
       var w = big.clientWidth, h = big.clientHeight;
@@ -174,6 +202,26 @@
     }
     big.addEventListener("pointerup", endPointer);
     big.addEventListener("pointercancel", endPointer);
+
+    // Swap the shown image, resetting zoom/pan; stops at the first/last one.
+    function showAt(i) {
+      index = i;
+      var src = list[index];
+      big.src = src.currentSrc || src.src;
+      big.alt = src.alt || "";
+      box.setAttribute("aria-label", src.alt || "Screenshot");
+      scale = MIN; tx = 0; ty = 0; moved = false;
+      apply();
+      if (prev) prev.disabled = index === 0;
+      if (next) next.disabled = index === list.length - 1;
+    }
+    if (list.length > 1) {
+      stepLightbox = function (dir) {
+        var i = index + dir;
+        if (i >= 0 && i < list.length) showAt(i);
+      };
+      showAt(index);
+    }
 
     box.addEventListener("click", function (e) {
       if (e.target !== big) closeLightbox(); // backdrop or close button
@@ -359,7 +407,11 @@
 
     var t = e.target;
     if (t.tagName === "IMG" && t.parentNode.classList.contains("app-shots__item")) {
-      openLightbox(t);
+      var shots = Array.prototype.filter.call(
+        strip.querySelectorAll(".app-shots__item img"),
+        function (im) { return im.parentNode.classList.contains("app-shots__item"); }
+      );
+      openLightbox(t, shots);
     }
   });
 })();

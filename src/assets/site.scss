@@ -601,6 +601,7 @@ th { font-weight: 600; }
   cursor: zoom-out;
 }
 .shot-lightbox__img {
+  min-width: 0; /* lets the image shrink to make room for the nav buttons */
   max-width: 100%;
   max-height: 100%;
   width: auto;
@@ -621,10 +622,8 @@ th { font-weight: 600; }
   transition: none;
   cursor: grabbing;
 }
-.shot-lightbox__close {
-  position: absolute;
-  top: clamp(.6rem, 3vw, 1.25rem);
-  right: clamp(.6rem, 3vw, 1.25rem);
+.shot-lightbox__close,
+.shot-lightbox__nav {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -641,8 +640,35 @@ th { font-weight: 600; }
   cursor: pointer;
   transition: border-color .15s ease, background .15s ease;
 }
-.shot-lightbox__close:hover { border-color: var(--text); background: var(--bg-subtle); }
-.shot-lightbox__close:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+.shot-lightbox__close {
+  position: absolute;
+  top: clamp(.6rem, 3vw, 1.25rem);
+  right: clamp(.6rem, 3vw, 1.25rem);
+}
+/* Prev / next sit in the same flex row as the image, right beside it. `order`
+   puts them either side of the image (they are appended after it in the DOM);
+   z-index keeps them above a zoomed image that grows over them. */
+.shot-lightbox__nav {
+  position: relative;
+  z-index: 1;
+  flex: none;
+}
+.shot-lightbox__nav--prev { order: -1; margin-right: clamp(.4rem, 2vw, 1rem); }
+.shot-lightbox__nav--next { order: 1; margin-left: clamp(.4rem, 2vw, 1rem); }
+/* While the image is zoomed it grows past its box, so the buttons leave the
+   row and pin to the screen edges instead (class set by assets/app-index.js). */
+.shot-lightbox.has-zoom .shot-lightbox__nav {
+  position: absolute;
+  top: 50%;
+  margin: -1.25rem 0 0;
+}
+.shot-lightbox.has-zoom .shot-lightbox__nav--prev { left: clamp(.6rem, 3vw, 1.25rem); }
+.shot-lightbox.has-zoom .shot-lightbox__nav--next { right: clamp(.6rem, 3vw, 1.25rem); }
+.shot-lightbox__close:hover,
+.shot-lightbox__nav:hover:not(:disabled) { border-color: var(--text); background: var(--bg-subtle); }
+.shot-lightbox__close:focus-visible,
+.shot-lightbox__nav:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+.shot-lightbox__nav:disabled { opacity: .35; cursor: default; }
 @keyframes shot-lightbox-fade {
   from { opacity: 0; }
   to { opacity: 1; }
