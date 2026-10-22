@@ -478,9 +478,8 @@ th { font-weight: 600; }
   overflow-wrap: anywhere;
 }
 
-/* Screenshots + video: a horizontal strip at a FIXED height. Each item keeps
-   its own aspect ratio (portrait, landscape or mixed) and never resizes as
-   the strip scrolls. It pans freely - no snap points, no speed cap - via
+/* Screenshots + video: a horizontal strip at a FIXED height. Each item sits in
+   a fixed frame and never resizes as the strip scrolls. It pans freely - no snap points, no speed cap - via
    click-drag (with a fling), swipe and arrow keys. The mouse wheel is left to
    the page. */
 .app-shots__strip {
@@ -505,20 +504,28 @@ th { font-weight: 600; }
   .app-shots__strip.is-dragging { cursor: grabbing; }
 }
 
+/* Every item sits in a fixed-size frame: 9:16 for portrait screenshots, 16:9
+   for landscape screenshots (class set by app-index.js) and videos, so the
+   strip looks uniform whatever the uploaded sizes. The image is only FITTED
+   inside the frame (object-fit: contain) - never cropped or resized on disk. */
 .app-shots__item {
   flex: 0 0 auto;
   margin: 0;
   height: var(--shot-h);
-  user-select: none;
-}
-.app-shots__item--video { aspect-ratio: 16 / 9; }
-.app-shots__item > img {
-  display: block;
-  height: 100%;
-  width: auto;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--bg-subtle);
+  user-select: none;
+}
+.app-shots__item--video,
+.app-shots__item--wide { aspect-ratio: 16 / 9; }
+.app-shots__item > img {
+  display: block;
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
   cursor: zoom-in;
   -webkit-user-drag: none;
 }
@@ -537,7 +544,7 @@ th { font-weight: 600; }
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   border: 0;
   border-radius: var(--radius);
   -webkit-user-drag: none;

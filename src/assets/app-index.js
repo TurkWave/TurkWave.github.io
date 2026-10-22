@@ -276,6 +276,17 @@
 
   if (!strip) return;
 
+  // --- screenshot frames: 9:16 by default, 16:9 for landscape images. The
+  // orientation is only known once the image has loaded, so it is set then. ---
+  function frameScreenshot(img) {
+    if (!img.naturalWidth) return;
+    img.parentNode.classList.toggle("app-shots__item--wide", img.naturalWidth > img.naturalHeight);
+  }
+  Array.prototype.forEach.call(strip.querySelectorAll(".app-shots__item > img"), function (img) {
+    if (img.complete) frameScreenshot(img);
+    img.addEventListener("load", function () { frameScreenshot(img); });
+  });
+
   // --- click, hold and drag to pan (mouse / pen; touch scrolls natively) ---
   strip.addEventListener("pointerdown", function (e) {
     if (e.pointerType === "touch" || e.button !== 0) return;
